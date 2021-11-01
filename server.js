@@ -54,12 +54,11 @@ const checkNotAuthenticated = (req, res, next) => {
 
 const getUsersFromDb = async () => {
     users = await getAllUsers();
-    console.log(users);
     // console.log('users', users);
 }
 
 getUsersFromDb().then(() => {
-    // console.log(users);
+    console.log(users);
     initializePassport(
         passport,
         email => users.find(user => user.email == email),

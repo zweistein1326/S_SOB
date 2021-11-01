@@ -1,9 +1,9 @@
-# Key feature
+# Core feature
 
-1. Generate a public and private key for 1 user
-2. Connect SSO to one test website
+1. Generate a public and private key for 1 user.
+2. Connect SSO to one test website.
 
-# Additional feature
+# Improvement feature
 
-1. Do not let user use same email address and username twice to create a new account
-
+1. Do not let user use same email address and username twice to create a new account.
+2. Asynchronously add user to database and retrive information when trying to login.
