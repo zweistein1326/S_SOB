@@ -3,7 +3,7 @@
 
 const { initializeApp } = require('firebase/app');
 const { getFirestore, collection, getDocs } = require('firebase/firestore/lite');
-const { getDatabase, ref, set, onValue, get, child } = require('firebase/database');
+const { getDatabase, ref, set, onValue, get, child, update, } = require('firebase/database');
 
 console.log('connected to DB');
 // TODO: Replace the following with your app's Firebase project configuration
@@ -31,9 +31,27 @@ const db = getDatabase(app);
 //     }
 // }).catch((e) => { console.log(e) })
 
+var users = []
+try {
+    onValue(ref(db, '/users'), (snapshot) => {
+        if (snapshot.exists()) {
+            const data = snapshot.val();
+            const keys = Object.keys(data);
+            users = Object.values(data);
+            return users;
+        }
+        else {
+            console.log('No data available');
+            users = [];
+            return null
+        }
+    });
+} catch (e) {
+    console.log(e);
+}
+
 async function writeUserData(user) {
     try {
-        console.log('writing Data')
         const dbRef = ref(db);
         set(ref(db, 'users/' + user.id), { id: user.id, email: user.email, username: user.username, password: user.password });
     } catch (e) {
@@ -41,27 +59,20 @@ async function writeUserData(user) {
     }
 }
 
-async function getAllUsers() {
-    var users = []
+async function updateUserData(userId, updates) {
     try {
-        await get(child(ref(db), '/users')).then((snapshot) => {
-            if (snapshot.exists()) {
-                const data = snapshot.val();
-                const keys = Object.keys(data);
-                users = Object.values(data);
-                users = users.map((user, index) => ({ ...user, id: keys[index] }))
-                // console.log(users);
-            }
-            else {
-                console.log('No data available');
-                users = [];
-            }
-        });
-        return users;
-    } catch (e) {
-        console.log(e);
+        const dbRef = ref(db);
+        update(ref(db, 'users/' + userId), updates).then(() => { console.log('successfully updated') })
+    }
+    catch (e) {
+        console.error(e);
     }
 }
+
+function getAllUsers() {
+    return users;
+}
+
 // async function readUserData() {
 //     try {
 //         const starCountref = ref(db, 'users/');
@@ -79,4 +90,4 @@ async function getAllUsers() {
 // writeUserData(2, 'Siddhu', 'sid.agarwal45@gmail.com', 'abcde');
 // readUserData();
 
-module.exports = { getAllUsers, writeUserData };
+module.exports = { getAllUsers, writeUserData, updateUserData };

@@ -1,7 +1,7 @@
 # Core feature
 
-1. Generate a public and private key for 1 user.
-2. Connect SSO to one test website.
+1. Generate a public and private key for user.
+2. Connect SSO to test website.
 
 # Improvement feature
 
