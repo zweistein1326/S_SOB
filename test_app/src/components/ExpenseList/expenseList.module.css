@@ -1,0 +1,23 @@
+.expenseList{
+    width:100%;
+}
+
+.expensesTable{
+    width: 100%;
+   text-align: center;
+   overflow-y: scroll;
+}
+
+/* .expensesTable tr{   
+    transition: 0.2s all ease-in-out ;
+    min-height:10rem;
+} */
+
+.expensesTable td,th{
+    padding: .6rem;
+}
+
+.total{
+    text-align: right;
+    padding: 0 12px ;
+}

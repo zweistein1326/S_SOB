@@ -3,7 +3,7 @@
 <h2>Activate sso for following websites</h2>
 <h2>Youtube</h2>
 <h2>Amazon</h2>
-<!-- <form action="/users" method="POST">
+<form action="/users" method="POST">
     <div>
         <label for="name">Name</label>
         <input type="name" id="firstname" name="firstname" placeholder="firstname">
@@ -14,10 +14,11 @@
         <input type="text" id="address" name="address">
     </div>
     <button type="submit">Save</button>
-</form> -->
+</form>
 <form action="/connect" method="POST">
-    <button type="submit" name="bnoutton" id="button" value="Youtube">Connect to Youtube</button>
+    <button type="submit" name="button" id="button" value="Youtube">Connect to Youtube</button>
     <button type="submit" name="button" id="button" value="Amazon">Connect to Amazon</button>
+    <button type="submit" name="button" id="button" value="testSite">Connect to Test Site</button>
 </form>
 <form action="/logout?_method=DELETE" method="POST">
     <button type="submit">Logout</button>

@@ -297,6 +297,7 @@ app.get('/connect', (req, res) => {
 })
 
 app.delete('/logout', (req, res, next) => {
+    sessionToken = null;
     req.session.destroy();
     req.logOut();
     return res.redirect('/login');
@@ -304,9 +305,9 @@ app.delete('/logout', (req, res, next) => {
 
 app.get('/ssoLogin', (req, res, next) => {
     //wait for either register or login
-    console.log(sessionToken);
     if (sessionToken.userId && sessionToken.token) {
-        res.send(sessionToken.token);
+        let user = getUserById(sessionToken.userId);
+        res.send({ sessionToken: sessionToken.token, credentials: { username: user.username, firstname: user.firstname, lastname: user.lastname } });
     }
     else {
         res.send(null);
