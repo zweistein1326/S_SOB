@@ -7,7 +7,7 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "devStart": "nodemon server.js"
   },
-  "author": "",
+  "author": "Siddharth Agarwal",
   "license": "ISC",
   "dependencies": {
     "axios": "^0.24.0",
