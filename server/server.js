@@ -5,7 +5,7 @@ if (process.env.NODE_ENV !== "production") {
 const express = require('express');
 // const path = require('path');
 const app = express();
-const port = process.env.PORT || 3000;
+const port = process.env.PORT || 8000;
 const bcrypt = require('bcrypt');
 const passport = require('passport');
 // const localSystem = require('passport-local');
@@ -195,6 +195,56 @@ app.post('/register', async (req, res) => {
 const getUserByEmail = (email) => users.find(user => user.email == email)
 const getUserById = (id) => users.find(user => user.id == id)
 
+app.post('/api/login', async (req, res, next) => {
+    const { email, password } = req.body;
+
+    let user = getUserByEmail(email);
+
+    if (user == null) {
+        res.send(JSON.stringify({ 
+            status: 'failed',
+            token: '',
+            message: 'No user with that email',
+        }));
+        return done(null, false, { message: 'No user with that email' });
+    }
+
+    console.log(user);
+    
+    const token = jwt.sign(user.id,
+        process.env.TOKEN_KEY, {
+        algorithm: 'HS256',
+    })
+    user.token = token
+    
+    try {
+        if (await bcrypt.compare(password, user.password)) {
+            sessionToken = req.session;
+            sessionToken.userId = user.id;
+            sessionToken.token = user.token;
+            // return done(null, user)
+            res.send(JSON.stringify({ 
+                status: 'success',
+                token: user.token,
+                message: '',
+            }));
+        }
+        else {
+            console.log('password incorrect');
+            res.send(JSON.stringify({ 
+                status: 'failed',
+                token: '',
+                message: 'Password incorrect',
+            }));
+        }
+    } catch (e) {
+        console.error(e)
+    }
+})
+
+/** 
+ * To be depreciated when front-end is fully migrated to React
+ */
 app.post('/login', async (req, res, next) => {
     const { email, password } = req.body;
 
@@ -220,11 +270,9 @@ app.post('/login', async (req, res, next) => {
         }
         else {
             console.log('password incorrect');
-            // return done(null, false, { message: 'Password incorrect' })
         }
     } catch (e) {
         console.log(e)
-        // return done(e)
     }
 })
 
