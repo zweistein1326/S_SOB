@@ -9,19 +9,57 @@ import Box from '@mui/material/Box';
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
+import { gql, useMutation } from "@apollo/client";
+import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+
+const LOGIN = gql`
+	fragment Payload on REST {
+    email: String
+		password: String
+  }
+	mutation Login ($input: Payload!) {
+    login (input: $input) @rest(type: "Post", method: "Post" path: "/login") {
+      status
+			token
+			message
+    }
+  }
+`
 
 const Login = () => {
+	const navigate = useNavigate();
+	const [message, setMessage] = useState(null);
+	const [submitLogin, { loading, error }] = useMutation(LOGIN);
+
+  if (error) return  <>`Submission error! ${error.message}`</>;
+
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
-    // eslint-disable-next-line no-console 
-    console.log({
+		const payload = {
       email: data.get('email'),
       password: data.get('password'),
-    });
-		// TODO: Connect to API
-  };
+    }
 
+    // eslint-disable-next-line no-console 
+    console.log(payload);
+
+		submitLogin({
+			variables: {
+				input: payload,
+			}
+		}).then(res => { 
+			const { status, token, message } = res.data.login;
+			if (status === 'success') {
+				localStorage.setItem('token', token);
+				navigate('/');
+			} else {
+				setMessage(message);
+			}
+		});
+  };
+	
   return (
     <Container component="main" maxWidth="xs">
     <Box
@@ -38,6 +76,11 @@ const Login = () => {
 			<Typography component="h1" variant="h5">
 				Sign in
 			</Typography>
+			{message && (
+				<Typography variant="body1" color="red" sx={{ mt: 2 }}>
+					{message}
+				</Typography>
+			)}
 			<Box component="form" onSubmit={handleSubmit} noValidate sx={{ mt: 1 }}>
 			<TextField
 				margin="normal"
@@ -68,6 +111,7 @@ const Login = () => {
 				fullWidth
 				variant="contained"
 				sx={{ mt: 3, mb: 2 }}
+				disabled={loading}
 			>
 				Sign In
 			</Button>
