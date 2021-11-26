@@ -21,7 +21,6 @@ const cookieParser = require('cookie-parser');
 const sessions = require('express-session');
 const { Blockchain, Block, Transaction, findUserById } = require('./blockchain');
 
-
 var users = [];
 
 // const blockchain = new Blockchain();
@@ -198,7 +197,7 @@ app.post('/api/login', async (req, res, next) => {
     let user = getUserByEmail(email);
 
     if (user == null) {
-        res.send(JSON.stringify({ 
+        res.send(JSON.stringify({
             status: 'failed',
             token: '',
             message: 'No user with that email',
@@ -207,20 +206,20 @@ app.post('/api/login', async (req, res, next) => {
     }
 
     console.log(user);
-    
+
     const token = jwt.sign(user.id,
         process.env.TOKEN_KEY, {
         algorithm: 'HS256',
     })
     user.token = token
-    
+
     try {
         if (await bcrypt.compare(password, user.password)) {
             sessionToken = req.session;
             sessionToken.userId = user.id;
             sessionToken.token = user.token;
             // return done(null, user)
-            res.send(JSON.stringify({ 
+            res.send(JSON.stringify({
                 status: 'success',
                 token: user.token,
                 message: '',
@@ -228,7 +227,7 @@ app.post('/api/login', async (req, res, next) => {
         }
         else {
             console.log('password incorrect');
-            res.send(JSON.stringify({ 
+            res.send(JSON.stringify({
                 status: 'failed',
                 token: '',
                 message: 'Password incorrect',
@@ -384,7 +383,7 @@ app.post('/updateCredential', (req, res, next) => {
         console.log(blockchain.getCurrentBlock().transactions);
         res.send();
     } catch (e) {
-        next(e)
+        next(e);
     }
 })
 
