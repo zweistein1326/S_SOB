@@ -238,63 +238,63 @@ app.post('/users', (req, res) => {
     }
 })
 
-app.post('/connect', (req, res) => {
-    let token;
-    console.log(req.body.button);
-    console.log('sending request for connection');
-    //send connection request to Youtube.com
+// app.post('/connect', (req, res) => {
+//     let token;
+//     console.log(req.body.button);
+//     console.log('sending request for connection');
+//     //send connection request to Youtube.com
 
-    console.log('start connection');
-    // receive affirm or negative on connection request from Youtube.com
+//     console.log('start connection');
+//     // receive affirm or negative on connection request from Youtube.com
 
-    console.log('generate and send session token');
-    if (sessionToken) {
-        token = jwt.sign({ userId: sessionToken.userId }, req.body.button, { algorithm: 'HS256' })
-        res.redirect(`https://www.${req.body.button}.com`);
-    }
-    else {
-        res.redirect('/');
-    }
-    try {
-        console.log(jwt.verify(token, 'youtube'));
-    } catch (e) {
-        console.error(e);
-    }
+//     console.log('generate and send session token');
+//     if (sessionToken) {
+//         token = jwt.sign({ userId: sessionToken.userId }, req.body.button, { algorithm: 'HS256' })
+//         res.redirect(`https://www.${req.body.button}.com`);
+//     }
+//     else {
+//         res.redirect('/');
+//     }
+//     try {
+//         console.log(jwt.verify(token, 'youtube'));
+//     } catch (e) {
+//         console.error(e);
+//     }
 
-    console.log('token verified');
+//     console.log('token verified');
 
-})
+// })
 
-app.get('/connect', (req, res) => {
-    // get endpoint of incoming request for later redirection
+// app.get('/connect', (req, res) => {
+//     // get endpoint of incoming request for later redirection
 
-    // generate token
+//     // generate token
 
-    // send token
-    let token;
-    console.log(req.body.button);
-    console.log('sending request for connection');
-    //send connection request to Youtube.com
+//     // send token
+//     let token;
+//     console.log(req.body.button);
+//     console.log('sending request for connection');
+//     //send connection request to Youtube.com
 
-    console.log('start connection');
-    // receive affirm or negative on connection request from Youtube.com
+//     console.log('start connection');
+//     // receive affirm or negative on connection request from Youtube.com
 
-    console.log('generate and send session token');
-    if (sessionToken) {
-        token = jwt.sign({ userId: sessionToken.userId }, 'youtube', { algorithm: 'HS256' })
-        res.redirect('https://www.youtube.com');
-    }
-    else {
-        res.redirect('/');
-    }
-    try {
-        console.log(jwt.verify(token, 'youtube'));
-    } catch (e) {
-        console.error(e);
-    }
+//     console.log('generate and send session token');
+//     if (sessionToken) {
+//         token = jwt.sign({ userId: sessionToken.userId }, 'youtube', { algorithm: 'HS256' })
+//         res.redirect('https://www.youtube.com');
+//     }
+//     else {
+//         res.redirect('/');
+//     }
+//     try {
+//         console.log(jwt.verify(token, 'youtube'));
+//     } catch (e) {
+//         console.error(e);
+//     }
 
-    console.log('token verified');
-})
+//     console.log('token verified');
+// })
 
 app.delete('/logout', (req, res, next) => {
     sessionToken = null;
