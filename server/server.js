@@ -21,6 +21,9 @@ const cookieParser = require('cookie-parser');
 const sessions = require('express-session');
 const { Blockchain, Block, Transaction, findUserById } = require('./blockchain');
 
+const API = 'http://localhost:3000/';
+// const API = ''
+
 
 var users = [];
 
@@ -336,7 +339,7 @@ app.post('/updateCredential', (req, res, next) => {
         console.log(blockchain.getCurrentBlock().transactions);
         res.send();
     } catch (e) {
-        next(e)
+        next(e);
     }
 })
 
