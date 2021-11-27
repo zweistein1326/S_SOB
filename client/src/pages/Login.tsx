@@ -1,31 +1,20 @@
-import Avatar from '@mui/material/Avatar';
-import Button from '@mui/material/Button';
-import TextField from '@mui/material/TextField';
-import FormControlLabel from '@mui/material/FormControlLabel';
-import Checkbox from '@mui/material/Checkbox';
-import Link from '@mui/material/Link';
-import Grid from '@mui/material/Grid';
-import Box from '@mui/material/Box';
-import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
-import Typography from '@mui/material/Typography';
-import Container from '@mui/material/Container';
-import { gql, useMutation } from "@apollo/client";
 import { useState } from 'react';
+import { 
+	Avatar,
+	Button,
+	Box,
+	Checkbox,
+	Container,
+	TextField,
+	FormControlLabel,
+	Link,
+	Grid,
+	Typography,
+} from '@mui/material';
+import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
+import { useMutation } from "@apollo/client";
 import { useNavigate } from 'react-router-dom';
-
-const LOGIN = gql`
-	fragment Payload on REST {
-    email: String
-		password: String
-  }
-	mutation Login ($input: Payload!) {
-    login (input: $input) @rest(type: "Post", method: "Post" path: "/login") {
-      status
-			token
-			message
-    }
-  }
-`
+import { LOGIN } from '../graphql';
 
 const Login = () => {
 	const navigate = useNavigate();
@@ -41,9 +30,6 @@ const Login = () => {
       email: data.get('email'),
       password: data.get('password'),
     }
-
-    // eslint-disable-next-line no-console 
-    console.log(payload);
 
 		submitLogin({
 			variables: {

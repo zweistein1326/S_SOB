@@ -59,6 +59,8 @@ app.use(sessions({
 app.use(express.json());
 app.use(cookieParser());
 
+app.use(require('./routes'));
+
 const checkAuthenticated = (req, res, next) => {
     if (req.isAuthenticated()) {
         // const token = req.body.token || req.query.token || req.headers['x-access-token'];
@@ -190,53 +192,6 @@ app.post('/register', async (req, res) => {
 
 const getUserByEmail = (email) => users.find(user => user.email == email)
 const getUserById = (id) => users.find(user => user.id == id)
-
-app.post('/api/login', async (req, res, next) => {
-    const { email, password } = req.body;
-
-    let user = getUserByEmail(email);
-
-    if (user == null) {
-        res.send(JSON.stringify({
-            status: 'failed',
-            token: '',
-            message: 'No user with that email',
-        }));
-        return done(null, false, { message: 'No user with that email' });
-    }
-
-    console.log(user);
-
-    const token = jwt.sign(user.id,
-        process.env.TOKEN_KEY, {
-        algorithm: 'HS256',
-    })
-    user.token = token
-
-    try {
-        if (await bcrypt.compare(password, user.password)) {
-            sessionToken = req.session;
-            sessionToken.userId = user.id;
-            sessionToken.token = user.token;
-            // return done(null, user)
-            res.send(JSON.stringify({
-                status: 'success',
-                token: user.token,
-                message: '',
-            }));
-        }
-        else {
-            console.log('password incorrect');
-            res.send(JSON.stringify({
-                status: 'failed',
-                token: '',
-                message: 'Password incorrect',
-            }));
-        }
-    } catch (e) {
-        console.error(e)
-    }
-})
 
 /** 
  * To be depreciated when front-end is fully migrated to React
