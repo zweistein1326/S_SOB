@@ -153,6 +153,9 @@ app.get('/register', checkNotAuthenticated, (req, res) => {
     }
 })
 
+/**
+ * To be depreciated when front-end is fully migrated to React
+ */
 app.post('/register', async (req, res) => {
     const { username, email, password } = req.body;
     try {

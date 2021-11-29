@@ -14,28 +14,35 @@ import {
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import { useMutation } from '@apollo/client';
 import { useNavigate } from 'react-router-dom';
-import { LOGIN } from '../graphql';
+import { REGISTER } from '../graphql';
 
-const Login = () => {
+const Register = () => {
   const navigate = useNavigate();
   const [message, setMessage] = useState<string>('');
-  const [submitLogin, { loading, error }] = useMutation(LOGIN);
+  const [submitRegister, { loading, error }] = useMutation(REGISTER);
 
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
+
+    if (data.get('password') !== data.get('confirm-password')) {
+      setMessage('Password does not match');
+      return;
+    }
+
     const payload = {
+      username: data.get('username'),
       email: data.get('email'),
       password: data.get('password'),
     };
 
-    submitLogin({
+    submitRegister({
       variables: {
         input: payload,
       },
     })
       .then((res) => {
-        const { status, token, message } = res.data.login;
+        const { status, token, message } = res.data.register;
         if (status === 'success') {
           localStorage.setItem('token', token);
           navigate('/');
@@ -63,7 +70,7 @@ const Login = () => {
           <LockOutlinedIcon />
         </Avatar>
         <Typography component="h1" variant="h5">
-          Sign in
+          Register
         </Typography>
         {message && (
           <Typography variant="body1" color="red" sx={{ mt: 2 }}>
@@ -71,6 +78,16 @@ const Login = () => {
           </Typography>
         )}
         <Box component="form" onSubmit={handleSubmit} noValidate sx={{ mt: 1 }}>
+          <TextField
+            margin="normal"
+            required
+            fullWidth
+            id="username"
+            label="User Name"
+            name="username"
+            autoComplete="username"
+            autoFocus
+          />
           <TextField
             margin="normal"
             required
@@ -91,6 +108,16 @@ const Login = () => {
             id="password"
             autoComplete="current-password"
           />
+          <TextField
+            margin="normal"
+            required
+            fullWidth
+            name="confirm-password"
+            label="Confirm Password"
+            type="password"
+            id="confirm-password"
+            autoComplete="current-password"
+          />
           <FormControlLabel
             control={<Checkbox value="remember" color="primary" />}
             label="Remember me"
@@ -102,7 +129,7 @@ const Login = () => {
             sx={{ mt: 3, mb: 2 }}
             disabled={loading}
           >
-            Sign In
+            Register
           </Button>
           <Grid container>
             <Grid item xs>
@@ -111,8 +138,8 @@ const Login = () => {
               </Link>
             </Grid>
             <Grid item>
-              <Link href="/register" variant="body2">
-                {"Don't have an account? Sign Up"}
+              <Link href="/login" variant="body2">
+                {'Already have an account? Login'}
               </Link>
             </Grid>
           </Grid>
@@ -122,4 +149,4 @@ const Login = () => {
   );
 };
 
-export default Login;
+export default Register;
