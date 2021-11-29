@@ -38,7 +38,7 @@ router.post('/login', async (req, res, next) => {
   })
 });
 
-router.post('register', async (req, res, next) => {
+router.post('/register', async (req, res, next) => {
   const { username, email, password } = req.body;
 
     if (await users.get({ email: email }))
@@ -47,7 +47,7 @@ router.post('register', async (req, res, next) => {
         token: '',
         message: 'email already registered',
       });
-
+    
     try {
       const hashedPassword = await bcrypt.hash(password, 10);
 
@@ -59,7 +59,6 @@ router.post('register', async (req, res, next) => {
       }
 
       const token = jwt.sign(user.id, TOKEN_KEY, { algorithm: 'HS256' });
-
       await users.create(user);
 
       return res.json({

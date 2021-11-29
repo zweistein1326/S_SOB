@@ -14,12 +14,12 @@ import {
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import { useMutation } from '@apollo/client';
 import { useNavigate } from 'react-router-dom';
-import { LOGIN } from '../graphql';
+import { REGISTER } from '../graphql';
 
 const Register = () => {
   const navigate = useNavigate();
   const [message, setMessage] = useState<string>('');
-  const [submitLogin, { loading, error }] = useMutation(LOGIN);
+  const [submitRegister, { loading, error }] = useMutation(REGISTER);
 
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
@@ -31,11 +31,29 @@ const Register = () => {
     }
 
     const payload = {
+      username: data.get('username'),
       email: data.get('email'),
       password: data.get('password'),
     };
 
-    // TODO: submit create user request to api
+    submitRegister({
+      variables: {
+        input: payload,
+      },
+    })
+      .then((res) => {
+        const { status, token, message } = res.data.register;
+        if (status === 'success') {
+          localStorage.setItem('token', token);
+          navigate('/');
+        } else {
+          setMessage(message);
+        }
+      })
+      .catch((err) => {
+        console.error(err);
+        if (error) setMessage(error.message);
+      });
   };
 
   return (
@@ -111,7 +129,7 @@ const Register = () => {
             sx={{ mt: 3, mb: 2 }}
             disabled={loading}
           >
-            Sign In
+            Register
           </Button>
           <Grid container>
             <Grid item xs>

@@ -13,3 +13,18 @@ export const LOGIN = gql`
     }
   }
 `;
+
+export const REGISTER = gql`
+  fragment Payload on REST {
+    username: String
+    email: String
+    password: String
+  }
+  mutation Register($input: Payload!) {
+    register(input: $input) @rest(type: "Post", method: "Post", path: "/register") {
+      status
+      token
+      message
+    }
+  }
+`;
