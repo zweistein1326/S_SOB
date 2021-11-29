@@ -18,10 +18,8 @@ import { LOGIN } from '../graphql';
 
 const Login = () => {
 	const navigate = useNavigate();
-	const [message, setMessage] = useState(null);
+	const [message, setMessage] = useState<string>('');
 	const [submitLogin, { loading, error }] = useMutation(LOGIN);
-
-  if (error) return  <>`Submission error! ${error.message}`</>;
 
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
@@ -43,6 +41,10 @@ const Login = () => {
 			} else {
 				setMessage(message);
 			}
+		}).catch(err => {
+			console.error(err);
+			if (error)
+				setMessage(error.message);
 		});
   };
 	
@@ -108,7 +110,7 @@ const Login = () => {
 				</Link>
 				</Grid>
 				<Grid item>
-				<Link href="#" variant="body2">
+				<Link href="/register" variant="body2">
 					{"Don't have an account? Sign Up"}
 				</Link>
 				</Grid>
