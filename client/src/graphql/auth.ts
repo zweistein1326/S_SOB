@@ -1,15 +1,15 @@
-import { gql } from "@apollo/client";
+import { gql } from '@apollo/client';
 
 export const LOGIN = gql`
-	fragment Payload on REST {
+  fragment Payload on REST {
     email: String
-		password: String
+    password: String
   }
-	mutation Login ($input: Payload!) {
-    login (input: $input) @rest(type: "Post", method: "Post" path: "/login") {
+  mutation Login($input: Payload!) {
+    login(input: $input) @rest(type: "Post", method: "Post", path: "/login") {
       status
-			token
-			message
+      token
+      message
     }
   }
-`
+`;

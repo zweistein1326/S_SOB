@@ -2,31 +2,27 @@ import { Button, Typography } from '@mui/material';
 import { useState } from 'react';
 
 const Home = () => {
-	const [loggedIn, setLoggedIn] = useState(localStorage.getItem('token') !== null)
-	
-	const handleLogout = () => {
-		localStorage.removeItem('token');
-		setLoggedIn(false);
-	}
+  const [loggedIn, setLoggedIn] = useState(
+    localStorage.getItem('token') !== null,
+  );
 
-	return (
-		<>
-			<Typography variant='h2'>
-				Home Page
-			</Typography>
-			<Typography>
-				You are currently {loggedIn ? '' : 'NOT'} logged-in
-			</Typography>
+  const handleLogout = () => {
+    localStorage.removeItem('token');
+    setLoggedIn(false);
+  };
 
-			<Button href='/login'>
-				Login
-			</Button>
+  return (
+    <>
+      <Typography variant="h2">Home Page</Typography>
+      <Typography>
+        You are currently {loggedIn ? '' : 'NOT'} logged-in
+      </Typography>
 
-			<Button onClick={handleLogout}>
-				Logout
-			</Button>
-		</>
-	)
-}
+      <Button href="/login">Login</Button>
+
+      <Button onClick={handleLogout}>Logout</Button>
+    </>
+  );
+};
 
 export default Home;
