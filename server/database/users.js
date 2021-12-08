@@ -1,6 +1,13 @@
 const firebasedb = require('firebase/database');
 const { db } = require('./index.js');
 
+
+// router.get('/database', async (req, res, next) => {
+
+
+
+// });
+
 async function list() {
   var users = null;
   try {
@@ -26,10 +33,10 @@ async function get({ email }) {
 
 async function create(user) {
   try {
-    firebasedb.set(firebasedb.ref(db, 'users/' + user.id), { 
-      id: user.id, 
-      email: user.email, 
-      username: user.username, 
+    firebasedb.set(firebasedb.ref(db, 'users/' + user.id), {
+      id: user.id,
+      email: user.email,
+      username: user.username,
       password: user.password,
     });
   } catch (err) {
@@ -40,10 +47,10 @@ async function create(user) {
 async function update(userId, updates) {
   try {
     firebasedb.update(
-      firebasedb.ref(db, 'users/' + userId), 
+      firebasedb.ref(db, 'users/' + userId),
       updates,
-    ).then(() => { 
-      console.log('successfully updated') 
+    ).then(() => {
+      console.log('successfully updated')
     })
   }
   catch (err) {

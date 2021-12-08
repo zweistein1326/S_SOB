@@ -19,9 +19,11 @@ const jwt = require('jsonwebtoken');
 const cors = require('cors');
 const cookieParser = require('cookie-parser');
 const sessions = require('express-session');
-const { Blockchain, Block, Transaction, findUserById } = require('./blockchain');
+const { default: axios } = require('axios');
 
 var users = [];
+const transactions = [];
+const connections = [{ url: 'http://localhost:3000', status: false }];
 
 // const blockchain = new Blockchain();
 
@@ -47,7 +49,7 @@ app.use((req, res, next) => {
 
 const oneDay = 5 * 60 * 60 * 1000; // 1 hour
 
-const blockchain = new Blockchain();
+// const blockchain = new Blockchain();
 
 app.use(sessions({
     secret: 'letssaythisisthesecretofjumanji',
@@ -126,7 +128,7 @@ app.get('/', (req, res) => {
     if (sessionToken.userId && sessionToken.token) {
         let user = getUserById(sessionToken.userId);
         // console.log(sessionToken.userId);
-        res.render('index.ejs', { username: user.username });
+        res.render('index.ejs', { username: user.username, firstname: user.firstname, lastname: user.lastname, address: user.address, status: connections[0].status });
     }
     else {
         res.render('login.ejs');
@@ -157,6 +159,9 @@ app.get('/register', checkNotAuthenticated, (req, res) => {
  * To be depreciated when front-end is fully migrated to React
  */
 app.post('/register', async (req, res) => {
+
+    // check if user with email, username exists
+
     const { username, email, password } = req.body;
     try {
         const hashedPassword = await bcrypt.hash(password, 10);
@@ -175,11 +180,6 @@ app.post('/register', async (req, res) => {
         await writeUserData(newUser);
 
         getAllUsers();
-
-        // const transaction = new Transaction('create', newUser.id);
-        // const currentBlock = blockchain.getCurrentBlock();
-        // currentBlock.addToBlock(transaction);
-        // await blockchain.mineBlock();
         res.redirect('/login');
     }
     catch (e) {
@@ -219,6 +219,13 @@ app.post('/login', async (req, res, next) => {
             sessionToken = req.session;
             sessionToken.userId = user.id;
             sessionToken.token = user.token;
+            // axios.post('http://localhost:9000',
+            //     { type: '0001', issuerId: 0, receiverId: user.id, data: { username: 'Siddharth' } }, {
+            //     headers: {
+            //         'Content-Type': 'application/json',
+            //         'Access-Control-Allow-Origin': '*'
+            //     }
+            // });
             // return done(null, user)
             res.redirect('/');
         }
@@ -230,75 +237,17 @@ app.post('/login', async (req, res, next) => {
     }
 })
 
-app.post('/users', (req, res) => {
-    const { firstname, lastname, email, address } = req.body;
-    const token = sessionToken.token;
-    if (token) {
-        updateUserData(sessionToken.userId, { firstname, lastname, address });
+// app.post('/users', (req, res) => {
+//     const { firstname, lastname, email, address } = req.body;
+//     const token = sessionToken.token;
+//     if (token) {
+//         updateUserData(sessionToken.userId, { firstname, lastname, address });
 
-        res.redirect('/')
-    }
-    else {
-        throw Error('Use not authorized')
-    }
-})
-
-// app.post('/connect', (req, res) => {
-//     let token;
-//     console.log(req.body.button);
-//     console.log('sending request for connection');
-//     //send connection request to Youtube.com
-
-//     console.log('start connection');
-//     // receive affirm or negative on connection request from Youtube.com
-
-//     console.log('generate and send session token');
-//     if (sessionToken) {
-//         token = jwt.sign({ userId: sessionToken.userId }, req.body.button, { algorithm: 'HS256' })
-//         res.redirect(`https://www.${req.body.button}.com`);
+//         res.redirect('/')
 //     }
 //     else {
-//         res.redirect('/');
+//         throw Error('Use not authorized')
 //     }
-//     try {
-//         console.log(jwt.verify(token, 'youtube'));
-//     } catch (e) {
-//         console.error(e);
-//     }
-
-//     console.log('token verified');
-
-// })
-
-// app.get('/connect', (req, res) => {
-//     // get endpoint of incoming request for later redirection
-
-//     // generate token
-
-//     // send token
-//     let token;
-//     console.log(req.body.button);
-//     console.log('sending request for connection');
-//     //send connection request to Youtube.com
-
-//     console.log('start connection');
-//     // receive affirm or negative on connection request from Youtube.com
-
-//     console.log('generate and send session token');
-//     if (sessionToken) {
-//         token = jwt.sign({ userId: sessionToken.userId }, 'youtube', { algorithm: 'HS256' })
-//         res.redirect('https://www.youtube.com');
-//     }
-//     else {
-//         res.redirect('/');
-//     }
-//     try {
-//         console.log(jwt.verify(token, 'youtube'));
-//     } catch (e) {
-//         console.error(e);
-//     }
-
-//     console.log('token verified');
 // })
 
 app.delete('/logout', (req, res, next) => {
@@ -308,29 +257,43 @@ app.delete('/logout', (req, res, next) => {
     return res.redirect('/login');
 })
 
-app.get('/ssoLogin', (req, res, next) => {
+app.post('/ssoLogin', (req, res, next) => {
     //wait for either register or login
-    if (sessionToken.userId && sessionToken.token) {
-        let user = getUserById(sessionToken.userId);
-        res.send({ sessionToken: sessionToken.token, credentials: { username: user.username, firstname: user.firstname, lastname: user.lastname } });
-    }
+    const { credentialsRequired } = req.body;
+    const origin = req.get('origin');
+    const originStatus = connections.find((connection) => connection.url == origin).status;
+    if (originStatus == false) { res.send(null); }
     else {
-        res.send(null);
+        if (sessionToken.userId && sessionToken.token) {
+            let user = getUserById(sessionToken.userId);
+            transactions.push({
+                type: 'Login',
+                from: user.id,
+                iat: new Date()
+            });
+            let credentials = {}
+            for (i = 0; i < credentialsRequired.length; i++) {
+                let credential = credentialsRequired[i].toString()
+                credentials = {
+                    ...credentials, [credential]: user[credentialsRequired[i]]
+                }
+            }
+            res.send({ sessionToken: sessionToken.token, credentials: credentials });
+        }
+        else {
+            res.send(null);
+        }
     }
 });
 
-app.post('/addCredential', (req, res, next) => {
-    const { issuerId, credential, key, to } = req.body;
-    const iat = new Date();
-    try {
-        const transaction = new Transaction('addCredential', to, { issuerId, to, key, credential, iat })
-        blockchain.getCurrentBlock().addToBlock(transaction);
-        console.log(blockchain.getCurrentBlock().transactions);
-        res.send();
-    } catch (e) {
-        next(e);
-    }
+app.post('/connect', (req, res, next) => {
+    // if connected then disconnect
+    // else change state to -> can establish connection
+    connections[0].status = !connections[0].status
+    // send request to connectionUrl to force logout
+    res.redirect('/')
 })
+
 
 app.post('/updateCredential', (req, res, next) => {
     const { issuerId, credential, credentialId, key, to } = req.body;
@@ -345,8 +308,5 @@ app.post('/updateCredential', (req, res, next) => {
     }
 })
 
-app.post('/verifyCredential', (req, res, next) => {
-
-})
 
 app.listen(port, () => { console.log(`Listening on port ${port}`) })
