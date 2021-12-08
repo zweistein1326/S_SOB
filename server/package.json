@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "devStart": "nodemon server.js"
+    "start:dev": "nodemon server.js"
   },
   "author": "Siddharth Agarwal",
   "license": "ISC",
@@ -22,6 +22,7 @@
     "firebase": "^9.2.0",
     "jsonwebtoken": "^8.5.1",
     "method-override": "^3.0.0",
+    "node-sessionstorage": "^1.0.0",
     "nodemon": "^2.0.13",
     "passport": "^0.5.0",
     "passport-local": "^1.0.0",

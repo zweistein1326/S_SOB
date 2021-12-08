@@ -6,4 +6,4 @@
 # Improvement feature
 
 1. Do not let user use same email address and username twice to create a new account.
-2. Asynchronously add user to database and retrive information when trying to login.
+2. Synchronously add user to database and update local database(which will later be replaced by blockchain)

@@ -1,5 +1,6 @@
 const { initializeApp } = require('firebase/app');
 const { getDatabase, ref, set, onValue, update, } = require('firebase/database');
+const router = require('../routes/api');
 
 const firebaseConfig = {
 	apiKey: "AIzaSyBQNAjpxaNHH9qvI2HkFpR7D1uvU66qe-M",
@@ -11,6 +12,8 @@ const firebaseConfig = {
 	appId: "1:311747588357:web:5dd79e7d91f770bfba476c",
 	measurementId: "G-9Q166472JW"
 };
+
+
 
 const app = initializeApp(firebaseConfig);
 const db = getDatabase(app);
@@ -28,7 +31,7 @@ try {
 		}
 	});
 } catch (err) {
-  console.log(err);
+	console.log(err);
 }
 
 async function writeUserData(user) {
@@ -41,7 +44,7 @@ async function writeUserData(user) {
 
 async function updateUserData(userId, updates) {
 	try {
-		update(ref(db, 'users/' + userId), updates).then(() => { 
+		update(ref(db, 'users/' + userId), updates).then(() => {
 			console.log('successfully updated')
 		})
 	}
@@ -55,8 +58,8 @@ function getAllUsers() {
 }
 
 module.exports = {
-  db,
-  getAllUsers, 
-  writeUserData, 
-  updateUserData,
+	db,
+	getAllUsers,
+	writeUserData,
+	updateUserData,
 };
