@@ -21,8 +21,15 @@ router.post('/login', async (req, res, next) => {
 
     bcrypt.compare(password, user.password).then(passwordMatch => {
       if (passwordMatch) {
+        console.log({
+          user,
+          status: 'success',
+          token: token,
+          message: '',
+        })
         console.log('successful login')
         return res.json({
+          user,
           status: 'success',
           token: token,
           message: '',
@@ -33,6 +40,7 @@ router.post('/login', async (req, res, next) => {
           status: 'failed',
           token: '',
           message: 'Password incorrect',
+          user: null
         });
       }
     })

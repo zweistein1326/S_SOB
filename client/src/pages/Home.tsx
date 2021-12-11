@@ -1,7 +1,8 @@
 import { Button, Typography } from '@mui/material';
 import { useState } from 'react';
+import { connect } from 'react-redux';
 
-const Home = () => {
+const Home = (props:any) => {
   const [loggedIn, setLoggedIn] = useState(
     localStorage.getItem('token') !== null,
   );
@@ -17,6 +18,12 @@ const Home = () => {
       <Typography>
         You are currently {loggedIn ? '' : 'NOT'} logged-in
       </Typography>
+      <Typography>
+        Welcome {props.auth.user? props.auth.user.username:''}
+      </Typography>
+      <Typography>
+        You are currently {loggedIn ? '' : 'NOT'} logged-in
+      </Typography>
 
       <Button href="/login">Login</Button>
 
@@ -25,4 +32,8 @@ const Home = () => {
   );
 };
 
-export default Home;
+const mapStateToProps = (state:any) => ({
+  auth:state.auth
+})
+
+export default connect(mapStateToProps)(Home);

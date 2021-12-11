@@ -3,7 +3,7 @@ if (process.env.NODE_ENV !== "production") {
 }
 
 const express = require('express');
-// const path = require('path');
+const path = require('path');
 const app = express();
 const port = process.env.PORT || 8000;
 const bcrypt = require('bcrypt');
@@ -13,13 +13,14 @@ const initializePassport = require('./passport-config');
 const flash = require('express-flash');
 const session = require('express-session');
 const methodOverride = require('method-override');
-const { getAllUsers, writeUserData, updateUserData } = require('./database');
+const { writeUserData, updateUserData } = require('./database');
 const jwt = require('jsonwebtoken');
 // const auth = require("./isAuthenticated");
 const cors = require('cors');
 const cookieParser = require('cookie-parser');
 const sessions = require('express-session');
 const { default: axios } = require('axios');
+const { getUserById, getUserByEmail } = require('./database/index');
 
 var users = [];
 const transactions = [];
@@ -106,7 +107,6 @@ const checkNotAuthenticated = (req, res, next) => {
 
 const getUsersFromDb = async () => {
     setTimeout(() => {
-        users = getAllUsers();
         // console.log(users);
     }, 1000);
 
@@ -135,7 +135,6 @@ app.get('/', (req, res) => {
     }
 
 })
-
 
 app.get('/login', checkNotAuthenticated, (req, res) => {
     console.log(req.session);
@@ -179,7 +178,7 @@ app.post('/register', async (req, res) => {
 
         await writeUserData(newUser);
 
-        getAllUsers();
+        // getAllUsers();
         res.redirect('/login');
     }
     catch (e) {
@@ -192,9 +191,6 @@ app.post('/register', async (req, res) => {
 //     successRedirect: '/',
 //     failureFlash: true
 // }))
-
-const getUserByEmail = (email) => users.find(user => user.email == email)
-const getUserById = (id) => users.find(user => user.id == id)
 
 /** 
  * To be depreciated when front-end is fully migrated to React
@@ -295,18 +291,18 @@ app.post('/connect', (req, res, next) => {
 })
 
 
-app.post('/updateCredential', (req, res, next) => {
-    const { issuerId, credential, credentialId, key, to } = req.body;
-    const iat = new Date();
-    try {
-        const transaction = new Transaction('updateCredential', to, { issuerId, to, key, credential, credentialId, iat })
-        blockchain.getCurrentBlock().addToBlock(transaction);
-        console.log(blockchain.getCurrentBlock().transactions);
-        res.send();
-    } catch (e) {
-        next(e);
-    }
-})
+// app.post('/updateCredential', (req, res, next) => {
+//     const { issuerId, credential, credentialId, key, to } = req.body;
+//     const iat = new Date();
+//     try {
+//         const transaction = new Transaction('updateCredential', to, { issuerId, to, key, credential, credentialId, iat })
+//         blockchain.getCurrentBlock().addToBlock(transaction);
+//         console.log(blockchain.getCurrentBlock().transactions);
+//         res.send();
+//     } catch (e) {
+//         next(e);
+//     }
+// })
 
 
 app.listen(port, () => { console.log(`Listening on port ${port}`) })
