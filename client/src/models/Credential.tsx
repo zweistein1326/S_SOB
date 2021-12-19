@@ -1,8 +1,8 @@
 export interface Credential{
-    credentialId: String,
-    key: String,
-    value: any,
-    iat: Date,
-    issuerId: String,
-    signature: String,
+    id: string,
+    iat?: Date,
+    issuer: string,
+    signature: string,
+    digest:string,
+    url:string
 }

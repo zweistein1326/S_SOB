@@ -29,3 +29,14 @@ export const REGISTER = gql`
     }
   }
 `;
+
+export const GETUSERBYID = gql`
+  fragment Payload on REST {
+    id:String
+  }
+  mutation GetUserById ($id:Payload!) {
+    getUserById() @rest(type: "Get", method: "Get", path: "/user/$id") {
+      user
+    }
+  }
+`;
