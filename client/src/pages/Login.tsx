@@ -15,8 +15,11 @@ import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import { useMutation } from '@apollo/client';
 import { useNavigate } from 'react-router-dom';
 import { LOGIN } from '../graphql';
+import {connect} from 'react-redux';
+import { login } from '../actions/auth';
+import { User } from '../models/User';
 
-const Login = () => {
+const Login = (props:any) => {
   const navigate = useNavigate();
   const [message, setMessage] = useState<string>('');
   const [submitLogin, { loading, error }] = useMutation(LOGIN);
@@ -35,10 +38,11 @@ const Login = () => {
       },
     })
       .then((res) => {
-        const { status, token, message } = res.data.login;
+        const { status, token, message, user } = res.data.login;
         if (status === 'success') {
+          props.login(user)
           localStorage.setItem('token', token);
-          navigate('/');
+          navigate(`/user/${user.id}`);
         } else {
           setMessage(message);
         }
@@ -122,4 +126,9 @@ const Login = () => {
   );
 };
 
-export default Login;
+const mapDispatchToProps = (dispatch:any)=> ({
+  login: (userData:User) => dispatch(login(userData)),
+  // logout: () => dispatch(logout())
+});
+
+export default connect(null, mapDispatchToProps)(Login);

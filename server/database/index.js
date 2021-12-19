@@ -1,6 +1,5 @@
 const { initializeApp } = require('firebase/app');
 const { getDatabase, ref, set, onValue, update, } = require('firebase/database');
-const router = require('../routes/api');
 
 const firebaseConfig = {
 	apiKey: "AIzaSyBQNAjpxaNHH9qvI2HkFpR7D1uvU66qe-M",
@@ -13,8 +12,6 @@ const firebaseConfig = {
 	measurementId: "G-9Q166472JW"
 };
 
-
-
 const app = initializeApp(firebaseConfig);
 const db = getDatabase(app);
 
@@ -25,6 +22,7 @@ try {
 		if (snapshot.exists()) {
 			const data = snapshot.val();
 			users = Object.values(data);
+			console.log('users updated')
 		}
 		else {
 			console.log('No data available');
@@ -53,13 +51,24 @@ async function updateUserData(userId, updates) {
 	}
 }
 
+function getUserByEmail(email) {
+	console.log(users);
+	return users.find((user) => user.email === email);
+}
+
+function getUserById(userId) {
+	return users.find(({ id }) => userId == id)
+}
+
 function getAllUsers() {
 	return users;
 }
 
+
 module.exports = {
-	db,
 	getAllUsers,
+	getUserByEmail,
+	getUserById,
 	writeUserData,
 	updateUserData,
 };

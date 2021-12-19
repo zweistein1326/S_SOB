@@ -1,20 +1,14 @@
 const firebasedb = require('firebase/database');
-const { db } = require('./index.js');
+const { getAllUsers } = require('.');
 
-
-// router.get('/database', async (req, res, next) => {
-
-
-
-// });
-
+var users = null;
 async function list() {
-  var users = null;
   try {
     await firebasedb.onValue(firebasedb.ref(db, '/users'), (snapshot) => {
       if (snapshot.exists()) {
         const data = snapshot.val();
         users = Object.values(data);
+        console.log(users);
       }
       else {
         console.log('No data available');
@@ -27,7 +21,7 @@ async function list() {
 };
 
 async function get({ email }) {
-  const users = await list();
+  const users = getAllUsers();
   return users.find(user => user.email == email)
 }
 
@@ -58,9 +52,10 @@ async function update(userId, updates) {
   }
 }
 
+
 module.exports = {
   get,
   list,
   create,
-  update,
+  update
 };

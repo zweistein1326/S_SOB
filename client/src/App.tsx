@@ -4,6 +4,7 @@ import { RestLink } from 'apollo-link-rest';
 import Login from './pages/Login';
 import Home from './pages/Home';
 import Register from './pages/Register';
+import Credential from './pages/Credential';
 
 const restLink = new RestLink({ uri: '/api' });
 
@@ -20,6 +21,8 @@ function App() {
           <Route path="/" element={<Home />} />
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />
+          <Route path="/user/:id" element={<Home />} />
+          <Route path="/user/:id/:credentialId" element={<Credential />} />
         </Routes>
       </Router>
     </ApolloProvider>
