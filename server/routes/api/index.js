@@ -2,13 +2,14 @@ const jwt = require('jsonwebtoken');
 const bcrypt = require('bcrypt');
 var router = require('express').Router();
 var users = require('../../database/users');
+const e = require('express');
 
 const TOKEN_KEY = process.env.TOKEN_KEY;
 
 router.post('/login', async (req, res, next) => {
   const { email, password } = req.body;
 
-  users.get({ email: email }).then(user => {
+  users.getUserByEmail(email).then(user => {
     if (user == null) {
       return res.json({
         status: 'failed',
@@ -50,7 +51,7 @@ router.post('/login', async (req, res, next) => {
 router.post('/register', async (req, res, next) => {
   const { username, email, password } = req.body;
 
-  if (await users.get({ email: email }))
+  if (await users.getUserByEmail(email))
     return res.json({
       status: 'failed',
       token: '',
@@ -82,6 +83,17 @@ router.post('/register', async (req, res, next) => {
 });
 
 
-router.get('/{}', () => { })
+router.get('/user/:id', async (req, res, next) => {
+  const { id } = req.params;
+  console.log(id);
+  try {
+    const user = await users.getUserById(id);
+    console.log(user);
+    return res.json({ user: user })
+  }
+  catch (error) {
+    console.log(error)
+  }
+})
 
 module.exports = router;
