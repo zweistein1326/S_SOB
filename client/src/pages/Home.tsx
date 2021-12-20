@@ -13,7 +13,7 @@ const Home = (props:any) => {
   );
   const [activeUser,setActiveUser] = useState<any>({});
   const [fetchInfo,{loading,error}] = useMutation(GETUSERBYID);
-
+  
   const handleLogout = () => {
     localStorage.removeItem('token');
     setLoggedIn(false);
