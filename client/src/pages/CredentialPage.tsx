@@ -27,8 +27,8 @@ const CredentialPage = (props:any) => {
         {credential?
         <>
             <Typography><Link to={`/user/${credential.issuer}`}>Issuer: {credential.issuer}</Link></Typography>
-            <Typography><Link to={`/user/${credential.issuer}`}>Signature: {credential.signature}</Link></Typography>
-            <a href={credential.url}><Typography>Url: {credential.url}</Typography></a>
+            <Typography>Signature: <Link to={`/user/${credential.issuer}`}> {credential.signature}</Link></Typography>
+            <Typography>Url:<a href={credential.url}> {credential.url}</a></Typography>
             <Typography>View History</Typography>
         </>:
            null}

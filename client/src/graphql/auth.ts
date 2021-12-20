@@ -6,7 +6,7 @@ export const LOGIN = gql`
     password: String
   }
   mutation Login($input: Payload!) {
-    login(input: $input) @rest(type: "Post", method: "Post", path: "/login") {
+    login(input: $input) @rest(type: "Post", method: "POST", path: "/login") {
       user
       status
       token
@@ -22,7 +22,7 @@ export const REGISTER = gql`
     password: String
   }
   mutation Register($input: Payload!) {
-    register(input: $input) @rest(type: "Post", method: "Post", path: "/register") {
+    register(input: $input) @rest(type: "Post", method: "POST", path: "/register") {
       status
       token
       message
@@ -31,11 +31,9 @@ export const REGISTER = gql`
 `;
 
 export const GETUSERBYID = gql`
-  fragment Payload on REST {
-    id:String
-  }
-  mutation GetUserById ($id:Payload!) {
-    getUserById() @rest(type: "Get", method: "Get", path: "/user/$id") {
+  mutation GetUserById($id: String!) {
+    getUserById(id: $id)
+      @rest(type: "Get", method: "GET", path: "/user/{args.id}") {
       user
     }
   }

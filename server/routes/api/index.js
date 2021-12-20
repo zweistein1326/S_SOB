@@ -85,10 +85,11 @@ router.post('/register', async (req, res, next) => {
 
 router.get('/user/:id', async (req, res, next) => {
   const { id } = req.params;
+  console.log(id);
   try {
     const user = await users.getUserById(id);
     console.log(user);
-    return res.json(user)
+    return res.json({ user: user })
   }
   catch (error) {
     console.log(error)

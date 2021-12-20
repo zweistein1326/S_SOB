@@ -5,11 +5,13 @@ import { connect } from 'react-redux';
 import { Link, useParams } from 'react-router-dom';
 import CredentialTile from '../components/CredentialTile';
 import { GETUSERBYID } from '../graphql';
+import { User } from '../models/User';
 
 const Home = (props:any) => {
   const [loggedIn, setLoggedIn] = useState(
     props.auth.user !==null ,
   );
+  const [activeUser,setActiveUser] = useState<any>({});
   const [fetchInfo,{loading,error}] = useMutation(GETUSERBYID);
 
   const handleLogout = () => {
@@ -19,10 +21,16 @@ const Home = (props:any) => {
   
   const {id} = useParams();
 
-  console.log(props.auth.user.credentials);
-
-  const getUserInfo =() =>{
-    fetchInfo({variables:{id:id}}).then((res)=>{console.log(res)})
+  const getUserInfo = () =>{
+    fetchInfo({
+      variables: {
+        id
+    },
+  })
+    .then((res)=>{
+      let user:User = res.data.getUserById.user;
+      setActiveUser(user);
+    })
   }
 
   useEffect(getUserInfo,[])
@@ -37,32 +45,31 @@ const Home = (props:any) => {
       <Typography>
         {loggedIn && props.auth.user ? '' : 'NOT'} logged-in
       </Typography>
-      {loggedIn && props.auth.user?
+      {loggedIn ?
       <>
         <Typography>
-          ID: {props.auth.user.id} (@zweistein1326)
+          ID: {activeUser.id} (@{activeUser.username})
         </Typography>
         <Typography>
-          Username: {props.auth.user.username}
+          Name: {activeUser.firstname} {activeUser.lastname}
         </Typography>
         <Typography>
-          Name: {props.auth.user.firstname} {props.auth.user.lastname}
+          Email: {activeUser.email}
         </Typography>
+        
+        {activeUser.id == props.auth.user.id?
+        <>
         <Typography>
-          Email: {props.auth.user.email}
-        </Typography>
-        <Typography>
-          Username: {props.auth.user.username}
+          Your saved credentials
         </Typography>
         <Typography>
           Update user information
         </Typography>
-        <Typography>
-          Your saved credentials
-        </Typography>
-        {props.auth.user.credentials ?
-        Object.values(props.auth.user.credentials).map((credential:any,index:number)=><CredentialTile key={credential.id} credential={credential} title={Object.keys(props.auth.user.credentials)[index]} />)
-          // <Link to={`${props.auth.user.degreeCertificate.digest}`}><Typography>Degree Certificate</Typography></Link>
+        </>:
+        null}
+        {activeUser.credentials ?
+        Object.values(activeUser.credentials).map((credential:any,index:number)=><CredentialTile key={credential.id} credential={credential} title={Object.keys(activeUser.credentials)[index]} />)
+          // <Link to={`${activeUser.degreeCertificate.digest}`}><Typography>Degree Certificate</Typography></Link>
         :''}
         <Button onClick={handleLogout}>Logout</Button>
       </>: 
