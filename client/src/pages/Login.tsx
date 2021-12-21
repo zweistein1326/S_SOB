@@ -19,28 +19,12 @@ import {connect} from 'react-redux';
 import { login } from '../actions/auth';
 import { User } from '../models/User';
 
-declare var window: any;
+
 
 const Login = (props:any) => {
   const navigate = useNavigate();
   const [message, setMessage] = useState<string>('');
   const [submitLogin, { loading, error }] = useMutation(LOGIN);
-
-  const {ethereum} = window;
-
-  const connectWalletHandler = async () => {
-    try{
-      const accounts = await ethereum.request({method: 'eth_requestAccounts'});
-      console.log('account', accounts[0]);
-      console.log("Wallet exists! We're ready to go!");
-    } catch(err){
-      console.log(err);
-    }
-  }
-
-  useEffect(()=>{
-    connectWalletHandler();
-  },[])
 
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();

@@ -4,8 +4,10 @@ import { useEffect, useState } from 'react';
 import { connect } from 'react-redux';
 import { Link, useParams } from 'react-router-dom';
 import CredentialTile from '../components/CredentialTile';
+import Header from '../components/Header';
 import { GETUSERBYID } from '../graphql';
 import { User } from '../models/User';
+declare var window:any;
 
 const Home = (props:any) => {
   const [loggedIn, setLoggedIn] = useState(
@@ -13,6 +15,7 @@ const Home = (props:any) => {
   );
   const [activeUser,setActiveUser] = useState<any>({});
   const [fetchInfo,{loading,error}] = useMutation(GETUSERBYID);
+  const [account, setAccount] = useState<any>(null);
   
   const handleLogout = () => {
     localStorage.removeItem('token');
@@ -21,7 +24,19 @@ const Home = (props:any) => {
   
   const {id} = useParams();
 
-  const getUserInfo = () =>{
+  const {ethereum} = window;
+
+  const connectWalletHandler = async () => {
+    try{
+      const accounts = await ethereum.request({method: 'eth_requestAccounts'});
+      setAccount(accounts[0]);
+    } catch(err){
+      console.log(err);
+    }
+  }
+
+  const getUserInfo = async () =>{
+    await connectWalletHandler();
     fetchInfo({
       variables: {
         id
@@ -33,22 +48,26 @@ const Home = (props:any) => {
     })
   }
 
-  useEffect(getUserInfo,[])
+  useEffect(()=>{getUserInfo()},[])
 
   return (
     <Box>
     <Box >
     User information
+      <Header setLoggedIn={setLoggedIn} loggedIn={loggedIn}/>
     </Box>
     <>
     {/* <Typography variant="h2">Home Page</Typography> */}
       <Typography>
-        {loggedIn && props.auth.user ? '' : 'NOT'} logged-in
+        {loggedIn && props.auth.user ? '' : 'Not logged-in'} 
       </Typography>
       {loggedIn ?
       <>
         <Typography>
-          ID: {activeUser.id} (@{activeUser.username})
+          Metamask account address: {account}
+        </Typography>
+        <Typography>
+          DID: {activeUser.id} (@{activeUser.username})
         </Typography>
         <Typography>
           Name: {activeUser.firstname} {activeUser.lastname}
@@ -71,9 +90,7 @@ const Home = (props:any) => {
         Object.values(activeUser.credentials).map((credential:any,index:number)=><CredentialTile key={credential.id} credential={credential} title={Object.keys(activeUser.credentials)[index]} />)
           // <Link to={`${activeUser.degreeCertificate.digest}`}><Typography>Degree Certificate</Typography></Link>
         :''}
-        <Button onClick={handleLogout}>Logout</Button>
-      </>: 
-      <Button href="/login">Login</Button>}
+      </>: null}
     </>
     </Box>
   );
