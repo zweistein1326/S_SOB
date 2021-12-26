@@ -5,5 +5,7 @@ export interface Credential{
     iat: Date,
     issuer: string,
     signature: string,
-    url: string
+    url: string,
+    pending: boolean,
+    sharedWith: string[]
 }

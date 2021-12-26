@@ -144,7 +144,7 @@ router.get('/user/:id', async (req, res, next) => {
 router.post('/addCredential', async (req, res, next) => {
   const { title, value, issuerId, receiverId, hash, signature } = req.body;
   const id = randomUUID(); // generate id according to hash
-  const credential = { ...req.body, id, iat: Date.now().toString() };
+  const credential = { ...req.body, id, iat: Date.now().toString(), pending: true };
   //verify credential signature
 
   const hashFromSignature = CryptoJS.AES.decrypt(signature, privateKey);

@@ -60,13 +60,11 @@ const Home = (props:any) => {
     User information
       <Header setLoggedIn={setLoggedIn} loggedIn={loggedIn}/>
     </Box>
-    <>
-    {/* <Typography variant="h2">Home Page</Typography> */}
+    <Box sx={{display:'flex'}}>
+    <Box sx={{width:'30vw', height:'100vh', m:2}}>
       <Typography>
-        {loggedIn && props.auth.user ? '' : 'Not logged-in'} 
-      </Typography>
-      {loggedIn ?
-      <>
+          My photo (optional)
+        </Typography>
         <Typography>
           Metamask account address: {account}
         </Typography>
@@ -79,23 +77,37 @@ const Home = (props:any) => {
         <Typography>
           Email: {activeUser.email}
         </Typography>
-        
+        <Button sx={{ mt:3, mb:2 }} variant="contained"><Link to={`/addCredential`}><Typography sx={{color:'white'}}>Add new Credential</Typography></Link></Button>
+    </Box>
+      {/* <Typography>
+        {loggedIn && props.auth.user ? '' : 'Not logged-in'} 
+      </Typography> */}
+      <Box sx={{width:'60vw', height:'100vh', m:3}}>
+      {loggedIn ?
+      <>
         {activeUser.id == props.auth.user.id?
-        <>
-        <Typography>
-          Your saved credentials
-        </Typography>
-        <Typography>
-          Update user information
-        </Typography>
-        <Link to={`/addCredential`}><Typography>Add new Credential</Typography></Link>
-        </>:
+        <Box display='flex'>
+          <Box sx={{width:'50%'}}>
+          <Typography variant="h4" >
+            Pending Requests
+          </Typography>
+          {activeUser.credentials ?
+          Object.values(activeUser.credentials).map((credential:any,index:number)=>credential.pending?<CredentialTile key={credential.id} credential={credential} title={Object.keys(activeUser.credentials)[index]} />:null)
+          :''}
+          </Box>
+          <Box sx={{width:'50%'}}>
+          <Typography variant="h4">
+            Accepted credentials
+          </Typography>
+          {activeUser.credentials ?
+          Object.values(activeUser.credentials).map((credential:any,index:number)=>!credential.pending?<CredentialTile key={credential.id} credential={credential} title={Object.keys(activeUser.credentials)[index]} />:null)
+          :''}
+          </Box>
+        </Box>:
         null}
-        {activeUser.credentials ?
-        Object.values(activeUser.credentials).map((credential:any,index:number)=><CredentialTile key={credential.id} credential={credential} title={Object.keys(activeUser.credentials)[index]} />)
-        :''}
       </>: null}
-    </>
+      </Box>
+      </Box>
     </Box>
   );
 };
