@@ -61,15 +61,15 @@ const Home = (props:any) => {
       <Header setLoggedIn={setLoggedIn} loggedIn={loggedIn}/>
     </Box>
     <Box sx={{display:'flex'}}>
-    <Box sx={{width:'30vw', height:'100vh', m:2}}>
+    <Box sx={{width:'20vw', height:'100vh', mt:2, backgroundColor:'beige', p:3}}>
       <Typography>
           My photo (optional)
         </Typography>
-        <Typography>
+        {/* <Typography>
           Metamask account address: {account}
-        </Typography>
-        <Typography>
-          DID: {activeUser.id} (@{activeUser.username})
+        </Typography> */}
+        <Typography sx={{display:'inline'}}>
+          DID: <span style={{fontWeight:'bold'}}>{activeUser.id} (@{activeUser.username})</span>
         </Typography>
         <Typography>
           Name: {activeUser.firstname} {activeUser.lastname}

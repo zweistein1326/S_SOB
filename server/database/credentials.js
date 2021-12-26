@@ -9,11 +9,23 @@ async function create(credential) {
             issuer: credential.issuerId,
             hash: credential.hash,
             signature: credential.signature,
-            iat: credential.iat
+            iat: credential.iat,
+            pending: credential.pending
         })
     } catch (err) {
         console.log(err);
     }
 }
 
-module.exports = { create }
+async function updateCredentialStatus(credentialId, ownerId) {
+    try {
+        firebasedb.update(firebasedb.ref(db, `users/${ownerId}/credentials/` + credentialId), {
+            pending: false
+        })
+        return true
+    } catch (err) {
+        console.log(err);
+    }
+}
+
+module.exports = { create, updateCredentialStatus }

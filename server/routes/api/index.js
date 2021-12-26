@@ -165,9 +165,16 @@ router.post('/addCredential', async (req, res, next) => {
   // } else {
   //   console.log('hash verification failed');
   // }
+})
 
-
-
+router.post('/updateCredential', async (req, res, next) => {
+  const { id, ownerId } = req.body
+  const status = credentials.updateCredentialStatus(id, ownerId);
+  if (status) {
+    return res.json({ status: 'success' })
+  } else {
+    return res.json({ status: 'failed' })
+  }
 })
 
 module.exports = router;
