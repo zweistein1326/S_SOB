@@ -14,7 +14,7 @@ const CredentialTile = (props:any) => {
     return(
         <div>
             -------------------------------
-            <Link to={`${credential.id}`}><Typography>{title}</Typography></Link>
+            <Link to={`${title}`}><Typography>{title}</Typography></Link>
             -------------------------------
         </div>
     )

@@ -6,14 +6,14 @@ import { useParams } from 'react-router-dom';
 import { Credential } from '../models/Credential';
 
 const CredentialPage = (props:any) => {
-    const {credentialId} = useParams();
+    const { credentialId }:any = useParams();
     const [credential,setCredential] = useState<Credential|null>(null);
     const [isAuth,setAuth] = useState(
         props.auth.user !== null //set inital to public
     );    
     
     const fetchCredentialInfo = () => {
-        var cred  = Object.values<Credential>(props.auth.user.credentials).find((credential:Credential)=> credential.id == credentialId) || null;
+        var cred  = props.auth.user.credentials[credentialId];
         setCredential(cred);
     }
 
@@ -26,10 +26,14 @@ const CredentialPage = (props:any) => {
         </Typography>
         {credential?
         <>
-            <Typography><Link to={`/user/${credential.issuer}`}>Issuer: {credential.issuer}</Link></Typography>
-            <Typography>Signature: <Link to={`/user/${credential.issuer}`}> {credential.signature}</Link></Typography>
+            <Typography>Issuer:<Link to={`/user/${credential.issuer}`}>{credential.issuer}</Link></Typography>
+            <Typography>Credential: {credential.title}</Typography>
+            <Typography>Value: {credential.value}</Typography>
+            <Typography>Verified: True</Typography>
             <Typography>Url:<a href={credential.url}> {credential.url}</a></Typography>
             <Typography>View History</Typography>
+            <Typography>Shared with: </Typography>
+
         </>:
            null}
         
