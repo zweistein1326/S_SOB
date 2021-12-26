@@ -1,9 +1,11 @@
 export interface Credential{
     id: string,
-    key: string,
+    title: string,
     value: any,
     iat: Date,
     issuer: string,
     signature: string,
-    url: string
+    url: string,
+    pending: boolean,
+    sharedWith: string[]
 }
