@@ -134,8 +134,6 @@ app.use(require('./routes'));
 //         res.render('login.ejs');
 //     }
 
-// })
-
 // app.get('/login', checkNotAuthenticated, (req, res) => {
 //     console.log(req.session);
 //     if (!!req.session.sessionToken) {
@@ -153,6 +151,7 @@ app.use(require('./routes'));
 //         res.render('register.ejs');
 //     }
 // })
+
 
 // /**
 //  * To be depreciated when front-end is fully migrated to React
@@ -173,8 +172,85 @@ app.use(require('./routes'));
 //             password: hashedPassword
 //         }
 
-//         const token = jwt.sign(newUser.id, process.env.TOKEN_KEY, { algorithm: 'HS256' })
-//         newUser = { ...newUser, token }
+/**
+ * To be depreciated when front-end is fully migrated to React
+ */
+app.post('/register', async (req, res) => {
+
+    // check if user with email, username exists
+
+    const { username, email, password } = req.body;
+    try {
+        const hashedPassword = await bcrypt.hash(password, 10);
+
+        // users.push(newUser);
+        let newUser = {
+            id: Date.now().toString(),
+            username,
+            email,
+            password: hashedPassword
+        }
+
+        const token = jwt.sign(newUser.id, process.env.TOKEN_KEY, { algorithm: 'HS256' })
+        newUser = { ...newUser, token }
+
+        await writeUserData(newUser);
+
+        // getAllUsers();
+        res.redirect('/login');
+    }
+    catch (e) {
+        console.log(e);
+        res.redirect('/register');
+    }
+    // console.log(users);
+})
+// app.post('/login', passport.authenticate('local', {
+//     successRedirect: '/',
+//     failureFlash: true
+// }))
+
+/** 
+ * To be depreciated when front-end is fully migrated to React
+ */
+app.post('/login', async (req, res, next) => {
+    const { email, password } = req.body;
+
+    let user = getUserByEmail(email);
+
+    console.log(user);
+
+    const token = jwt.sign(user.id,
+        process.env.TOKEN_KEY, {
+        algorithm: 'HS256',
+    })
+    user.token = token
+    if (user == null) {
+        return done(null, false, { message: 'No user with that email' });
+    }
+    try {
+        if (await bcrypt.compare(password, user.password)) {
+            sessionToken = req.session;
+            sessionToken.userId = user.id;
+            sessionToken.token = user.token;
+            // axios.post('http://localhost:9000',
+            //     { type: '0001', issuerId: 0, receiverId: user.id, data: { username: 'Siddharth' } }, {
+            //     headers: {
+            //         'Content-Type': 'application/json',
+            //         'Access-Control-Allow-Origin': '*'
+            //     }
+            // });
+            // return done(null, user)
+            res.redirect('/');
+        }
+        else {
+            console.log('password incorrect');
+        }
+    } catch (e) {
+        console.log(e)
+    }
+})
+
 
 //         await writeUserData(newUser);
 
@@ -291,18 +367,20 @@ app.post('/ssoLogin', (req, res, next) => {
 // })
 
 
-// // app.post('/updateCredential', (req, res, next) => {
-// //     const { issuerId, credential, credentialId, key, to } = req.body;
-// //     const iat = new Date();
-// //     try {
-// //         const transaction = new Transaction('updateCredential', to, { issuerId, to, key, credential, credentialId, iat })
-// //         blockchain.getCurrentBlock().addToBlock(transaction);
-// //         console.log(blockchain.getCurrentBlock().transactions);
-// //         res.send();
-// //     } catch (e) {
-// //         next(e);
-// //     }
-// // })
+
+// app.post('/updateCredential', (req, res, next) => {
+//     const { issuerId, credential, credentialId, key, to } = req.body;
+//     const iat = new Date();
+//     try {
+//         const transaction = new Transaction('updateCredential', to, { issuerId, to, key, credential, credentialId, iat })
+//         blockchain.getCurrentBlock().addToBlock(transaction);
+//         console.log(blockchain.getCurrentBlock().transactions);
+//         res.send();
+//     } catch (e) {
+//         next(e);
+//     }
+// })
+
 
 
 app.listen(port, () => { console.log(`Listening on port ${port}`) })
