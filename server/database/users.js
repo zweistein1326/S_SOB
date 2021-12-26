@@ -1,5 +1,5 @@
 const firebasedb = require('firebase/database');
-const { getAllUsers } = require('.');
+const { getAllUsers, db } = require('.');
 
 var users = null;
 async function list() {

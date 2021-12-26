@@ -36,6 +36,7 @@ const Home = (props:any) => {
   }
 
   const getUserInfo = async () =>{
+    console.log(id);
     await connectWalletHandler();
     fetchInfo({
       variables: {
@@ -48,7 +49,10 @@ const Home = (props:any) => {
     })
   }
 
-  useEffect(()=>{getUserInfo()},[])
+  useEffect(()=>{ 
+    getUserInfo()
+  },activeUser);
+
 
   return (
     <Box>
@@ -84,11 +88,11 @@ const Home = (props:any) => {
         <Typography>
           Update user information
         </Typography>
+        <Link to={`/addCredential`}><Typography>Add new Credential</Typography></Link>
         </>:
         null}
         {activeUser.credentials ?
         Object.values(activeUser.credentials).map((credential:any,index:number)=><CredentialTile key={credential.id} credential={credential} title={Object.keys(activeUser.credentials)[index]} />)
-          // <Link to={`${activeUser.degreeCertificate.digest}`}><Typography>Degree Certificate</Typography></Link>
         :''}
       </>: null}
     </>
