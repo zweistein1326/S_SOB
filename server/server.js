@@ -24,7 +24,7 @@ const { getUserById, getUserByEmail } = require('./database/index');
 
 var users = [];
 const transactions = [];
-const connections = [{ url: 'http://localhost:3000', status: false }];
+const connections = [{ url: 'http://localhost:3002', status: false }];
 
 // const blockchain = new Blockchain();
 
@@ -253,34 +253,34 @@ app.use(require('./routes'));
 //     return res.redirect('/login');
 // })
 
-// app.post('/ssoLogin', (req, res, next) => {
-//     //wait for either register or login
-//     const { credentialsRequired } = req.body;
-//     const origin = req.get('origin');
-//     const originStatus = connections.find((connection) => connection.url == origin).status;
-//     if (originStatus == false) { res.send(null); }
-//     else {
-//         if (sessionToken.userId && sessionToken.token) {
-//             let user = getUserById(sessionToken.userId);
-//             transactions.push({
-//                 type: 'Login',
-//                 from: user.id,
-//                 iat: new Date()
-//             });
-//             let credentials = {}
-//             for (i = 0; i < credentialsRequired.length; i++) {
-//                 let credential = credentialsRequired[i].toString()
-//                 credentials = {
-//                     ...credentials, [credential]: user[credentialsRequired[i]]
-//                 }
-//             }
-//             res.send({ sessionToken: sessionToken.token, credentials: credentials });
-//         }
-//         else {
-//             res.send(null);
-//         }
-//     }
-// });
+app.post('/ssoLogin', (req, res, next) => {
+    //wait for either register or login
+    const { credentialsRequired } = req.body;
+    const origin = req.get('origin');
+    const originStatus = connections.find((connection) => connection.url == origin).status;
+    if (originStatus == false) { res.send(null); }
+    else {
+        if (sessionToken.userId && sessionToken.token) {
+            let user = getUserById(sessionToken.userId);
+            transactions.push({
+                type: 'Login',
+                from: user.id,
+                iat: new Date()
+            });
+            let credentials = {}
+            for (i = 0; i < credentialsRequired.length; i++) {
+                let credential = credentialsRequired[i].toString()
+                credentials = {
+                    ...credentials, [credential]: user[credentialsRequired[i]]
+                }
+            }
+            res.send({ sessionToken: sessionToken.token, credentials: credentials });
+        }
+        else {
+            res.send(null);
+        }
+    }
+});
 
 // app.post('/connect', (req, res, next) => {
 //     // if connected then disconnect
