@@ -2,12 +2,18 @@ const jwt = require('jsonwebtoken');
 const bcrypt = require('bcrypt');
 var router = require('express').Router();
 var users = require('../../database/users');
-// const e = require('express');
+var credentials = require('../../database/credentials');
+const uuid = require('uuid');
 const Web3 = require('web3');
 const Users = require('../../../Blockchain/build/contracts/Users.json');
 const { generateHash } = require('../../functions/HelperFunctions');
+const { randomUUID, publicDecrypt, verify } = require('crypto');
+var CryptoJS = require('crypto-js');
 
 const web3 = new Web3('HTTP://127.0.0.1:7545');
+
+const privateKey = process.env.PRIVATE_KEY;
+const publicKey = process.env.PUBLIC_KEY;
 
 const TOKEN_KEY = process.env.TOKEN_KEY;
 let account;
@@ -137,10 +143,31 @@ router.get('/user/:id', async (req, res, next) => {
 
 router.post('/addCredential', async (req, res, next) => {
   const { title, value, issuerId, receiverId, hash, signature } = req.body;
-  const credential = { title, value, issuerId, receiverId, iat: new Date() }
-  console.log(req.body);
-  // verify hash
-  // verify signature
+  const id = randomUUID(); // generate id according to hash
+  const credential = { ...req.body, id, iat: Date.now().toString() };
+  //verify credential signature
+
+  const hashFromSignature = CryptoJS.AES.decrypt(signature, privateKey);
+
+  try {
+    credentials.create(credential);
+    return res.json({ status: 'success', credential, message: 'credential verified' })
+  } catch (error) {
+    return res.json({ status: 'failed', credential: null, message: error.message });
+  }
+
+  // const verifySign = verify("sha256", Buffer.from(hash), { key: publicKey }, signature);
+  // console.log(verifySign);
+  // verify credential hash
+
+  // if (hash == checkHash) {
+  //   console.log('hash verified');
+  // } else {
+  //   console.log('hash verification failed');
+  // }
+
+
+
 })
 
 module.exports = router;
