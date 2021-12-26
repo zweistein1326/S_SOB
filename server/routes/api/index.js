@@ -2,14 +2,33 @@ const jwt = require('jsonwebtoken');
 const bcrypt = require('bcrypt');
 var router = require('express').Router();
 var users = require('../../database/users');
-const e = require('express');
+// const e = require('express');
+const Web3 = require('web3');
+const Users = require('../../../Blockchain/build/contracts/Users.json');
+const { generateHash } = require('../../functions/HelperFunctions');
+
+const web3 = new Web3('HTTP://127.0.0.1:7545');
 
 const TOKEN_KEY = process.env.TOKEN_KEY;
+let account;
+let contract;
+
+const initAccount = async () => {
+  let tempAccount = await web3.eth.getAccounts();
+  account = tempAccount[1];
+  contract = new web3.eth.Contract(Users.abi, Users.networks[5777].address);
+}
 
 router.post('/login', async (req, res, next) => {
+  // await initAccount();
   const { email, password } = req.body;
 
-  users.getUserByEmail(email).then(user => {
+  // fetch users from the blockchain and cross reference information to login
+
+  // const userFound = await contract.methods.getUser(email, password).send({ from: account });
+  // console.log(userFound);
+
+  users.getUserByEmail(email).then(async user => {
     if (user == null) {
       return res.json({
         status: 'failed',
@@ -18,17 +37,32 @@ router.post('/login', async (req, res, next) => {
       });
     }
 
+    // try {
+    //   // await contract.methods.addUser(3).send({ from: account[0] });
+    //   const userCount = await contract.methods.userCount().call({ from: account });
+    //   const user = await contract.methods.users(1).call({ from: account });
+    //   console.log(userCount);
+    //   console.log(user);
+    //   // const userCount = await methods;
+    //   // console.log(userCount);
+    //   // return
+    // } catch (e) {
+    //   console.log(e);
+    //   // return;
+    // }
+
+
     const token = jwt.sign(user.id, TOKEN_KEY, { algorithm: 'HS256' });
 
     bcrypt.compare(password, user.password).then(passwordMatch => {
       if (passwordMatch) {
-        console.log({
-          user,
-          status: 'success',
-          token: token,
-          message: '',
-        })
-        console.log('successful login')
+        // console.log({
+        //   user,
+        //   status: 'success',
+        //   token: token,
+        //   message: '',
+        // })
+        // console.log('successful login')
         return res.json({
           user,
           status: 'success',
@@ -49,6 +83,7 @@ router.post('/login', async (req, res, next) => {
 });
 
 router.post('/register', async (req, res, next) => {
+  // initAccount();
   const { username, email, password } = req.body;
 
   if (await users.getUserByEmail(email))
@@ -57,6 +92,7 @@ router.post('/register', async (req, res, next) => {
       token: '',
       message: 'email already registered',
     });
+
 
   try {
     const hashedPassword = await bcrypt.hash(password, 10);
@@ -70,6 +106,9 @@ router.post('/register', async (req, res, next) => {
 
     const token = jwt.sign(user.id, TOKEN_KEY, { algorithm: 'HS256' });
     await users.create(user);
+    // gasestimate = await contract.methods.addUser(user.id, user.email, user.password).estimateGas({ from: account })
+    // console.log(gasestimate);
+    // add user to users list and update on blockchain
 
     return res.json({
       status: 'success',
@@ -85,15 +124,23 @@ router.post('/register', async (req, res, next) => {
 
 router.get('/user/:id', async (req, res, next) => {
   const { id } = req.params;
-  console.log(id);
+  // console.log(id);
   try {
     const user = await users.getUserById(id);
-    console.log(user);
+    // console.log(user);
     return res.json({ user: user })
   }
   catch (error) {
     console.log(error)
   }
+})
+
+router.post('/addCredential', async (req, res, next) => {
+  const { title, value, issuerId, receiverId, hash, signature } = req.body;
+  const credential = { title, value, issuerId, receiverId, iat: new Date() }
+  console.log(req.body);
+  // verify hash
+  // verify signature
 })
 
 module.exports = router;

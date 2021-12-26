@@ -6,7 +6,7 @@ export const LOGIN = gql`
     password: String
   }
   mutation Login($input: Payload!) {
-    login(input: $input) @rest(type: "Post", method: "POST", path: "/login") {
+    login(input: $input) @rest(type: "Post", method: "Post", path: "/login") {
       user
       status
       token

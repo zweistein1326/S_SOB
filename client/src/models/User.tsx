@@ -6,6 +6,4 @@ export interface User{
     username: String,
     publicKey: String,
     credentials: Credential[]
-    firstname: string,
-    lastname:string
 }

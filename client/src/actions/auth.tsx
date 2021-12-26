@@ -3,7 +3,7 @@ import { User } from "../models/User";
 
 export const login = (user:User) => ({
     type: 'LOGIN',
-    user: user
+    user:user
 })
 
 export const credentials = ({ username }:any) => ({
