@@ -22,10 +22,19 @@ export const REGISTER = gql`
     password: String
   }
   mutation Register($input: Payload!) {
-    register(input: $input) @rest(type: "Post", method: "Post", path: "/register") {
+    register(input: $input) @rest(type: "Post", method: "POST", path: "/register") {
       status
       token
       message
+    }
+  }
+`;
+
+export const GETUSERBYID = gql`
+  mutation GetUserById($id: String!) {
+    getUserById(id: $id)
+      @rest(type: "Get", method: "GET", path: "/user/{args.id}") {
+      user
     }
   }
 `;

@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import {
   Avatar,
   Button,
@@ -42,7 +42,7 @@ const Login = (props:any) => {
         if (status === 'success') {
           props.login(user)
           localStorage.setItem('token', token);
-          navigate('/');
+          navigate(`/user/${user.id}`);
         } else {
           setMessage(message);
         }
