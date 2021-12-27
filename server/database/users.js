@@ -32,12 +32,8 @@ async function getUserById(id) {
 
 async function create(user) {
   try {
-    firebasedb.set(firebasedb.ref(db, 'users/' + user.id), {
-      id: user.id,
-      email: user.email,
-      username: user.username,
-      password: user.password,
-    });
+    console.log(user);
+    firebasedb.set(firebasedb.ref(db, 'users/' + user.id), user);
   } catch (err) {
     console.error(err);
   }

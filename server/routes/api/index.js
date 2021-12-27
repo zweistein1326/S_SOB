@@ -7,7 +7,7 @@ const uuid = require('uuid');
 const Web3 = require('web3');
 const Users = require('../../../Blockchain/build/contracts/Users.json');
 const { generateHash } = require('../../functions/HelperFunctions');
-const { randomUUID, publicDecrypt, verify } = require('crypto');
+const { randomUUID, publicDecrypt, verify, generateKeyPair } = require('crypto');
 var CryptoJS = require('crypto-js');
 
 const web3 = new Web3('HTTP://127.0.0.1:7545');
@@ -96,31 +96,61 @@ router.post('/register', async (req, res, next) => {
     return res.json({
       status: 'failed',
       token: '',
+      privateKey: '',
       message: 'email already registered',
     });
+
 
 
   try {
     const hashedPassword = await bcrypt.hash(password, 10);
 
-    const user = {
-      id: Date.now().toString(),
-      username,
-      email,
-      password: hashedPassword
-    }
+    let publicKey = null;
+    let privateKey = null;
+    generateKeyPair('rsa', {
+      modulusLength: 530,    // options
+      publicExponent: 0x10101,
+      publicKeyEncoding: {
+        type: 'spki',
+        format: 'der'
+      },
+      privateKeyEncoding: {
+        type: 'pkcs8',
+        format: 'der',
+      }
+    }, async (err, pubKey, privKey) => { // Callback function
+      if (!err) {
+        // Prints new asymmetric key pair
+        publicKey = pubKey.toString('hex');
+        privateKey = privKey.toString('hex');
+        const user = {
+          id: Date.now().toString(),
+          username,
+          email,
+          password: hashedPassword,
+          publicKey
+        }
 
-    const token = jwt.sign(user.id, TOKEN_KEY, { algorithm: 'HS256' });
-    await users.create(user);
-    // gasestimate = await contract.methods.addUser(user.id, user.email, user.password).estimateGas({ from: account })
-    // console.log(gasestimate);
-    // add user to users list and update on blockchain
+        // const token = jwt.sign(user.id, TOKEN_KEY, { algorithm: 'HS256' });
 
-    return res.json({
-      status: 'success',
-      token: token,
-      message: '',
+        await users.create(user);
+
+        // gasestimate = await contract.methods.addUser(user.id, user.email, user.password).estimateGas({ from: account })
+        // console.log(gasestimate);
+        // add user to users list and update on blockchain
+
+        return res.json({
+          status: 'success',
+          privateKey,
+          message: '',
+        });
+      }
+      else {
+        // Prints error
+        console.log("Errr is: ", err);
+      }
     });
+
   }
   catch (err) {
     console.error(err);
