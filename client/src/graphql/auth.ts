@@ -9,7 +9,6 @@ export const LOGIN = gql`
     login(input: $input) @rest(type: "Post", method: "Post", path: "/login") {
       user
       status
-      token
       message
     }
   }
@@ -24,7 +23,7 @@ export const REGISTER = gql`
   mutation Register($input: Payload!) {
     register(input: $input) @rest(type: "Post", method: "POST", path: "/register") {
       status
-      token
+      privateKey
       message
     }
   }

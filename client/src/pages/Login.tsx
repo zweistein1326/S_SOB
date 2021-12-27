@@ -18,6 +18,7 @@ import { LOGIN } from '../graphql';
 import {connect} from 'react-redux';
 import { login } from '../actions/auth';
 import { User } from '../models/User';
+import { privateEncrypt } from 'crypto';
 
 
 const Login = (props:any) => {
@@ -28,9 +29,14 @@ const Login = (props:any) => {
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
+    const password:string = data.get('password')?.toString() || '';
+    console.log(password);
+
+    const privateKey:string = localStorage.getItem('privateKey') || '';
+
     const payload = {
       email: data.get('email'),
-      password: data.get('password'),
+      password: password,
     };
 
     submitLogin({

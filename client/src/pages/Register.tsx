@@ -42,9 +42,9 @@ const Register = () => {
       },
     })
       .then((res) => {
-        const { status, token, message } = res.data.register;
+        const { status, privateKey, message } = res.data.register;
         if (status === 'success') {
-          localStorage.setItem('token', token);
+          localStorage.setItem('privateKey', privateKey);
           navigate('/');
         } else {
           setMessage(message);
