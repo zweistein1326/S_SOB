@@ -1,20 +1,36 @@
 import { useState } from "react";
 import { connect } from "react-redux"
-import { Box, Button, Typography } from "@mui/material";
+import { Alert, Box, Button, Typography } from "@mui/material";
 import { Link } from "react-router-dom";
 import { useMutation } from "@apollo/client";
-import { CHANGESTATUS } from "../graphql";
+import { CHANGEPENDINGSTATUS, CHANGESTATUS } from "../graphql";
 
 const CredentialTile = (props:any) => {
     const {credential,title} = props;
-    const [changeCredentialStatus,{loading,error}] = useMutation(CHANGESTATUS);
-    console.log(props.auth.user);
+    const [changeCredentialPendingStatus,{loading,error}] = useMutation(CHANGEPENDINGSTATUS);
+    const [changeCredentialStatus,{loading:loading2,error:error2}] = useMutation(CHANGESTATUS);
 
     const getCredentialInfo = ()=>{
-        // find info for credential
+        // find info for credentialx
     }
 
      const acceptCredential=()=>{
+        changeCredentialPendingStatus({
+            variables:{
+                input: {
+                    id:title,
+                    ownerId: props.auth.user.id
+                }
+            }
+        }).then((res)=>{
+            const {status} = res.data.changeCredentialPendingStatus;
+            console.log(status);
+        })
+    }
+
+    const revokeCredential = ()=>{
+        alert('Are you sure you want to revoke this credential?');
+        // delink credential from user's account
         changeCredentialStatus({
             variables:{
                 input: {
@@ -26,10 +42,6 @@ const CredentialTile = (props:any) => {
             const {status} = res.data.changeCredentialStatus;
             console.log(status);
         })
-    }
-
-    const rejectCredential = ()=>{
-        // delink credential from user's account
     }
 
     return(
@@ -44,7 +56,7 @@ const CredentialTile = (props:any) => {
             sx={{ mt:3, mb:2 }}>
                 Accept
             </Button>
-            <Button onClick={rejectCredential}
+            <Button onClick={revokeCredential}
             color="error"
             variant="contained"
             sx={{ mt:3, mb:2 }}>
@@ -52,11 +64,11 @@ const CredentialTile = (props:any) => {
             </Button>
             </Box> 
             :
-            <Button onClick={()=>{}}
-            color="error"
+            <Button onClick={revokeCredential}
+            color="warning"
             variant="contained"
             sx={{ mt:3, mb:2 }}>
-                Delete
+                Revoke
             </Button>}
         </Box>
     )

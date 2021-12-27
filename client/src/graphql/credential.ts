@@ -16,13 +16,39 @@ export const ADDCREDENTIAL = gql`
     }
 `;
 
+export const REQUESTCREDENTIAL = gql`
+    fragment Payload on REST{
+       id:String,
+       message:String
+    }
+    mutation RequestCredential($input:Payload!){
+        requestCredential(input:$input) @rest(type:"Post",method:"POST",path:"/requestCredential"){
+            status
+            message
+        }
+    }
+`;
+
+
+export const CHANGEPENDINGSTATUS = gql`
+    fragment Payload on REST {
+        id: String
+    }
+    mutation ChangeCredentialPendingStatus($input: Payload!){
+        changeCredentialPendingStatus(input: $input)
+            @rest(type: "Post", method: "POST", path: "/updateCredentialPendingStatus") {
+                status
+            }
+    }
+`;
+
 export const CHANGESTATUS = gql`
     fragment Payload on REST {
         id: String
     }
     mutation ChangeCredentialStatus($input: Payload!){
         changeCredentialStatus(input: $input)
-            @rest(type: "Post", method: "POST", path: "/updateCredential") {
+            @rest(type: "Post", method: "POST", path: "/updateCredentialStatus") {
                 status
             }
     }

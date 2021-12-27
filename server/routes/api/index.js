@@ -167,7 +167,29 @@ router.post('/addCredential', async (req, res, next) => {
   // }
 })
 
-router.post('/updateCredential', async (req, res, next) => {
+router.post('/requestCredential', (req, res, next) => {
+  const { id, message } = req.body;
+  console.log(req.body);
+  try {
+    return res.json({ status: 'success', message: 'request successful' })
+  } catch (err) {
+    return res.json({ status: 'failed', message: error.message })
+  }
+
+})
+
+
+router.post('/updateCredentialPendingStatus', async (req, res, next) => {
+  const { id, ownerId } = req.body
+  const status = credentials.updateCredentialPendingStatus(id, ownerId);
+  if (status) {
+    return res.json({ status: 'success' })
+  } else {
+    return res.json({ status: 'failed' })
+  }
+})
+
+router.post('/updateCredentialStatus', async (req, res, next) => {
   const { id, ownerId } = req.body
   const status = credentials.updateCredentialStatus(id, ownerId);
   if (status) {
