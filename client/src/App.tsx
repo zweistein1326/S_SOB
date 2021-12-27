@@ -9,6 +9,7 @@ import { useEffect } from 'react';
 import AddCredential from './pages/AddCredential';
 import { Provider } from 'react-redux';
 import configureStore from './store/configureStore';
+import RequestCredential from './pages/RequestCredential';
 
 
 declare var window: any;
@@ -54,6 +55,7 @@ function App() {
           <Route path="/user/:id" element={<Home />} />
           <Route path="/user/:id/:credentialId" element={<CredentialPage />} />
           <Route path="/addCredential" element={<AddCredential />} />
+          <Route path="/requestCredential" element={<RequestCredential />} />
         </Routes>
       </Router>
       </Provider>

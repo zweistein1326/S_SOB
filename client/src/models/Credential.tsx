@@ -7,5 +7,6 @@ export interface Credential{
     signature: string,
     url: string,
     pending: boolean,
-    sharedWith: string[]
+    sharedWith: string[],
+    status:boolean
 }

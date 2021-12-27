@@ -20,6 +20,17 @@ async function create(credential) {
 async function updateCredentialStatus(credentialId, ownerId) {
     try {
         firebasedb.update(firebasedb.ref(db, `users/${ownerId}/credentials/` + credentialId), {
+            status: false
+        })
+        return true
+    } catch (err) {
+        console.log(err);
+    }
+}
+
+async function updateCredentialPendingStatus(credentialId, ownerId) {
+    try {
+        firebasedb.update(firebasedb.ref(db, `users/${ownerId}/credentials/` + credentialId), {
             pending: false
         })
         return true
@@ -28,4 +39,4 @@ async function updateCredentialStatus(credentialId, ownerId) {
     }
 }
 
-module.exports = { create, updateCredentialStatus }
+module.exports = { create, updateCredentialStatus, updateCredentialPendingStatus }
