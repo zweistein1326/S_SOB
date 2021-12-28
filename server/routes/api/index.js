@@ -26,6 +26,7 @@ const initAccount = async () => {
 }
 
 router.post('/login', async (req, res, next) => {
+  console.log('login');
   // await initAccount();
   const { email, password } = req.body;
 
