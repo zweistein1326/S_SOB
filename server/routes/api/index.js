@@ -3,9 +3,9 @@ const bcrypt = require('bcrypt');
 var router = require('express').Router();
 var users = require('../../database/users');
 var credentials = require('../../database/credentials');
+var cards = require('../../database/card');
 const uuid = require('uuid');
 const Web3 = require('web3');
-const Users = require('../../../Blockchain/build/contracts/Users.json');
 const { generateHash } = require('../../functions/HelperFunctions');
 const { randomUUID, publicDecrypt, verify, generateKeyPair } = require('crypto');
 var CryptoJS = require('crypto-js');
@@ -19,11 +19,6 @@ const TOKEN_KEY = process.env.TOKEN_KEY;
 let account;
 let contract;
 
-const initAccount = async () => {
-  let tempAccount = await web3.eth.getAccounts();
-  account = tempAccount[1];
-  contract = new web3.eth.Contract(Users.abi, Users.networks[5777].address);
-}
 
 router.post('/login', async (req, res, next) => {
   console.log('login');
@@ -227,6 +222,27 @@ router.post('/updateCredentialStatus', async (req, res, next) => {
     return res.json({ status: 'success' })
   } else {
     return res.json({ status: 'failed' })
+  }
+})
+
+
+router.post('/createCard/:userId', async (req, res, next) => {
+  const { userId } = req.params;
+  const card = req.body;
+  const newCard = cards.createCard(userId, card);
+  if (newCard !== null) {
+    return res.json({
+      status: 'success',
+      newCard,
+      message: 'card created'
+    })
+  }
+  else {
+    return res.json({
+      status: 'failure',
+      newCard: null,
+      message: 'failed to create card'
+    })
   }
 })
 
