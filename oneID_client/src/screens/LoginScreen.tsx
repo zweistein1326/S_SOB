@@ -28,7 +28,10 @@ const LoginScreen = (props:any) => {
                 }
             }
             else{
-                props.navigation.navigate('CustomizeCard',{cardId:null});
+                props.navigation.navigate('Home',{
+                screen:'CustomizeCard',
+                params:{cardId:null}
+            });
             }
         }
         else{

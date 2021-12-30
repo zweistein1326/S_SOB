@@ -32,7 +32,10 @@ const RegisterScreen = (props:any) => {
             if(user.credentials){
                 props.setUserCredentials(Object.values(user.credentials));
             }
-            props.navigation.navigate('CustomizeCard',{cardId:null});
+            props.navigation.navigate('Home',{
+                screen:'CustomizeCard',
+                params:{cardId:null}
+            });
         }
         else{
             console.log('login failed');
