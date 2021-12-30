@@ -234,6 +234,8 @@ router.post('/updateCredentialStatus', async (req, res, next) => {
 router.post('/createCard/:userId', async (req, res, next) => {
   const { userId } = req.params;
   const card = req.body;
+  const cardId = uuidv4(req.body);
+  card.id = cardId;
   const newCard = cards.createCard(userId, card);
   if (newCard !== null) {
     return res.json({

@@ -1,6 +1,7 @@
 import { TextField } from '@mui/material';
+import CheckBox from '@react-native-community/checkbox';
 import React, { useState } from 'react';
-import { StyleSheet, Text, View } from 'react-native';
+import {  Pressable, StyleSheet, Text, View } from 'react-native';
 import { TextInput } from 'react-native-gesture-handler';
 import { connect } from 'react-redux';
 import Button from '../components/Button';
@@ -8,6 +9,9 @@ import UserCard from '../components/User/UserCard';
 import { createCard } from '../functions/axios';
 import { Card } from '../models/Card';
 import { cards } from '../redux/reducers/Cards';
+import { Ionicons } from '@expo/vector-icons';
+import CheckItem from '../components/Card/CheckItem';
+import { setCards } from '../redux/actions/CardActions';
 
 const CustomizeCardScreen = (props:any) => {
 
@@ -42,10 +46,25 @@ const CustomizeCardScreen = (props:any) => {
             foregroundColor:'white' 
         };
         const card = await createCard(cardData,props.user.id);
-        console.log(card);
+        props.setCards([card]);
+        props.navigation.navigate('Home',{screen:'HomeScreen'})
         }
-        
     }
+
+    const cardOptions = [
+        {
+            title:'Username',
+            value:props.user.username,
+            checked:false
+        },
+        {
+            title:'Email',
+            value:props.user.email,
+            checked:false
+        },
+    ]
+
+    
 
     return(
         <View style={styles.box}>
@@ -53,12 +72,15 @@ const CustomizeCardScreen = (props:any) => {
             <UserCard customize={true} card={card} user={props.user}/>
             <View style={{width:'100%', height:250, padding:20}}>
                 <Text>Customize Card Information</Text>
+
+                {cardOptions.map((option)=> <CheckItem item = {option}/>)}
+            
                 <View style = {{ padding:20, margin:10, borderColor:'white', borderBottomWidth:1, borderRadius:20 }}>
                     <TextInput value={cardTitle} onChangeText = {(cardTitle)=>{setCardTitle(cardTitle)}} placeholder='Card Title'/>
                 </View>
                 <View style = {{ padding:20, margin:10, borderColor:'white', borderBottomWidth:1, borderRadius:20 }}>
                     <TextInput placeholder='Link to social media'/>
-                    {card.social.map((social)=><Text>{social}</Text>)}
+                    {/* {card.social.map((social)=><Text>{social}</Text>)} */}
                     <Text>+</Text>
                 </View>
                 <Button 
@@ -84,6 +106,10 @@ const styles = StyleSheet.create({
 const mapStateToProps = (state:any) => ({
     user: state.auth.user,
     cards: state.cards
+})
+
+const mapDispatchToProps = (dispatch:any) => ({
+    setCards: (cards:Card[]) => setCards(cards)
 })
 
 export default connect(mapStateToProps,null)(CustomizeCardScreen);

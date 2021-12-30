@@ -32,7 +32,7 @@ const Home = () => {
     return (
         <Stack.Navigator key={'Home'}>
             <Stack.Screen
-            name="Home"
+            name="HomeScreen"
             component={HomeScreen}
             options = {{title:'Welcome'}}
             />
@@ -61,6 +61,7 @@ const Navigator = () => {
                 <Stack.Screen
                     name="Home"
                     component={Home}
+                    options={{headerShown:false}}
                 />
                 </Stack.Navigator>
         </NavigationContainer>
