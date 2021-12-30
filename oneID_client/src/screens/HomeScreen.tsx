@@ -1,12 +1,13 @@
 import { Props, useEffect, useState } from "react"
 import { Box, Typography} from '@mui/material';
-import { Text, View } from "react-native";
+import { StyleSheet, Text, View } from "react-native";
 import React from 'react';
 import { connect } from "react-redux";
 import CredentialTile from '../components/Credentials/CredentialTile';
 import UserCard from "../components/User/UserCard";
 import { FlatList, ScrollView } from "react-native-gesture-handler";
 import { Card } from "../models/Card";
+import { style } from "@mui/system";
 
 const HomeScreen = (props:any) =>{
 
@@ -17,11 +18,11 @@ const HomeScreen = (props:any) =>{
     // }
 
     // useEffect(findUserCredentials,[]);
-    console.log(props.credentials.length);
     console.log('cards',props.cards.length);
 
     return(
         <ScrollView>
+            <Text style={styles.heading}>My saved cards</Text>
         <View style={{display:'flex', alignItems:'center', paddingVertical:10}}>
             {props.cards.map((card:Card) => {
                 if(card!=null){
@@ -42,6 +43,14 @@ const mapStateToProps = (state:any) => ({
     user: state.auth.user,
     credentials: state.credentials,
     cards: state.cards
+})
+
+const styles = StyleSheet.create({
+    heading:{
+        padding:8,
+        fontSize:22,
+        fontWeight:'bold',
+    }
 })
 
 export default connect(mapStateToProps,null)(HomeScreen) ;

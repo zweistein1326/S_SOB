@@ -22,10 +22,9 @@ const LoginScreen = (props:any) => {
                 props.setUserCredentials(Object.values(user.credentials)); 
             }
             if(user.cards){
-                if(user.cards.length >= 1 ){
-                    props.setUserCards(Object.values(user.cards));
-                    props.navigation.navigate('Home');
-                }
+                console.log(user.cards)
+                props.setCards(Object.values(user.cards));
+                props.navigation.navigate('Home',{screen:'HomeScreen'});
             }
             else{
                 props.navigation.navigate('Home',{
@@ -94,7 +93,7 @@ const styles = StyleSheet.create({
 const mapDispatchToProps = (dispatch:any) => ({
     setUser: (user:any) => dispatch(setUser(user)),
     setUserCredentials: (credentials:any[]) => dispatch(setCredentials(credentials)),
-    setUserCards: (cards:any[]) => dispatch(setCards(cards))
+    setCards: (cards:any[]) => dispatch(setCards(cards))
 })
 
 export default connect(null,mapDispatchToProps)(LoginScreen);
