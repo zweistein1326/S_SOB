@@ -24,11 +24,11 @@ const HomeScreen = (props:any) =>{
         <ScrollView>
             <Text style={styles.heading}>My saved cards</Text>
         <View style={{display:'flex', alignItems:'center', paddingVertical:10}}>
-            {props.cards.map((card:Card) => {
+            {props.cards.length>0 ? props.cards.map((card:Card) => {
                 if(card!=null){
                       return (<UserCard key={card.id} navigation={props.navigation} card={card} user={props.user}/>)  
                 }
-            })}
+            }):<UserCard key={''} navigation={props.navigation} user={props.user}/>}
             {/* <FlatList data={props.cards} keyExtractor={(item)=>item? item.id : null} renderItem={({card}:any) => card ? <UserCard navigation={props.navigation} user={props.user}/> : null } /> */}
             {/* <View style={{ alignItems:'center' }}>
                 <Text style={{width:'100%'}}>Saved Credentials</Text>
