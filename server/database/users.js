@@ -25,6 +25,11 @@ async function getUserByEmail(email) {
   return users.find(user => user.email == email)
 }
 
+async function getUserByUsername(username) {
+  const users = getAllUsers();
+  return users.find(user => user.username == username)
+}
+
 async function getUserById(id) {
   const users = getAllUsers();
   return users.find(user => user.id == id)
@@ -56,6 +61,7 @@ async function update(userId, updates) {
 
 module.exports = {
   getUserByEmail,
+  getUserByUsername,
   getUserById,
   list,
   create,
