@@ -12,7 +12,18 @@ import { cards } from '../redux/reducers/Cards';
 const CustomizeCardScreen = (props:any) => {
 
     const {cardId} = props.route.params;
-    const card:Card = props.cards[cardId];
+    let card : Card = {
+        id:'',
+        title:'',
+        personalInfo:[],
+        social:[],
+        backgroundColor:'',
+        foregroundColor:'' 
+    };
+    if(cardId!==null){
+        card = props.cards[cardId];
+    }
+    
     
     const [cardTitle, setCardTitle] = useState(card.title);
     
@@ -39,7 +50,7 @@ const CustomizeCardScreen = (props:any) => {
     return(
         <View style={styles.box}>
             {/* <Text>Card #{cardId}: {cardTitle}</Text> */}
-            <UserCard customize={true} card={props.cards[cardId]} user={props.user}/>
+            <UserCard customize={true} card={card} user={props.user}/>
             <View style={{width:'100%', height:250, padding:20}}>
                 <Text>Customize Card Information</Text>
                 <View style = {{ padding:20, margin:10, borderColor:'white', borderBottomWidth:1, borderRadius:20 }}>
