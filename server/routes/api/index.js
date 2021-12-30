@@ -23,19 +23,19 @@ let contract;
 router.post('/login', async (req, res, next) => {
   console.log('login');
   // await initAccount();
-  const { email, password } = req.body;
+  const { username, password } = req.body;
 
   // fetch users from the blockchain and cross reference information to login
 
   // const userFound = await contract.methods.getUser(email, password).send({ from: account });
   // console.log(userFound);
 
-  users.getUserByEmail(email).then(async user => {
+  users.getUserByUsername(username).then(async user => {
     if (user == null) {
       return res.json({
         status: 'failed',
         token: '',
-        message: 'No user with that email',
+        message: 'No user with that username',
       });
     }
 
@@ -91,10 +91,17 @@ router.post('/register', async (req, res, next) => {
   if (await users.getUserByEmail(email))
     return res.json({
       status: 'failed',
-      token: '',
-      privateKey: '',
+      user: null,
       message: 'email already registered',
     });
+
+  if (await users.getUserByUsername(username)) {
+    return res.json({
+      status: 'failed',
+      user: null,
+      message: 'username already in user'
+    })
+  }
 
 
 
@@ -103,50 +110,48 @@ router.post('/register', async (req, res, next) => {
 
     let publicKey = null;
     let privateKey = null;
-    generateKeyPair('rsa', {
-      modulusLength: 530,    // options
-      publicExponent: 0x10101,
-      publicKeyEncoding: {
-        type: 'spki',
-        format: 'der'
-      },
-      privateKeyEncoding: {
-        type: 'pkcs8',
-        format: 'der',
-      }
-    }, async (err, pubKey, privKey) => { // Callback function
-      if (!err) {
-        // Prints new asymmetric key pair
-        publicKey = pubKey.toString('hex');
-        privateKey = privKey.toString('hex');
-        const user = {
-          id: Date.now().toString(),
-          username,
-          email,
-          password: hashedPassword,
-          publicKey
-        }
+    // generateKeyPair('rsa', {
+    //   modulusLength: 530,    // options
+    //   publicExponent: 0x10101,
+    //   publicKeyEncoding: {
+    //     type: 'spki',
+    //     format: 'der'
+    //   },
+    //   privateKeyEncoding: {
+    //     type: 'pkcs8',
+    //     format: 'der',
+    //   }
+    // }, async (err, pubKey, privKey) => { // Callback function
+    //   if (!err) {
+    //     // Prints new asymmetric key pair
+    //     publicKey = pubKey.toString('hex');
+    //     privateKey = privKey.toString('hex');
+    //   }
+    //   else {
+    //     // Prints error
+    //     console.log("Errr is: ", err);
+    //   }
+    // });
+    const user = {
+      id: Date.now().toString(),
+      username,
+      email,
+      password: hashedPassword,
+    }
 
-        // const token = jwt.sign(user.id, TOKEN_KEY, { algorithm: 'HS256' });
+    // const token = jwt.sign(user.id, TOKEN_KEY, { algorithm: 'HS256' });
 
-        await users.create(user);
+    await users.create(user);
 
-        // gasestimate = await contract.methods.addUser(user.id, user.email, user.password).estimateGas({ from: account })
-        // console.log(gasestimate);
-        // add user to users list and update on blockchain
+    // gasestimate = await contract.methods.addUser(user.id, user.email, user.password).estimateGas({ from: account })
+    // console.log(gasestimate);
+    // add user to users list and update on blockchain
 
-        return res.json({
-          status: 'success',
-          privateKey,
-          message: '',
-        });
-      }
-      else {
-        // Prints error
-        console.log("Errr is: ", err);
-      }
+    return res.json({
+      status: 'success',
+      user,
+      message: '',
     });
-
   }
   catch (err) {
     console.error(err);
@@ -244,6 +249,6 @@ router.post('/createCard/:userId', async (req, res, next) => {
       message: 'failed to create card'
     })
   }
-})
+});
 
 module.exports = router;
