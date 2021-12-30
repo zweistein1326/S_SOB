@@ -24,14 +24,14 @@ const LoginScreen = (props:any) => {
             if(user.cards){
                 console.log(user.cards)
                 props.setCards(Object.values(user.cards));
-                props.navigation.navigate('Home',{screen:'HomeScreen'});
             }
-            else{
-                props.navigation.navigate('Home',{
-                screen:'CustomizeCard',
-                params:{cardId:null}
-            });
-            }
+            props.navigation.navigate('Home',{screen:'HomeScreen'});
+            // else{
+            //     props.navigation.navigate('Home',{
+            //     screen:'CustomizeCard',
+            //     params:{cardId:null}
+            // });
+            // }
         }
         else{
             console.log('login failed');
