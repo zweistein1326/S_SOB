@@ -4,7 +4,7 @@ var router = require('express').Router();
 var users = require('../../database/users');
 var credentials = require('../../database/credentials');
 var cards = require('../../database/card');
-const uuid = require('uuid');
+const { v4: uuidv4 } = require('uuid');
 const Web3 = require('web3');
 const { generateHash } = require('../../functions/HelperFunctions');
 const { randomUUID, publicDecrypt, verify, generateKeyPair } = require('crypto');
@@ -133,7 +133,7 @@ router.post('/register', async (req, res, next) => {
     //   }
     // });
     const user = {
-      id: Date.now().toString(),
+      id: uuidv4({ username, email, password }),
       username,
       email,
       password: hashedPassword,
