@@ -1,7 +1,9 @@
 import React, { Key } from 'react';
 import { StyleSheet, Text, View } from 'react-native';
 import { TouchableOpacity } from 'react-native-gesture-handler';
+import QRCode from 'react-native-qrcode-svg';
 import { connect } from 'react-redux';
+import { baseUrl } from '../../constants/Constants';
 import { Card } from '../../models/Card';
 
 const UserCard = (props:any) => {
@@ -15,6 +17,7 @@ const UserCard = (props:any) => {
             // <Text style={[styles.cardText,{color:'white'}]}>{props.card.cardInfo.title}</Text>
              <View style= {{display:'flex',justifyContent:'space-between', flexDirection:'row', alignItems:'center',width:'98%', height:'100%'}}>
                 <View>
+                    <QRCode value={baseUrl+'/addCard/'}/>
                     <Text style={[styles.cardText,{color:'white'}]}>Avatar</Text>
                 </View>
                  <View style={{width:'60%'}}>

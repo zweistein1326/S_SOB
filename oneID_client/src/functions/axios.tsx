@@ -41,6 +41,18 @@ export const createCard = async(cardData:Card,userId:String) => {
     return null;
 }
 
+export const getCardsForUser = async(userId:string) => {
+    const res = await instance.get('/cards/' + userId);
+    const {status, cards} = res.data;
+    if(status == 'success'){
+        console.log(cards);
+        return cards;
+    }
+    console.log(status);
+    return null;
+    
+}
+
 // export const findCredentials = async(userId:string) => {
 //     const res = await instance.get('/user'+userId);
 //     const { user } = res.data;

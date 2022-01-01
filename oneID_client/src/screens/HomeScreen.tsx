@@ -35,7 +35,7 @@ const HomeScreen = (props:any) =>{
     }
 
     let cards: Card[] = [];
-        props.cards.forEach((card:Card) => cards.push(card))
+    props.cards.forEach((card:Card) => cards.push(card))
 
     return(
         <ScrollView>

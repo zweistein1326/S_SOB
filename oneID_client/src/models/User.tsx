@@ -3,5 +3,7 @@ interface User{
     username: String,
     phone: String[],
     email: String[],
-    social: String[]
+    social: String[],
+    cards: String[]
+    sharedCards: String[]
 }
