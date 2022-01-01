@@ -3,7 +3,7 @@ const bcrypt = require('bcrypt');
 var router = require('express').Router();
 var users = require('../../database/users');
 var credentials = require('../../database/credentials');
-var cards = require('../../database/card');
+var cards = require('../../database/cards');
 const { v4: uuidv4 } = require('uuid');
 const Web3 = require('web3');
 const { generateHash } = require('../../functions/HelperFunctions');
@@ -252,6 +252,18 @@ router.post('/createCard/:userId', async (req, res, next) => {
     })
   }
 });
+
+router.get('/cards/:userId', async (req, res, next) => {
+  const { userId } = req.params;
+  try {
+    const userCards = await cards.getCardsForUser(userId);
+    return res.json({ status: 'success', cards: userCards, message: 'request successful' })
+  }
+  catch (e) {
+    console.log(e);
+    return res.json({ status: 'failed', cards: null, message: e.message });
+  }
+})
 
 
 module.exports = router;

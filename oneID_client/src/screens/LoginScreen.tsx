@@ -3,7 +3,7 @@ import {  StyleSheet, Text, View } from 'react-native';
 import { TextInput, TouchableOpacity } from 'react-native-gesture-handler';
 import { connect } from 'react-redux';
 import Button from '../components/Button';
-import { login } from '../functions/axios';
+import { getCardsForUser, login } from '../functions/axios';
 import { setUser } from '../redux/actions/AuthActions';
 import { setCards } from '../redux/actions/CardActions';
 import { setCredentials } from '../redux/actions/CredentialActions';
@@ -15,16 +15,15 @@ const LoginScreen = (props:any) => {
     const handleSubmit = async() => {
         // send login request
         const user = await login({ username,password });
+        const cards = await getCardsForUser(user.id);
         // console.log(user);
         if(!!user){
             props.setUser(user);
             if(user.credentials){
                 props.setUserCredentials(Object.values(user.credentials)); 
             }
-            if(user.cards){
-                console.log(user.cards)
-                props.setCards(Object.values(user.cards));
-            }
+            console.log(cards);
+            props.setCards(cards);
             props.navigation.navigate('Home',{screen:'HomeScreen'});
             // else{
             //     props.navigation.navigate('Home',{
