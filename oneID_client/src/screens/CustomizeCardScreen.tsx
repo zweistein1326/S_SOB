@@ -7,7 +7,7 @@ import { connect } from 'react-redux';
 import Button from '../components/Button';
 import UserCard from '../components/User/UserCard';
 import { createCard } from '../functions/axios';
-import { Card } from '../models/Card';
+import { Card, CardInfo } from '../models/Card';
 import { cards } from '../redux/reducers/Cards';
 import { Ionicons } from '@expo/vector-icons';
 import CheckItem from '../components/Card/CheckItem';
@@ -16,28 +16,24 @@ import { setCards } from '../redux/actions/CardActions';
 const CustomizeCardScreen = (props:any) => {
 
     const {cardId} = props.route.params;
-    let card : Card = {
-        id:'',
-        title:'',
-        personalInfo:[],
-        social:[],
-        backgroundColor:'',
-        foregroundColor:'' 
-    };
-    if(cardId!==null){
-        card = props.cards[cardId];
-    }
-    
-    
-    const [cardTitle, setCardTitle] = useState(card.title);
+    const [cardTitle, setCardTitle] = useState('');
+    const [name, setCardName] = useState('');
     const [email, setEmail] = useState('');
     const [website, setWebsite] = useState('');
     const [social1, setSocial1] = useState('');
     const [social2, setSocial2] = useState('');
     const [social3, setSocial3] = useState('');
 
-    let cardInfo = {cardTitle, email, website, social1, social2, social3}
-    
+    let card : Card = {
+        id:'',
+        cardInfo: {name, cardTitle, email, website, social1, social2, social3},
+        backgroundColor:'',
+        foregroundColor:'' 
+    };
+
+    if(cardId!==null){
+        card = props.cards[cardId];
+    }    
 
     const handleSubmit = async() => {
         if(card.id){
@@ -45,10 +41,8 @@ const CustomizeCardScreen = (props:any) => {
         }
         else{
             const cardData: Card = {
-            id:cardId,
-            title:cardTitle,
-            personalInfo:[{'fullname':'Siddharth Agarwal'}], 
-            social:['https://www.instagram.com'], 
+            id: cardId,
+            cardInfo: {name, cardTitle, email, website, social1, social2, social3},
             backgroundColor:'red', 
             foregroundColor:'white' 
         };
@@ -58,20 +52,18 @@ const CustomizeCardScreen = (props:any) => {
         }
     }
 
-    const cardOptions = [
-        {
-            title:'Username',
-            value:props.user.username,
-            checked:false
-        },
-        {
-            title:'Email',
-            value:props.user.email,
-            checked:false
-        },
-    ]
-
-    
+    // const cardOptions = [
+    //     {
+    //         title:'Username',
+    //         value:props.user.username,
+    //         checked:false
+    //     },
+    //     {
+    //         title:'Email',
+    //         value:props.user.email,
+    //         checked:false
+    //     },
+    // ]
 
     return(
         <ScrollView>
@@ -81,7 +73,7 @@ const CustomizeCardScreen = (props:any) => {
                     Make the card attractive otherwise people wouldnt want to share it with other people
                     Link directly to social media instead of asking for links <- links are harder to enter
                 */}
-                <UserCard customize={true} cardInfo={cardInfo} user={props.user}/>
+                <UserCard navigation={props.navigation} customize={false} card={card} user={props.user}/>
                 <View style={{width:'100%', height:250, padding:20}}>
                     <Text>Customize Card Information</Text>
 
@@ -91,6 +83,10 @@ const CustomizeCardScreen = (props:any) => {
                     <View style = {{ padding:20, margin:10, borderColor:'white', borderBottomWidth:1, borderRadius:20 }}>
                         <Text>Title(this will not appear on the card)</Text>
                         <TextInput value={cardTitle} onChangeText = {(cardTitle)=>{setCardTitle(cardTitle)}} placeholder='Card Title'/>
+                    </View>
+                    <View style = {{ padding:20, margin:10, borderColor:'white', borderBottomWidth:1, borderRadius:20 }}>
+                        <Text>Name</Text>
+                        <TextInput value={name} onChangeText = {(name)=>{setCardName(name)}} placeholder='Name on Card'/>
                     </View>
                     <View style = {{ padding:20, margin:10, borderColor:'white', borderBottomWidth:1, borderRadius:20 }}>
                         <Text>Email</Text>
@@ -145,4 +141,4 @@ const mapDispatchToProps = (dispatch:any) => ({
     setCards: (cards:Card[]) => setCards(cards)
 })
 
-export default connect(mapStateToProps,null)(CustomizeCardScreen);
+export default connect(mapStateToProps,mapDispatchToProps)(CustomizeCardScreen);
