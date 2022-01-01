@@ -22,7 +22,7 @@ const HomeScreen = (props:any) =>{
 
     return(
         <ScrollView>
-            <Text style={styles.heading}>My saved cards</Text>
+            <Text style={styles.heading}>Saved cards</Text>
         <View style={{display:'flex', alignItems:'center', paddingVertical:10}}>
             {props.cards.length>0 ? props.cards.map((card:Card) => {
                 if(card!=null){
@@ -35,6 +35,7 @@ const HomeScreen = (props:any) =>{
                 {Object.values(props.credentials).map((credential:any,index)=><CredentialTile key={index} navigation={props.navigation} credential={credential}/>)}
             </View> */}
         </View>
+        <Text style={styles.heading}>Saved contacts</Text>
         </ScrollView>
     )
 }

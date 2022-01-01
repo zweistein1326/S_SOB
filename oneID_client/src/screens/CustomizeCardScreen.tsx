@@ -2,7 +2,7 @@ import { TextField } from '@mui/material';
 import CheckBox from '@react-native-community/checkbox';
 import React, { useState } from 'react';
 import {  Pressable, StyleSheet, Text, View } from 'react-native';
-import { TextInput } from 'react-native-gesture-handler';
+import { ScrollView, TextInput } from 'react-native-gesture-handler';
 import { connect } from 'react-redux';
 import Button from '../components/Button';
 import UserCard from '../components/User/UserCard';
@@ -30,6 +30,13 @@ const CustomizeCardScreen = (props:any) => {
     
     
     const [cardTitle, setCardTitle] = useState(card.title);
+    const [email, setEmail] = useState('');
+    const [website, setWebsite] = useState('');
+    const [social1, setSocial1] = useState('');
+    const [social2, setSocial2] = useState('');
+    const [social3, setSocial3] = useState('');
+
+    let cardInfo = {cardTitle, email, website, social1, social2, social3}
     
 
     const handleSubmit = async() => {
@@ -67,36 +74,62 @@ const CustomizeCardScreen = (props:any) => {
     
 
     return(
-        <View style={styles.box}>
-            {/* <Text>Card #{cardId}: {cardTitle}</Text> */}
-            <UserCard customize={true} card={card} user={props.user}/>
-            <View style={{width:'100%', height:250, padding:20}}>
-                <Text>Customize Card Information</Text>
+        <ScrollView>
+            <View style={styles.box}>
+                {/* <Text>Card #{cardId}: {cardTitle}</Text> */}
+                {/* Update card with each iteration of checkbox
+                    Make the card attractive otherwise people wouldnt want to share it with other people
+                    Link directly to social media instead of asking for links <- links are harder to enter
+                */}
+                <UserCard customize={true} cardInfo={cardInfo} user={props.user}/>
+                <View style={{width:'100%', height:250, padding:20}}>
+                    <Text>Customize Card Information</Text>
 
-                {cardOptions.map((option)=> <CheckItem item = {option}/>)}
-            
-                <View style = {{ padding:20, margin:10, borderColor:'white', borderBottomWidth:1, borderRadius:20 }}>
-                    <TextInput value={cardTitle} onChangeText = {(cardTitle)=>{setCardTitle(cardTitle)}} placeholder='Card Title'/>
+                    {/* {cardOptions.map((option)=> <CheckItem item = {option}/>)} */}
+                    <Text>Select Avatar</Text>
+                    
+                    <View style = {{ padding:20, margin:10, borderColor:'white', borderBottomWidth:1, borderRadius:20 }}>
+                        <Text>Title(this will not appear on the card)</Text>
+                        <TextInput value={cardTitle} onChangeText = {(cardTitle)=>{setCardTitle(cardTitle)}} placeholder='Card Title'/>
+                    </View>
+                    <View style = {{ padding:20, margin:10, borderColor:'white', borderBottomWidth:1, borderRadius:20 }}>
+                        <Text>Email</Text>
+                        <TextInput value={email} onChangeText = {(email)=>{setEmail(email)}} placeholder='Email'/>
+                    </View>
+                    <View style = {{ padding:20, margin:10, borderColor:'white', borderBottomWidth:1, borderRadius:20 }}>
+                        <Text>Website</Text>
+                        <TextInput value={website} onChangeText = {(website)=>{setWebsite(website)}} placeholder='Email'/>
+                    </View>
+                    <View style = {{ padding:20, margin:10, borderColor:'white', borderBottomWidth:1, borderRadius:20 }}>
+                        <Text>Social 1</Text>
+                        <TextInput value={social1} onChangeText = {(social1)=>{setSocial1(social1)}} placeholder='Social 1'/>
+                    </View>
+                    <View style = {{ padding:20, margin:10, borderColor:'white', borderBottomWidth:1, borderRadius:20 }}>
+                        <Text>Social 2</Text>
+                        <TextInput value={social2} onChangeText = {(social2)=>{setSocial2(social2)}} placeholder='Social 2'/>
+                    </View>
+                    <View style = {{ padding:20, margin:10, borderColor:'white', borderBottomWidth:1, borderRadius:20 }}>
+                        <Text>Social 3</Text>
+                        <TextInput value={social3} onChangeText = {(social3)=>{setSocial3(social3)}} placeholder='Social 3'/>
+                    </View>
+
+                    <Button 
+                    onPressed={handleSubmit}
+                    textStyle={{color:'black'}}
+                    style={{ padding:20, margin:10, borderRadius:20, alignItems:'center', justifyContent:'center', backgroundColor:'white' }} 
+                    text={'Save'}/>
                 </View>
-                <View style = {{ padding:20, margin:10, borderColor:'white', borderBottomWidth:1, borderRadius:20 }}>
-                    <TextInput placeholder='Link to social media'/>
-                    {/* {card.social.map((social)=><Text>{social}</Text>)} */}
-                    <Text>+</Text>
-                </View>
-                <Button 
-                onPressed={handleSubmit}
-                textStyle={{color:'black'}}
-                style={{ padding:20, margin:10, borderRadius:20, alignItems:'center', justifyContent:'center', backgroundColor:'white' }} 
-                text={'Save'}/>
             </View>
-        </View>
+        </ScrollView>
     );
 }
 
 const styles = StyleSheet.create({
     box:{
         width:'100%',
-        // padding:10,
+        height:'100%',
+        marginTop:10,
+        paddingBottom:600,
         display:'flex',
         alignItems:'center',
         justifyContent:'center'
