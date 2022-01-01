@@ -18,7 +18,21 @@ const HomeScreen = (props:any) =>{
     // }
 
     // useEffect(findUserCredentials,[]);
-    console.log('cards',props.cards.length);
+
+    const card: Card = {
+        id:'',
+        cardInfo:{
+            cardTitle:'',
+            name:'',
+            email:'',
+            website:'',
+            social1:'',
+            social2:'',
+            social3:''
+        },
+        backgroundColor:'',
+        foregroundColor:''
+    }
 
     return(
         <ScrollView>
@@ -26,9 +40,9 @@ const HomeScreen = (props:any) =>{
         <View style={{display:'flex', alignItems:'center', paddingVertical:10}}>
             {props.cards.length>0 ? props.cards.map((card:Card) => {
                 if(card!=null){
-                      return (<UserCard key={card.id} navigation={props.navigation} card={card} user={props.user}/>)  
+                      return (<UserCard customize={true} key={card.id} navigation={props.navigation} card={card} user={props.user}/>)  
                 }
-            }):<UserCard key={''} navigation={props.navigation} user={props.user}/>}
+            }):<UserCard key={''} customize={true} card={null} navigation={props.navigation} user={props.user}/>}
             {/* <FlatList data={props.cards} keyExtractor={(item)=>item? item.id : null} renderItem={({card}:any) => card ? <UserCard navigation={props.navigation} user={props.user}/> : null } /> */}
             {/* <View style={{ alignItems:'center' }}>
                 <Text style={{width:'100%'}}>Saved Credentials</Text>

@@ -17,6 +17,7 @@ const CustomizeCardScreen = (props:any) => {
 
     const {cardId} = props.route.params;
     const [cardTitle, setCardTitle] = useState('');
+    const [name, setCardName] = useState('');
     const [email, setEmail] = useState('');
     const [website, setWebsite] = useState('');
     const [social1, setSocial1] = useState('');
@@ -25,7 +26,7 @@ const CustomizeCardScreen = (props:any) => {
 
     let card : Card = {
         id:'',
-        cardInfo: {cardTitle, email, website, social1, social2, social3},
+        cardInfo: {name, cardTitle, email, website, social1, social2, social3},
         backgroundColor:'',
         foregroundColor:'' 
     };
@@ -41,7 +42,7 @@ const CustomizeCardScreen = (props:any) => {
         else{
             const cardData: Card = {
             id: cardId,
-            cardInfo: {cardTitle, email, website, social1, social2, social3},
+            cardInfo: {name, cardTitle, email, website, social1, social2, social3},
             backgroundColor:'red', 
             foregroundColor:'white' 
         };
@@ -72,7 +73,7 @@ const CustomizeCardScreen = (props:any) => {
                     Make the card attractive otherwise people wouldnt want to share it with other people
                     Link directly to social media instead of asking for links <- links are harder to enter
                 */}
-                <UserCard customize={true} card={card} user={props.user}/>
+                <UserCard navigation={props.navigation} customize={false} card={card} user={props.user}/>
                 <View style={{width:'100%', height:250, padding:20}}>
                     <Text>Customize Card Information</Text>
 
@@ -82,6 +83,10 @@ const CustomizeCardScreen = (props:any) => {
                     <View style = {{ padding:20, margin:10, borderColor:'white', borderBottomWidth:1, borderRadius:20 }}>
                         <Text>Title(this will not appear on the card)</Text>
                         <TextInput value={cardTitle} onChangeText = {(cardTitle)=>{setCardTitle(cardTitle)}} placeholder='Card Title'/>
+                    </View>
+                    <View style = {{ padding:20, margin:10, borderColor:'white', borderBottomWidth:1, borderRadius:20 }}>
+                        <Text>Name</Text>
+                        <TextInput value={name} onChangeText = {(name)=>{setCardName(name)}} placeholder='Name on Card'/>
                     </View>
                     <View style = {{ padding:20, margin:10, borderColor:'white', borderBottomWidth:1, borderRadius:20 }}>
                         <Text>Email</Text>
