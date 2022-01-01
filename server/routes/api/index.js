@@ -265,5 +265,18 @@ router.get('/cards/:userId', async (req, res, next) => {
   }
 })
 
+router.get('/card/:cardId', async (req, res, next) => {
+  const { cardId } = req.params;
+  try {
+    const card = await cards.getCardById(cardId);
+    console.log(card);
+    return res.json({ status: 'success', card: card, message: 'request successful' })
+  }
+  catch (e) {
+    console.log(e);
+    return res.json({ status: 'failed', card: null, message: e.message });
+  }
+})
+
 
 module.exports = router;

@@ -24,7 +24,7 @@ async function createCard(userId, card) {
     console.log(card);
     try {
         firebasedb.set(firebasedb.ref(db, `cards/` + card.id), card);
-        firebasedb.set(firebasedb.ref(db, `users/${userId}/cards/`), card.id);
+        firebasedb.set(firebasedb.ref(db, `users/${userId}/cards/`), [card.id]);
         return card;
     }
     catch (err) {
@@ -51,10 +51,22 @@ async function getCardsForUser(userId) {
     }
 }
 
+async function getCardById(cardId) {
+    try {
+        const userCards = [];
+        const cards = await getAllCards();
+        const card = cards.find((card) => card.id == cardId);
+        return card;
+    }
+    catch (err) {
+        console.log(err);
+    }
+}
+
 
 async function getAllCards() {
     return cards;
 }
 
 
-module.exports = { createCard, getCardsForUser, getAllCards };
+module.exports = { createCard, getCardsForUser, getAllCards, getCardById };

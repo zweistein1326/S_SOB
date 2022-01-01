@@ -50,8 +50,15 @@ export const getCardsForUser = async(userId:string) => {
     }
     console.log(status);
     return null;
-    
 }
+
+export const getCardById = async ( cardId:String ) => {
+    const res = await instance.get('/card/'+cardId);
+    const {status,card} = res.data;
+     console.log(status);
+    return card;
+}
+
 
 // export const findCredentials = async(userId:string) => {
 //     const res = await instance.get('/user'+userId);
