@@ -1,23 +1,17 @@
 import React, { Key } from 'react';
 import { StyleSheet, Text, View } from 'react-native';
 import { TouchableOpacity } from 'react-native-gesture-handler';
+import { connect } from 'react-redux';
 import { Card } from '../../models/Card';
 
-interface Props{
-    card: Card | null,
-    user: User,
-    navigation: any,
-    key?: (Key | null | undefined) & (number | String),
-    customize?: any
-}
+const UserCard = (props:any) => {
 
-const UserCard = (props:Props) => {
-
-    console.log(props.customize);
+    // console.log(props.card);
+    console.log('cards',props.cards);
 
     return(
         <View style={{display:'flex',justifyContent:'space-between', flexDirection:'column', alignItems:'center', backgroundColor:'red', width:'95%', height:250, borderRadius:20, padding:20}}>
-            {props.card !== null?
+            {props.card.id !== null?
             // <Text style={[styles.cardText,{color:'white'}]}>{props.card.cardInfo.title}</Text>
              <View style= {{display:'flex',justifyContent:'space-between', flexDirection:'row', alignItems:'center',width:'98%', height:'100%'}}>
                 <View>
@@ -33,7 +27,7 @@ const UserCard = (props:Props) => {
             null}
             {props.customize ?
              <View style={{position:'absolute', bottom:20, right:20}}>
-                {!!props.card ?
+                {!!props.card.id ?
                     <TouchableOpacity onPress={()=>{props.navigation.navigate('CustomizeCard',{cardId:props.card.id}) }} style={{borderRadius:20, borderColor:'white', borderWidth:1, padding:8}}> 
                         <Text style={{color:'white'}}>Customize</Text>
                     </TouchableOpacity>
@@ -51,6 +45,11 @@ const styles = StyleSheet.create({
     cardText:{
         fontSize:16
     },
+});
+
+const mapStateToProps = (state:any) => ({
+    cards: state.cards,
 })
 
-export default UserCard;
+
+export default connect(mapStateToProps,null)(UserCard);

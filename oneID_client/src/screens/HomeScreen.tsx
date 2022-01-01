@@ -20,7 +20,7 @@ const HomeScreen = (props:any) =>{
     // useEffect(findUserCredentials,[]);
 
     const card: Card = {
-        id:'',
+        id:null,
         cardInfo:{
             cardTitle:'',
             name:'',
@@ -34,15 +34,17 @@ const HomeScreen = (props:any) =>{
         foregroundColor:''
     }
 
+    let cards: Card[] = [];
+        props.cards.forEach((card:Card) => cards.push(card))
+
     return(
         <ScrollView>
             <Text style={styles.heading}>Saved cards</Text>
         <View style={{display:'flex', alignItems:'center', paddingVertical:10}}>
-            {props.cards.length>0 ? props.cards.map((card:Card) => {
-                if(card!=null){
-                      return (<UserCard customize={true} key={card.id} navigation={props.navigation} card={card} user={props.user}/>)  
-                }
-            }):<UserCard key={''} customize={true} card={null} navigation={props.navigation} user={props.user}/>}
+            {
+                cards.map((card:Card)=>{return(<UserCard key={''} customize={true} card={card} navigation={props.navigation} user={props.user}/>)})
+            }
+            {1==1? <></>:<UserCard key={''} customize={true} card={card} navigation={props.navigation} user={props.user}/>}
             {/* <FlatList data={props.cards} keyExtractor={(item)=>item? item.id : null} renderItem={({card}:any) => card ? <UserCard navigation={props.navigation} user={props.user}/> : null } /> */}
             {/* <View style={{ alignItems:'center' }}>
                 <Text style={{width:'100%'}}>Saved Credentials</Text>
