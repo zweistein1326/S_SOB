@@ -32,7 +32,8 @@ const CustomizeCardScreen = (props:any) => {
     };
 
     if(cardId!==null){
-        card = props.cards[cardId];
+        card = props.cards.get(cardId);
+        console.log('card',card);
     }    
 
     const handleSubmit = async() => {

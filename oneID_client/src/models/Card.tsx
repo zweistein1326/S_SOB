@@ -1,5 +1,5 @@
 export interface Card{
-    id: String,
+    id: String|null,
     cardInfo:CardInfo,
     backgroundColor:String,
     foregroundColor:String,
