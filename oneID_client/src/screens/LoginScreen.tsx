@@ -3,7 +3,7 @@ import {  StyleSheet, Text, View } from 'react-native';
 import { TextInput, TouchableOpacity } from 'react-native-gesture-handler';
 import { connect } from 'react-redux';
 import Button from '../components/Button';
-import { getCardsForUser, login } from '../functions/axios';
+import { getCardById, getCardsForUser, login } from '../functions/axios';
 import { setUser } from '../redux/actions/AuthActions';
 import { setCards } from '../redux/actions/CardActions';
 import { setCredentials } from '../redux/actions/CredentialActions';
@@ -11,6 +11,16 @@ import { setCredentials } from '../redux/actions/CredentialActions';
 const LoginScreen = (props:any) => {
     const[username,setUsername] = useState('');
     const[password,setPassword] = useState('');
+
+    const findAllSharedCards = (user:User) => {
+        if(user.sharedCards){
+            user.sharedCards.forEach(async(cardId:String)=>{
+            const card = await getCardById(cardId);
+            console.log('card',card);
+            props.setCards([card]);
+        });
+        }   
+    }
 
     const handleSubmit = async() => {
         // send login request
@@ -21,6 +31,7 @@ const LoginScreen = (props:any) => {
             props.setUser(user);
             if(user.credentials){
                 props.setUserCredentials(Object.values(user.credentials)); 
+                findAllSharedCards(user);
             }
             console.log(cards);
             props.setCards(cards);
