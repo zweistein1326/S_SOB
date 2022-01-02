@@ -55,7 +55,7 @@ export const getCardsForUser = async(userId:string) => {
 export const getCardById = async ( cardId:String ) => {
     const res = await instance.get('/card/'+cardId);
     const {status,card} = res.data;
-     console.log(status);
+    console.log('sharedCard',card);
     return card;
 }
 
