@@ -15,17 +15,17 @@ const UserCard = (props:any) => {
              <View style= {{display:'flex',justifyContent:'space-between', flexDirection:'row', alignItems:'center',width:'98%', height:'100%'}}>
                 <View>
                     <QRCode value={baseUrl+'/addCard/'}/>
-                    <Text style={[styles.cardText,{color:'white'}]}>Avatar</Text>
+                    {/* <Text style={[styles.cardText,{color:'white'}]}>Avatar</Text> */}
                 </View>
                  <View style={{width:'60%'}}>
                     <Text style={{...styles.cardText,fontSize:16, color:'white'}}>@{props.user.username} </Text>
-                {Object.values(props.card.cardInfo).map((info:String,index)=><Text style={{...styles.cardText,fontSize:16, color:'white'}}>{Object.keys(props.card.cardInfo)[index]}: {info}</Text>)}
+                    {Object.values(props.card.cardInfo).map((info:String,index)=><Text style={{...styles.cardText,fontSize:16, color:'white'}}>{Object.keys(props.card.cardInfo)[index]}: {info}</Text>)}
                 </View>
                 {/* <Text>UID: </Text>
                 <Text>UID: </Text> */}
             </View> : 
             null}
-            {props.customize ?
+            {props.customize && !props.sharedCard ?
              <View style={{position:'absolute', bottom:20, right:20}}>
                 {!!props.card.id ?
                     <TouchableOpacity onPress={()=>{props.navigation.navigate('CustomizeCard',{cardId:props.card.id}) }} style={{borderRadius:20, borderColor:'white', borderWidth:1, padding:8}}> 

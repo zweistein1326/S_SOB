@@ -14,20 +14,6 @@ const LoginScreen = (props:any) => {
     const[username,setUsername] = useState('');
     const[password,setPassword] = useState('');
 
-
-    const mapCards = async (user:User) => {
-        let sharedCards: Card[] = [];
-        return new Promise<Card[]>((res,rej)=>{
-                
-            return res(sharedCards);
-        })
-    }
-
-    const findAllSharedCards = async(user:User) => {
-        let sharedCards: Card[] = [];
-         
-    }
-
     const handleSubmit = async() => {
         // send login request
         const user = await login({ username,password });
@@ -35,7 +21,7 @@ const LoginScreen = (props:any) => {
         const sharedCards: Card[] = [];
         if(user.sharedCards){
              var bar = new Promise((resolve,reject)=>{
-                user.sharedCards.forEach(async (cardId:String,index) => {
+                user.sharedCards.forEach(async (cardId:String,index:number) => {
                 const card = await getCardById(cardId);
                 props.setSharedCards([card]);
                 sharedCards.push(card);

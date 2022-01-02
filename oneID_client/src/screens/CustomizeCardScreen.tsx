@@ -135,7 +135,8 @@ const styles = StyleSheet.create({
 
 const mapStateToProps = (state:any) => ({
     user: state.auth.user,
-    cards: state.cards
+    userCards: state.cards.userCards,
+    sharedCards: state.cards.sharedCards,
 })
 
 const mapDispatchToProps = (dispatch:any) => ({
