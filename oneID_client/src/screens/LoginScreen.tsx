@@ -1,40 +1,57 @@
+import { resolve } from 'node:path/win32';
 import React, { useState } from 'react';
 import {  StyleSheet, Text, View } from 'react-native';
 import { TextInput, TouchableOpacity } from 'react-native-gesture-handler';
 import { connect } from 'react-redux';
 import Button from '../components/Button';
 import { getCardById, getCardsForUser, login } from '../functions/axios';
+import { Card } from '../models/Card';
 import { setUser } from '../redux/actions/AuthActions';
-import { setCards } from '../redux/actions/CardActions';
+import { setSharedCards, setUserCards } from '../redux/actions/CardActions';
 import { setCredentials } from '../redux/actions/CredentialActions';
 
 const LoginScreen = (props:any) => {
     const[username,setUsername] = useState('');
     const[password,setPassword] = useState('');
 
-    const findAllSharedCards = (user:User) => {
-        if(user.sharedCards){
-            user.sharedCards.forEach(async(cardId:String)=>{
-            const card = await getCardById(cardId);
-            console.log('card',card);
-            props.setCards([card]);
-        });
-        }   
+
+    const mapCards = async (user:User) => {
+        let sharedCards: Card[] = [];
+        return new Promise<Card[]>((res,rej)=>{
+                
+            return res(sharedCards);
+        })
+    }
+
+    const findAllSharedCards = async(user:User) => {
+        let sharedCards: Card[] = [];
+         
     }
 
     const handleSubmit = async() => {
         // send login request
         const user = await login({ username,password });
         const cards = await getCardsForUser(user.id);
-        // console.log(user);
-        if(!!user){
+        const sharedCards: Card[] = [];
+        if(user.sharedCards){
+             var bar = new Promise((resolve,reject)=>{
+                user.sharedCards.forEach(async (cardId:String,index) => {
+                const card = await getCardById(cardId);
+                props.setSharedCards([card]);
+                sharedCards.push(card);
+                if (index === user.sharedCards.length - 1){
+                    resolve(null);
+                }
+            });
+        });
+        bar.then(()=>{
+            if(!!user){
             props.setUser(user);
             if(user.credentials){
                 props.setUserCredentials(Object.values(user.credentials)); 
-                findAllSharedCards(user);
+               
             }
-            console.log(cards);
-            props.setCards(cards);
+            props.setUserCards(cards);
             props.navigation.navigate('Home',{screen:'HomeScreen'});
             // else{
             //     props.navigation.navigate('Home',{
@@ -46,6 +63,8 @@ const LoginScreen = (props:any) => {
         else{
             console.log('login failed');
         }
+        })
+        } 
     }
 
     return(
@@ -103,7 +122,8 @@ const styles = StyleSheet.create({
 const mapDispatchToProps = (dispatch:any) => ({
     setUser: (user:any) => dispatch(setUser(user)),
     setUserCredentials: (credentials:any[]) => dispatch(setCredentials(credentials)),
-    setCards: (cards:any[]) => dispatch(setCards(cards))
+    setUserCards: (cards:any[]) => dispatch(setUserCards(cards)),
+    setSharedCards: (cards:any[]) => dispatch(setSharedCards(cards))
 })
 
 export default connect(null,mapDispatchToProps)(LoginScreen);

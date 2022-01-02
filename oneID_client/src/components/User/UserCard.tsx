@@ -8,9 +8,6 @@ import { Card } from '../../models/Card';
 
 const UserCard = (props:any) => {
 
-    // console.log(props.card);
-    console.log('cards',props.cards);
-
     return(
         <View style={{display:'flex',justifyContent:'space-between', flexDirection:'column', alignItems:'center', backgroundColor:'red', width:'95%', height:250, borderRadius:20, padding:20}}>
             {props.card.id !== null?
@@ -51,7 +48,8 @@ const styles = StyleSheet.create({
 });
 
 const mapStateToProps = (state:any) => ({
-    cards: state.cards,
+    userCards: state.cards.userCards,
+    sharedCards: state.cards.sharedCards
 })
 
 
