@@ -5,7 +5,7 @@ import {  Pressable, StyleSheet, Text, View } from 'react-native';
 import { ScrollView, TextInput } from 'react-native-gesture-handler';
 import { connect } from 'react-redux';
 import Button from '../components/Button';
-import UserCard from '../components/User/UserCard';
+import UserCard from '../components/Card/UserCard';
 import { createCard, updateCard } from '../functions/axios';
 import { Card, CardInfo } from '../models/Card';
 import { cards } from '../redux/reducers/Cards';

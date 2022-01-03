@@ -10,6 +10,7 @@ import CredentialScreen from "../screens/CredentialScreen";
 import CustomizeCardScreen from "../screens/CustomizeCardScreen";
 import RegisterScreen from "../screens/RegisterScreen";
 import CameraScreen from "../screens/CameraScreen";
+import TestScreen from "../screens/TestScreen";
 
 const Stack = createNativeStackNavigator();
 
@@ -36,6 +37,10 @@ const Home = () => {
             name="HomeScreen"
             component={HomeScreen}
             options = {{title:'Welcome'}}
+            />
+            <Stack.Screen
+            name="TestScreen"
+            component={TestScreen}
             />
             <Stack.Screen
             name="CameraScreen"

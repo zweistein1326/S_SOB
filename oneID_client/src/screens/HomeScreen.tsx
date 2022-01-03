@@ -4,7 +4,7 @@ import { StyleSheet, Text, View } from "react-native";
 import React from 'react';
 import { connect } from "react-redux";
 import CredentialTile from '../components/Credentials/CredentialTile';
-import UserCard from "../components/User/UserCard";
+import UserCard from "../components/Card/UserCard";
 import { FlatList, ScrollView } from "react-native-gesture-handler";
 import { Card } from "../models/Card";
 import { style } from "@mui/system";

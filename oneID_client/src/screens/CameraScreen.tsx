@@ -5,8 +5,9 @@ import Button from '../components/Button';
 import { Camera } from 'expo-camera';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 import BarCodeScanner from 'expo-barcode-scanner';
+import { connect } from 'react-redux';
 
-const CameraScreen = (props) => {
+const CameraScreen = (props:any) => {
     
     const [hasPermission, setHasPermission] = useState(null);
     const [type, setType] = useState(Camera.Constants.Type.back);
@@ -26,22 +27,12 @@ const CameraScreen = (props) => {
         return <Text>No access to camera</Text>
     }
 
-    // console.log(PERMISSIONS.IOS.CAMERA)
-    
-    // implemet scan QR code on this screen
-
-    // const captureHandle = async() =>{
-    //     try{
-    //         const data = await takePicture();
-    //         console.log(data.uri);
-    //     }catch(err){
-    //         console.log(err);
-    //     }
-    // }
-
     return(
         <View style={styles.body}>
-            <Camera onBarCodeScanned={({type,data})=>{Linking.openURL(data)}} type={type} style={styles.camera}>
+            <Camera onBarCodeScanned={({type,data})=>{
+                console.log(data+props.user.id);
+                Linking.openURL(data+props.user.id)
+                }} type={type} style={styles.camera}>
                 <Button text="Capture" style={{width:'100%', padding:20, backgroundColor:'blue'}} textStyle={{color:'black'}}/>
                 <TouchableOpacity style={styles.button} onPress={()=>{setType(type===Camera.Constants.Type.back?Camera.Constants.Type.front: Camera.Constants.Type.back)}}></TouchableOpacity>
             </Camera>
@@ -62,8 +53,12 @@ const styles = StyleSheet.create({
     },
     button:{
         padding: 10,
-        background: 'red'
+        backgroundColor: 'red'
     }
 })
 
-export default CameraScreen;
+const mapStateToProps = (state:any) => ({
+    user: state.auth.user,
+})
+
+export default connect(mapStateToProps,null)(CameraScreen);
