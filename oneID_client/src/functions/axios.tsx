@@ -1,6 +1,7 @@
 import axios, { Axios } from 'axios';
 import { baseUrl } from '../constants/Constants';
 import { Card } from '../models/Card';
+import { cards } from '../redux/reducers/Cards';
 
 axios.defaults.headers.post['Content-Type'] = 'application/x-www-form-urlencoded';
 const instance = axios.create({
@@ -71,6 +72,12 @@ export const getCardById = async ( cardId:String ) => {
     return card;
 }
 
+export const shareCard = async(data : string) => {
+    const res = await instance.get(data);
+    const {status, card} = res.data;
+    console.log('sharedCard', card);
+    return card;
+}
 
 // export const findCredentials = async(userId:string) => {
 //     const res = await instance.get('/user'+userId);

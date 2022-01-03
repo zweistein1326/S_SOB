@@ -6,6 +6,9 @@ import { Camera } from 'expo-camera';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 import BarCodeScanner from 'expo-barcode-scanner';
 import { connect } from 'react-redux';
+import { shareCard } from '../functions/axios';
+import { setSharedCards } from '../redux/actions/CardActions';
+import { Card } from '../models/Card';
 
 const CameraScreen = (props:any) => {
     
@@ -30,8 +33,9 @@ const CameraScreen = (props:any) => {
     return(
         <View style={styles.body}>
             <Camera onBarCodeScanned={({type,data})=>{
-                console.log(data+props.user.id);
-                Linking.openURL(data+props.user.id)
+                    const card = shareCard(data+props.user.id);
+                    props.setSharedCards([card]);
+                    props.navigation.navigate('Home',{screen:'HomeScreen'})
                 }} type={type} style={styles.camera}>
                 <Button text="Capture" style={{width:'100%', padding:20, backgroundColor:'blue'}} textStyle={{color:'black'}}/>
                 <TouchableOpacity style={styles.button} onPress={()=>{setType(type===Camera.Constants.Type.back?Camera.Constants.Type.front: Camera.Constants.Type.back)}}></TouchableOpacity>
@@ -61,4 +65,8 @@ const mapStateToProps = (state:any) => ({
     user: state.auth.user,
 })
 
-export default connect(mapStateToProps,null)(CameraScreen);
+const mapDispatchToProps = (dispatch:any) => ({
+    setSharedCards: (cards:Card[]) => dispatch(setSharedCards(cards))
+})
+
+export default connect(mapStateToProps,mapDispatchToProps)(CameraScreen);

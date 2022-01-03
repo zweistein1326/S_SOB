@@ -31,10 +31,12 @@ const HomeScreen = (props:any) =>{
 
     let sharedCards:Card[] = [];
     props.sharedCards.forEach((card:Card)=> sharedCards.push(card));
+    console.log(props.sharedCards);
     // setSharedCards(sharedCards1);
-
+    
     let userCards: Card[] = [];
     props.userCards.forEach((card:Card) => userCards.push(card))
+    console.log(props.userCards);
     // setUserCards(userCards);
 
     return(
