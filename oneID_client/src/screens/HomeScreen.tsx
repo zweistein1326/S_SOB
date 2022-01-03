@@ -12,35 +12,37 @@ import Button from "../components/Button";
 
 const HomeScreen = (props:any) =>{
 
-    const card: Card = {
-        id:null,
-        cardInfo:{
-            cardTitle:'',
-            name:'',
-            email:'',
-            website:'',
-            social1:'',
-            social2:'',
-            social3:''
-        },
-        backgroundColor:'',
-        foregroundColor:''
-    }
+    const [card,setCard] = useState({
+            id:'',
+            cardInfo:{
+                cardTitle: '',
+                name:'',
+                email:'',
+                website:'',
+                social1:'',
+                social2:'',
+                social3:''
+            },
+            backgroundColor:'',
+            foregroundColor:''
+        });
+    // const [sharedCards, setSharedCards] = useState<Card[]>([]);
+    // const [userCards, setUserCards] = useState<Card[]>([]);
 
     let sharedCards:Card[] = [];
     props.sharedCards.forEach((card:Card)=> sharedCards.push(card));
-    console.log(props.sharedCards)
+    // setSharedCards(sharedCards1);
 
-    let cards: Card[] = [];
-    props.userCards.forEach((card:Card) => cards.push(card))
-    console.log(props.userCards);
+    let userCards: Card[] = [];
+    props.userCards.forEach((card:Card) => userCards.push(card))
+    // setUserCards(userCards);
 
     return(
         <ScrollView>
             <Text style={styles.heading}>Saved cards</Text>
         <View style={{display:'flex', alignItems:'center', paddingVertical:10}}>
             {
-                cards.map((card:Card)=>{return(<UserCard key={''} customize={true} card={card} navigation={props.navigation} user={props.user}/>)})
+                userCards.map((card:Card)=>{return(<UserCard key={''} sharedCard={false} customize={true} card={card} navigation={props.navigation} user={props.user}/>)})
             }
             {1==1? <></>:<UserCard key={''} customize={true} sharedCard={false} card={card} navigation={props.navigation} user={props.user}/>}
             {/* <FlatList data={props.cards} keyExtractor={(item)=>item? item.id : null} renderItem={({card}:any) => card ? <UserCard navigation={props.navigation} user={props.user}/> : null } /> */}
