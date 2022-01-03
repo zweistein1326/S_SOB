@@ -41,6 +41,18 @@ export const createCard = async(cardData:Card,userId:String) => {
     return null;
 }
 
+export const updateCard = async(cardData:Card,userId:String) => {
+    const res = await instance.post('/updateCard/' + userId, cardData);
+    // console.log(res);
+    const {status, updatedCard} = res.data;
+    if(status=="success"){
+        console.log(status, updatedCard);
+        return updatedCard;
+    }
+    console.log(status);
+    return null;
+}
+
 export const getCardsForUser = async(userId:string) => {
     const res = await instance.get('/cards/' + userId);
     const {status, cards} = res.data;

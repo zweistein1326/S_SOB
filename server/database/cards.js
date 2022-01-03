@@ -33,6 +33,18 @@ async function createCard(userId, card) {
     }
 }
 
+async function updateCard(userId, card) {
+    try {
+        firebasedb.update(firebasedb.ref(db, `cards/` + card.id), card);
+        // firebasedb.update(firebasedb.ref(db, `users/${userId}/cards/`), [card.id]);
+        return card;
+    }
+    catch (err) {
+        console.log(err);
+        return null;
+    }
+}
+
 async function getCardsForUser(userId) {
     try {
         const user = getUserById(userId);
@@ -63,10 +75,29 @@ async function getCardById(cardId) {
     }
 }
 
+async function shareCard(cardId, receiverId) {
+    const user = await getUserById(receiverId);
+    let sharedCards;
+    if (!!user.sharedCards) {
+        sharedCards = [...user.sharedCards, cardId];
+    }
+    else {
+        sharedCards = [cardId];
+    }
+    try {
+        firebasedb.set(firebasedb.ref(db, `users/${receiverId}/sharedCards/`), sharedCards);
+        return true;
+    }
+    catch (err) {
+        console.log(err);
+        throw Error(err.message);
+    }
+}
+
 
 async function getAllCards() {
     return cards;
 }
 
 
-module.exports = { createCard, getCardsForUser, getAllCards, getCardById };
+module.exports = { createCard, updateCard, getCardsForUser, getAllCards, getCardById, shareCard };

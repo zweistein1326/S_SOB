@@ -1,20 +1,20 @@
 import { TextField } from '@mui/material';
 import CheckBox from '@react-native-community/checkbox';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import {  Pressable, StyleSheet, Text, View } from 'react-native';
 import { ScrollView, TextInput } from 'react-native-gesture-handler';
 import { connect } from 'react-redux';
 import Button from '../components/Button';
 import UserCard from '../components/User/UserCard';
-import { createCard } from '../functions/axios';
+import { createCard, updateCard } from '../functions/axios';
 import { Card, CardInfo } from '../models/Card';
 import { cards } from '../redux/reducers/Cards';
 import { Ionicons } from '@expo/vector-icons';
 import CheckItem from '../components/Card/CheckItem';
-import { setCards } from '../redux/actions/CardActions';
+import {  setUserCards } from '../redux/actions/CardActions';
 
 const CustomizeCardScreen = (props:any) => {
-
+    
     const {cardId} = props.route.params;
     const [cardTitle, setCardTitle] = useState('');
     const [name, setCardName] = useState('');
@@ -23,34 +23,58 @@ const CustomizeCardScreen = (props:any) => {
     const [social1, setSocial1] = useState('');
     const [social2, setSocial2] = useState('');
     const [social3, setSocial3] = useState('');
+    const [backgroundColor, setBackgroundColor] = useState('');
+    const [foregroundColor, setForegroundColor] = useState('');
+    const card = {
+        id:cardId,
+            cardInfo:{
+                cardTitle,
+                name,
+                email,
+                website,
+                social1,
+                social2,
+                social3
+            },
+            backgroundColor,
+            foregroundColor
+        }
 
-    let card : Card = {
-        id:'',
-        cardInfo: {name, cardTitle, email, website, social1, social2, social3},
-        backgroundColor:'',
-        foregroundColor:'' 
-    };
 
-    if(cardId!==null){
-        card = props.cards.get(cardId);
-        console.log('card',card);
-    }    
+    useEffect(()=>{
+        const {id, cardInfo, backgroundColor, foregroundColor} = props.userCards.get(cardId);
+        console.log(props.userCards.get(cardId));
+        const {cardTitle:title,name:cardName,email:cardEmail,website:cardWebsite,social1:cardSocial1,social2:cardSocial2,social3:cardSocial3} = cardInfo;
+
+        setCardTitle(title);
+        setCardName(cardName);
+        setEmail(cardEmail);
+        setSocial1(cardSocial1);
+        setSocial2(cardSocial2);
+        setSocial3(cardSocial3);
+        setWebsite(cardWebsite);
+    },[])
+
 
     const handleSubmit = async() => {
+         const cardData: Card = {
+                id: cardId,
+                cardInfo: {name, cardTitle, email, website, social1, social2, social3},
+                backgroundColor:'red', 
+                foregroundColor:'white' 
+             }
         if(card.id){
             //update card info
+            const card = await updateCard(cardData,props.user.id);
+            console.log(card);
+            props.setUserCards([card]);
+            console.log(props.userCards);
         }
         else{
-            const cardData: Card = {
-            id: cardId,
-            cardInfo: {name, cardTitle, email, website, social1, social2, social3},
-            backgroundColor:'red', 
-            foregroundColor:'white' 
-        };
-        const card = await createCard(cardData,props.user.id);
-        props.setCards([card]);
-        props.navigation.navigate('Home',{screen:'HomeScreen'})
+            const card = await createCard(cardData,props.user.id);
+            props.setCards([card]);
         }
+        props.navigation.navigate('Home',{ screen:'HomeScreen' });
     }
 
     // const cardOptions = [
@@ -136,11 +160,10 @@ const styles = StyleSheet.create({
 const mapStateToProps = (state:any) => ({
     user: state.auth.user,
     userCards: state.cards.userCards,
-    sharedCards: state.cards.sharedCards,
 })
 
 const mapDispatchToProps = (dispatch:any) => ({
-    setCards: (cards:Card[]) => setCards(cards)
+    setUserCards: (cards:Card[]) => dispatch(setUserCards(cards))
 })
 
 export default connect(mapStateToProps,mapDispatchToProps)(CustomizeCardScreen);

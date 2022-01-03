@@ -5,12 +5,12 @@ var users = require('../../database/users');
 var credentials = require('../../database/credentials');
 var cards = require('../../database/cards');
 const { v4: uuidv4 } = require('uuid');
-const Web3 = require('web3');
+// const Web3 = require('web3');
 const { generateHash } = require('../../functions/HelperFunctions');
 const { randomUUID, publicDecrypt, verify, generateKeyPair } = require('crypto');
 var CryptoJS = require('crypto-js');
 
-const web3 = new Web3('HTTP://127.0.0.1:7545');
+// const web3 = new Web3('HTTP://127.0.0.1:7545');
 
 const privateKey = process.env.PRIVATE_KEY;
 const publicKey = process.env.PUBLIC_KEY;
@@ -236,7 +236,7 @@ router.post('/createCard/:userId', async (req, res, next) => {
   const card = req.body;
   const cardId = uuidv4(req.body);
   card.id = cardId;
-  const newCard = cards.createCard(userId, card);
+  const newCard = await cards.createCard(userId, card);
   if (newCard !== null) {
     return res.json({
       status: 'success',
@@ -248,6 +248,27 @@ router.post('/createCard/:userId', async (req, res, next) => {
     return res.json({
       status: 'failure',
       newCard: null,
+      message: 'failed to create card'
+    })
+  }
+});
+
+router.post('/updateCard/:userId', async (req, res, next) => {
+  const { userId } = req.params;
+  const card = req.body;
+  const updatedCard = await cards.updateCard(userId, card);
+  console.log(updatedCard);
+  if (updatedCard !== null) {
+    return res.json({
+      status: 'success',
+      updatedCard,
+      message: 'card created'
+    })
+  }
+  else {
+    return res.json({
+      status: 'failure',
+      updatedCard: null,
       message: 'failed to create card'
     })
   }
@@ -276,6 +297,32 @@ router.get('/card/:cardId', async (req, res, next) => {
     console.log(e);
     return res.json({ status: 'failed', card: null, message: e.message });
   }
+})
+
+
+router.get('/share', async (req, res, next) => {
+  const { cardId, receiverId } = req.query;
+
+  try {
+    const card = await cards.shareCard(cardId, receiverId);
+    console.log(card);
+    return res.json({ status: 'success', card: card, message: 'request successful' })
+  }
+  catch (e) {
+    throw Error(e.message);
+  }
+  // add shared card id to receiver user's shared Id
+
+  // const { cardId } = req.params;
+  // try {
+  //   const card = await cards.getCardById(cardId);
+  //   console.log(card);
+  //   return res.json({ status: 'success', card: card, message: 'request successful' })
+  // }
+  // catch (e) {
+  //   console.log(e);
+  //   return res.json({ status: 'failed', card: null, message: e.message });
+  // }
 })
 
 

@@ -12,28 +12,30 @@ import Button from "../components/Button";
 
 const HomeScreen = (props:any) =>{
 
-    const card: Card = {
-        id:null,
-        cardInfo:{
-            cardTitle:'',
-            name:'',
-            email:'',
-            website:'',
-            social1:'',
-            social2:'',
-            social3:''
-        },
-        backgroundColor:'',
-        foregroundColor:''
-    }
+    const [card,setCard] = useState({
+            id:'',
+            cardInfo:{
+                cardTitle: '',
+                name:'',
+                email:'',
+                website:'',
+                social1:'',
+                social2:'',
+                social3:''
+            },
+            backgroundColor:'',
+            foregroundColor:''
+        });
+    // const [sharedCards, setSharedCards] = useState<Card[]>([]);
+    // const [userCards, setUserCards] = useState<Card[]>([]);
 
     let sharedCards:Card[] = [];
     props.sharedCards.forEach((card:Card)=> sharedCards.push(card));
-    console.log(props.sharedCards)
+    // setSharedCards(sharedCards1);
 
     let userCards: Card[] = [];
     props.userCards.forEach((card:Card) => userCards.push(card))
-    console.log(props.userCards);
+    // setUserCards(userCards);
 
     return(
         <ScrollView>
