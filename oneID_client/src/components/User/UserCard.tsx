@@ -21,7 +21,7 @@ const UserCard = (props:any) => {
                     {/* <Text style={[styles.cardText,{color:'white'}]}>Avatar</Text> */}
                 </View>
                  <View style={{width:'60%'}}>
-                    {Object.values(props.card.cardInfo).map((info:String,index)=><Text style={{...styles.cardText,fontSize:16, color:'white'}}>{Object.keys(props.card.cardInfo)[index]!=="cardTitle" ?`${Object.keys(props.card.cardInfo)[index]} ${info}` : '' }</Text>)}
+                    {Object.values(props.card.cardInfo).map((info:String,index)=><Text style={{...styles.cardText,fontSize:16, color:'white'}}>{Object.keys(props.card.cardInfo)[index]!=="cardTitle" ?`${Object.keys(props.card.cardInfo)[index]}: ${info}` : '' }</Text>)}
                 </View>
                 {/* <Text>UID: </Text>
                 <Text>UID: </Text> */}

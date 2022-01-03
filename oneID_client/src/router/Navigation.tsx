@@ -9,6 +9,7 @@ import reducers from '../redux/store/store';
 import CredentialScreen from "../screens/CredentialScreen";
 import CustomizeCardScreen from "../screens/CustomizeCardScreen";
 import RegisterScreen from "../screens/RegisterScreen";
+import CameraScreen from "../screens/CameraScreen";
 
 const Stack = createNativeStackNavigator();
 
@@ -35,6 +36,10 @@ const Home = () => {
             name="HomeScreen"
             component={HomeScreen}
             options = {{title:'Welcome'}}
+            />
+            <Stack.Screen
+            name="CameraScreen"
+            component={CameraScreen}
             />
             <Stack.Screen
             name="Credential"

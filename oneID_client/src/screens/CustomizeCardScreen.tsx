@@ -98,6 +98,7 @@ const CustomizeCardScreen = (props:any) => {
                     Make the card attractive otherwise people wouldnt want to share it with other people
                     Link directly to social media instead of asking for links <- links are harder to enter
                 */}
+                <Text>Title: {cardTitle}</Text>
                 <UserCard navigation={props.navigation} customize={false} card={card} user={props.user}/>
                 <View style={{width:'100%', height:250, padding:20}}>
                     <Text>Customize Card Information</Text>
