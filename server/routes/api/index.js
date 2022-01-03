@@ -301,11 +301,11 @@ router.get('/card/:cardId', async (req, res, next) => {
 
 
 router.get('/share', async (req, res, next) => {
-  const { cardId, receiverId } = req.query;
+  const { cardId, receiverId, issuerId } = req.query;
+  console.log(req.query);
 
   try {
     const card = await cards.shareCard(cardId, receiverId);
-    console.log(card);
     return res.json({ status: 'success', card: card, message: 'request successful' })
   }
   catch (e) {

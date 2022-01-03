@@ -16,12 +16,12 @@ const UserCard = (props:any) => {
             // <Text style={[styles.cardText,{color:'white'}]}>{props.card.cardInfo.title}</Text>
              <View style= {{display:'flex',justifyContent:'space-between', flexDirection:'row', alignItems:'center',width:'98%', height:'100%'}}>
                 <View>
-                    <QRCode value={ baseUrl+'/share?cardId='+props.card.id+'&issuerId='+props.user.id+'&receiverId=51a6cbf7-456f-4693-8479-5f6654f475a2' }/>
+                    <QRCode value={ baseUrl+'/share?cardId='+props.card.id+'&issuerId='+props.user.id+'&receiverId=' }/>
                     {!props.sharedCard ? <Text style={{...styles.cardText,fontSize:16, color:'white'}}>@{props.user.username} </Text> : null}
                     {/* <Text style={[styles.cardText,{color:'white'}]}>Avatar</Text> */}
                 </View>
                  <View style={{width:'60%'}}>
-                    {Object.values(props.card.cardInfo).map((info:String,index)=><Text style={{...styles.cardText,fontSize:16, color:'white'}}>{Object.keys(props.card.cardInfo)[index]!=="cardTitle" ?`${Object.keys(props.card.cardInfo)[index]} ${info}` : '' }</Text>)}
+                    {Object.values(props.card.cardInfo).map((info:String,index)=><Text style={{...styles.cardText,fontSize:16, color:'white'}}>{Object.keys(props.card.cardInfo)[index]!=="cardTitle" ?`${Object.keys(props.card.cardInfo)[index]}: ${info}` : '' }</Text>)}
                 </View>
                 {/* <Text>UID: </Text>
                 <Text>UID: </Text> */}

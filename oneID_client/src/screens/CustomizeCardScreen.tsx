@@ -5,7 +5,7 @@ import {  Pressable, StyleSheet, Text, View } from 'react-native';
 import { ScrollView, TextInput } from 'react-native-gesture-handler';
 import { connect } from 'react-redux';
 import Button from '../components/Button';
-import UserCard from '../components/User/UserCard';
+import UserCard from '../components/Card/UserCard';
 import { createCard, updateCard } from '../functions/axios';
 import { Card, CardInfo } from '../models/Card';
 import { cards } from '../redux/reducers/Cards';
@@ -98,6 +98,7 @@ const CustomizeCardScreen = (props:any) => {
                     Make the card attractive otherwise people wouldnt want to share it with other people
                     Link directly to social media instead of asking for links <- links are harder to enter
                 */}
+                <Text>Title: {cardTitle}</Text>
                 <UserCard navigation={props.navigation} customize={false} card={card} user={props.user}/>
                 <View style={{width:'100%', height:250, padding:20}}>
                     <Text>Customize Card Information</Text>
