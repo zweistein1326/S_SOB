@@ -11,6 +11,7 @@ import { FlatList, ScrollView } from 'react-native-gesture-handler';
 import { Card } from '../models/Card';
 import { style } from '@mui/system';
 import Button from '../components/Button';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const HomeScreen = (props: any) => {
 	const [card, setCard] = useState({
@@ -65,6 +66,16 @@ const HomeScreen = (props: any) => {
 					text='Scan Card'
 					onPressed={() => {
 						props.navigation.navigate('Home', { screen: 'CameraScreen' });
+					}}
+					textStyle={{ color: 'white' }}
+					style={{ backgroundColor: 'black', padding: 20 }}
+				/>
+				<Button
+					text='Logout'
+					onPressed={() => {
+						AsyncStorage.setItem('user','');
+						props.navigation.navigate('Auth',{screen:'Login'})
+						// logout user
 					}}
 					textStyle={{ color: 'white' }}
 					style={{ backgroundColor: 'black', padding: 20 }}
