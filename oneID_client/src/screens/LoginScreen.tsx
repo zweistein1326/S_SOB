@@ -24,27 +24,20 @@ const LoginScreen = (props: any) => {
 
 	const persistentLogin = async () => {
 		let loggedInUser: String = await AsyncStorage.getItem('user');
-		if (loggedInUser) {
+		if (loggedInUser!=='') {
 			console.log(loggedInUser);
 			let foundUser = await getUserById(loggedInUser);
 			let cards = await getCardsForUser(loggedInUser);
 			//let sharedCards = foundUser.sharedCards;
 			let sharedCards = [];
-			console.log('info', sharedCards.length);
 
 			if (foundUser.sharedCards) {
 				var bar = new Promise((resolve, reject) => {
 					foundUser.sharedCards.forEach(
 						async (cardId: String, index: number) => {
-							console.log('!!!!!!');
 							const card = await getCardById(cardId);
 							props.setSharedCards([card]);
 							sharedCards.push(card);
-							console.log(
-								'sharedcard NEW',
-								index,
-								foundUser.sharedCards.length
-							);
 							if (index === foundUser.sharedCards.length - 1) {
 								resolve(null);
 							}
@@ -52,7 +45,6 @@ const LoginScreen = (props: any) => {
 					);
 				});
 				bar.then(() => {
-					console.log('---HEREEEEE', loggedInUser);
 					if (!!loggedInUser) {
 						props.setUser(foundUser);
 						props.setUserCards(cards);
@@ -67,7 +59,6 @@ const LoginScreen = (props: any) => {
 				props.navigation.navigate('Home', { screen: 'HomeScreen' });
 			}
 		} else {
-			console.log('new user');
 		}
 	};
 	useEffect(() => {
@@ -95,7 +86,6 @@ const LoginScreen = (props: any) => {
 					props.setUser(user);
 					// store the user in localStorage
 					AsyncStorage.setItem('user', user.id);
-					console.log(user.id);
 					if (user.credentials) {
 						props.setUserCredentials(Object.values(user.credentials));
 					}
