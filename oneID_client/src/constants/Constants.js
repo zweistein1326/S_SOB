@@ -1,6 +1,6 @@
 /** @format */
 
-export const baseUrl = 'http://192.168.8.100:8000/api';
-export const testUrl = 'http://192.168.8.100:8000/';
+export const baseUrl = 'https://oneid-server.herokuapp.com/api';
+export const testUrl = 'https://oneid-server.herokuapp.com/';
 
 // change link to heroku link
