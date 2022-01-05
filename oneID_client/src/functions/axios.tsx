@@ -36,10 +36,10 @@ export const register = async (formData: any) => {
 export const createCard = async (cardData: Card, userId: String) => {
 	const res = await instance.post('/createCard/' + userId, cardData);
 	// console.log(res);
-	const { status, card } = res.data;
+	const { status, newCard } = res.data;
 	if (status == 'success') {
 		console.log(status);
-		return card;
+		return newCard;
 	}
 	console.log(status);
 	return null;

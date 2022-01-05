@@ -2,7 +2,7 @@
 
 import { resolve } from 'node:path/win32';
 import React, { useState, useEffect } from 'react';
-import { StyleSheet, Text, View } from 'react-native';
+import { ActivityIndicator, StyleSheet, Text, View } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { TextInput, TouchableOpacity } from 'react-native-gesture-handler';
 import { connect } from 'react-redux';
@@ -21,11 +21,12 @@ import { setCredentials } from '../redux/actions/CredentialActions';
 const LoginScreen = (props: any) => {
 	const [username, setUsername] = useState('');
 	const [password, setPassword] = useState('');
+	const [loading, setLoading] = useState(true);
 
 	const persistentLogin = async () => {
 		let loggedInUser: String = await AsyncStorage.getItem('user');
-		if (loggedInUser!=='') {
-			console.log(loggedInUser);
+		console.log(loggedInUser);
+		if (loggedInUser) {
 			let foundUser = await getUserById(loggedInUser);
 			let cards = await getCardsForUser(loggedInUser);
 			//let sharedCards = foundUser.sharedCards;
@@ -48,7 +49,8 @@ const LoginScreen = (props: any) => {
 					if (!!loggedInUser) {
 						props.setUser(foundUser);
 						props.setUserCards(cards);
-						props.navigation.navigate('Home', { screen: 'HomeScreen' });
+						setLoading(false);
+						props.navigation.navigate('HomeStack', { screen: 'HomeScreen' });
 					} else {
 						console.log('login failed');
 					}
@@ -56,9 +58,10 @@ const LoginScreen = (props: any) => {
 			} else {
 				props.setUser(foundUser);
 				props.setUserCards(cards);
-				props.navigation.navigate('Home', { screen: 'HomeScreen' });
+				props.navigation.navigate('HomeStack', { screen: 'HomeScreen' });
 			}
 		} else {
+			setLoading(false);
 		}
 	};
 	useEffect(() => {
@@ -66,6 +69,7 @@ const LoginScreen = (props: any) => {
 	}, []);
 
 	const handleSubmit = async () => {
+		setLoading(true);
 		// send login request
 		const user = await login({ username, password });
 		const cards = await getCardsForUser(user.id);
@@ -90,7 +94,8 @@ const LoginScreen = (props: any) => {
 						props.setUserCredentials(Object.values(user.credentials));
 					}
 					props.setUserCards(cards);
-					props.navigation.navigate('Home', { screen: 'HomeScreen' });
+					setLoading(false);
+					props.navigation.navigate('HomeStack', { screen: 'HomeScreen' });
 					// else{
 					//     props.navigation.navigate('Home',{
 					//     screen:'CustomizeCard',
@@ -106,7 +111,7 @@ const LoginScreen = (props: any) => {
 
 	return (
 		<View style={styles.box}>
-			<View style={styles.card}>
+			{loading?<ActivityIndicator/>:<View style={styles.card}>
 				<View
 					style={{
 						padding: 20,
@@ -168,7 +173,7 @@ const LoginScreen = (props: any) => {
 						text={'Next'}
 					/>
 				</View>
-			</View>
+			</View>}
 		</View>
 	);
 };
@@ -183,6 +188,7 @@ const styles = StyleSheet.create({
 		display: 'flex',
 		alignItems: 'center',
 		justifyContent: 'center',
+		backgroundColor:'white'
 	},
 	card: {
 		width: '95%',

@@ -12,13 +12,12 @@ import { Card } from '../models/Card';
 
 const CameraScreen = (props:any) => {
     
-    const [hasPermission, setHasPermission] = useState(null);
+    const [hasPermission, setHasPermission] = useState<boolean | null>(null);
     const [type, setType] = useState(Camera.Constants.Type.back);
 
     useEffect(()=>{
         (async()=>{
             const {status} = await Camera.requestPermissionsAsync();
-            console.log(status);
             setHasPermission( status == "granted")
         })();
     },[]);
