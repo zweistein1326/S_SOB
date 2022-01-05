@@ -7,11 +7,12 @@ import React from 'react';
 import { connect } from 'react-redux';
 import CredentialTile from '../components/Credentials/CredentialTile';
 import UserCard from '../components/Card/UserCard';
-import { FlatList, ScrollView } from 'react-native-gesture-handler';
+import { FlatList, ScrollView, TouchableOpacity } from 'react-native-gesture-handler';
 import { Card } from '../models/Card';
 import { style } from '@mui/system';
 import Button from '../components/Button';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { Ionicons } from '@expo/vector-icons';
 
 const HomeScreen = (props: any) => {
 	const [card, setCard] = useState({
@@ -40,10 +41,27 @@ const HomeScreen = (props: any) => {
 	// setUserCards(userCards);
 
 	return (
-		<ScrollView>
-			<Text style={styles.heading}>Saved cards</Text>
+		<ScrollView style={styles.container}>
+			<View style={styles.row}>
+				<View style={{flexDirection:'row', alignItems:'center'}}>
+					<Text style={styles.heading}>My Avatars</Text>
+					<TouchableOpacity onPress={()=>{
+						props.navigation.navigate('HomeTab',{screen:'CustomizeCardScreen',params:{cardId:null}})}}>
+						<Text style={{...styles.heading, color:'red'}}>+</Text>
+					</TouchableOpacity>
+				</View>
+				<Button
+						text=''
+						icon = {<Ionicons name='qr-code' size={20} color={'black'}/>}
+						onPressed={() => {
+							props.navigation.navigate('CameraScreen');
+						}}
+						textStyle={{ color: 'white', fontSize:40 }}
+						style={{ padding: 20 }}
+					/>
+				</View>
 			<View
-				style={{ display: 'flex', alignItems: 'center', paddingVertical: 10 }}>
+				style={styles.innerContainer}>
 				{userCards.map((card: Card, index) => {
 					return (
 						<UserCard
@@ -62,28 +80,10 @@ const HomeScreen = (props: any) => {
                 <Text style={{width:'100%'}}>Saved Credentials</Text>
                 {Object.values(props.credentials).map((credential:any,index)=><CredentialTile key={index} navigation={props.navigation} credential={credential}/>)}
             </View> */}
-				<Button
-					text='Scan Card'
-					onPressed={() => {
-						props.navigation.navigate('Home', { screen: 'CameraScreen' });
-					}}
-					textStyle={{ color: 'white' }}
-					style={{ backgroundColor: 'black', padding: 20 }}
-				/>
-				<Button
-					text='Logout'
-					onPressed={() => {
-						AsyncStorage.setItem('user','');
-						props.navigation.navigate('Auth',{screen:'Login'})
-						// logout user
-					}}
-					textStyle={{ color: 'white' }}
-					style={{ backgroundColor: 'black', padding: 20 }}
-				/>
 			</View>
 			<Text style={styles.heading}>Saved contacts</Text>
 			<View
-				style={{ display: 'flex', alignItems: 'center', paddingVertical: 10 }}>
+				style={styles.sharedCardsContainer}>
 				{sharedCards.map((card: Card, index) => {
 					return (
 						<UserCard
@@ -114,6 +114,24 @@ const styles = StyleSheet.create({
 		fontSize: 22,
 		fontWeight: 'bold',
 	},
+	container:{
+		paddingTop:60
+	},
+	innerContainer:{ 
+		display: 'flex', 
+		alignItems: 'center',
+		paddingVertical: 10 
+	},
+	sharedCardsContainer:{
+		display: 'flex', 
+		alignItems: 'center',
+		paddingVertical: 10 
+	},
+	row:{
+		flexDirection:'row',
+		alignItems:'center',
+		justifyContent:'space-between'
+	}
 });
 
 export default connect(mapStateToProps, null)(HomeScreen);

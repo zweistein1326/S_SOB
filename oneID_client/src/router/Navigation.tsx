@@ -1,4 +1,4 @@
-import { NavigationContainer } from "@react-navigation/native"
+import { NavigationContainer, TabRouter } from "@react-navigation/native"
 import { createNativeStackNavigator } from "@react-navigation/native-stack"
 import HomeScreen from "../screens/HomeScreen";
 import React from 'react';
@@ -10,8 +10,61 @@ import CredentialScreen from "../screens/CredentialScreen";
 import CustomizeCardScreen from "../screens/CustomizeCardScreen";
 import RegisterScreen from "../screens/RegisterScreen";
 import CameraScreen from "../screens/CameraScreen";
+import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
+import { Ionicons } from "@expo/vector-icons";
+import SettingsScreen from "../screens/SettingsScreen";
 
 const Stack = createNativeStackNavigator();
+
+const Tab = createBottomTabNavigator();
+
+const MyTabs = () => {
+	return(
+		<Tab.Navigator screenOptions={({route})=>({
+            tabBarIcon:({focused,color,size})=>{
+                if(route.name=="HomeTab"){
+                    return(
+                       <Ionicons
+                       name={
+                           focused? 'home': 'home-outline'
+                       }
+                       size={size}
+                       color={color}
+                       />
+                    )
+                }
+                else if(route.name=="CameraScreen"){
+                    return(
+                       <Ionicons
+                       name={
+                           focused ? "camera":'camera-outline'
+                       }
+                       size={size}
+                       color={color}
+                       />
+                    )
+                }
+                else if(route.name=="SettingsScreen"){
+                    return(
+                       <Ionicons
+                       name={
+                           focused ? 'settings':'settings-outline'
+                       }
+                       size={size}
+                       color={color}
+                       />
+                    )
+                }
+            },
+            tabBarInactiveTintColor:'gray',
+            tabBarActiveTintColor:'tomato'
+        })}>
+			<Tab.Screen options={{ headerShown:false }} name="HomeTab" component={Home}/>
+			{/* <Tab.Screen options={{ headerShown:false }} name="CameraScreen" component={CameraScreen}/> */}
+			<Tab.Screen options={{ headerShown:false }} name="SettingsScreen" component={SettingsScreen}/>
+		</Tab.Navigator>
+	)
+}
 
 const store = createStore(reducers);
 
@@ -20,10 +73,12 @@ return (
         <Stack.Navigator key={"Auth"}>
             <Stack.Screen
             name="Login"
+            options={{headerShown:false}}
             component={LoginScreen}
             />
             <Stack.Screen
             name="Register"
+            options={{headerShown:false}}
             component={RegisterScreen}
             />
         </Stack.Navigator>
@@ -31,22 +86,23 @@ return (
 
 const Home = () => {
     return (
-        <Stack.Navigator key={'Home'}>
+        <Stack.Navigator key={'HomeNavigator'}>
             <Stack.Screen
             name="HomeScreen"
             component={HomeScreen}
-            options = {{title:'Welcome'}}
+            options = {{headerShown:false}}
             />
             <Stack.Screen
             name="CameraScreen"
             component={CameraScreen}
+            options={{headerShown:false}}
             />
             <Stack.Screen
-            name="Credential"
+            name="CredentialScreen"
             component={CredentialScreen}
             />
             <Stack.Screen
-            name="CustomizeCard"
+            name="CustomizeCardScreen"
             component={CustomizeCardScreen}
             />
         </Stack.Navigator>
@@ -59,13 +115,13 @@ const Navigator = () => {
         <NavigationContainer>
             <Stack.Navigator>
                 <Stack.Screen 
-                    name="Auth"
+                    name="AuthStack"
                     component={AuthStack}
                     options={{headerShown:false}}
                 />
                 <Stack.Screen
-                    name="Home"
-                    component={Home}
+                    name="HomeStack"
+                    component={MyTabs}
                     options={{headerShown:false}}
                 />
                 </Stack.Navigator>

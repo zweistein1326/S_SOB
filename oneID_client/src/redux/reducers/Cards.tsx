@@ -11,7 +11,6 @@ export const cards = (state = INITIAL_STATE, action:any) => {
             return state;
         case 'SET_SHARED_CARDS':
             const sharedCards = action.payload;
-            console.log(sharedCards);
             sharedCards.forEach((card:Card) => {state.sharedCards.set(card.id,card)});
         default:
             return state

@@ -20,6 +20,7 @@ const CustomizeCardScreen = (props: any) => {
 	const [cardTitle, setCardTitle] = useState('');
 	const [name, setCardName] = useState('');
 	const [email, setEmail] = useState('');
+	const [phone, setPhone] = useState('');
 	const [website, setWebsite] = useState('');
 	const [social1, setSocial1] = useState('');
 	const [social2, setSocial2] = useState('');
@@ -30,6 +31,7 @@ const CustomizeCardScreen = (props: any) => {
 		id: cardId,
 		cardInfo: {
 			cardTitle,
+			phone,
 			name,
 			email,
 			website,
@@ -42,12 +44,13 @@ const CustomizeCardScreen = (props: any) => {
 	};
 
 	useEffect(() => {
-		const { id, cardInfo, backgroundColor, foregroundColor } =
+		if(cardId){
+			const { id, cardInfo, backgroundColor, foregroundColor } =
 			props.userCards.get(cardId);
-		console.log(props.userCards.get(cardId));
 		const {
 			cardTitle: title,
 			name: cardName,
+			phone: cardPhone,
 			email: cardEmail,
 			website: cardWebsite,
 			social1: cardSocial1,
@@ -57,17 +60,19 @@ const CustomizeCardScreen = (props: any) => {
 
 		setCardTitle(title);
 		setCardName(cardName);
+		setPhone(cardPhone);
 		setEmail(cardEmail);
 		setSocial1(cardSocial1);
 		setSocial2(cardSocial2);
 		setSocial3(cardSocial3);
 		setWebsite(cardWebsite);
+		}
 	}, []);
 
 	const handleSubmit = async () => {
 		const cardData: Card = {
 			id: cardId,
-			cardInfo: { name, cardTitle, email, website, social1, social2, social3 },
+			cardInfo: { name, cardTitle, phone, email, website, social1, social2, social3 },
 			backgroundColor: 'red',
 			foregroundColor: 'white',
 		};
@@ -78,10 +83,11 @@ const CustomizeCardScreen = (props: any) => {
 			props.setUserCards([card]);
 			console.log(props.userCards);
 		} else {
+			// add new card
 			const card = await createCard(cardData, props.user.id);
-			props.setCards([card]);
+			props.setUserCards([card]);
 		}
-		props.navigation.navigate('Home', { screen: 'HomeScreen' });
+		props.navigation.navigate('HomeTab', { screen: 'HomeScreen' });
 	};
 
 	// const cardOptions = [
@@ -133,6 +139,17 @@ const CustomizeCardScreen = (props: any) => {
 								setCardName(name);
 							}}
 							placeholder='Name on Card'
+						/>
+					</View>
+					<View style={styles.field}>
+						<Text>Phone</Text>
+						<TextInput
+							value={phone}
+							keyboardType='phone-pad'
+							onChangeText={(phone) => {
+								setPhone(phone);
+							}}
+							placeholder='+852*********'
 						/>
 					</View>
 					<View style={styles.field}>
