@@ -13,7 +13,7 @@ import {
 	login,
 	getUserById,
 } from '../functions/axios';
-import { Card } from '../models/Card';
+import { Card, SharedCard } from '../models/Card';
 import { setUser } from '../redux/actions/AuthActions';
 import { setSharedCards, setUserCards } from '../redux/actions/CardActions';
 import { setCredentials } from '../redux/actions/CredentialActions';
@@ -25,7 +25,6 @@ const LoginScreen = (props: any) => {
 
 	const persistentLogin = async () => {
 		let loggedInUser: String = await AsyncStorage.getItem('user');
-		console.log(loggedInUser);
 		if (loggedInUser) {
 			let foundUser = await getUserById(loggedInUser);
 			let cards = await getCardsForUser(loggedInUser);
@@ -35,9 +34,9 @@ const LoginScreen = (props: any) => {
 			if (foundUser.sharedCards) {
 				var bar = new Promise((resolve, reject) => {
 					foundUser.sharedCards.forEach(
-						async (cardId: String, index: number) => {
-							const card = await getCardById(cardId);
-							props.setSharedCards([card]);
+						async (sharedCard: SharedCard, index: number) => {
+							const card = await getCardById(sharedCard.id);
+							props.setSharedCards([{ ...card,iat:sharedCard.iat }]);
 							sharedCards.push(card);
 							if (index === foundUser.sharedCards.length - 1) {
 								resolve(null);

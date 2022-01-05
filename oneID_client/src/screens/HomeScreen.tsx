@@ -13,6 +13,8 @@ import { style } from '@mui/system';
 import Button from '../components/Button';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { Ionicons } from '@expo/vector-icons';
+import SearchBar from '../components/SearchBar';
+import selectSharedCards from '../redux/selectors/cards';
 
 const HomeScreen = (props: any) => {
 	const [card, setCard] = useState({
@@ -29,16 +31,12 @@ const HomeScreen = (props: any) => {
 		backgroundColor: '',
 		foregroundColor: '',
 	});
-	// const [sharedCards, setSharedCards] = useState<Card[]>([]);
-	// const [userCards, setUserCards] = useState<Card[]>([]);
 
 	let sharedCards: Card[] = [];
 	props.sharedCards.forEach((card: Card) => sharedCards.push(card));
-	// setSharedCards(sharedCards1);
 
 	let userCards: Card[] = [];
 	props.userCards.forEach((card: Card) => userCards.push(card));
-	// setUserCards(userCards);
 
 	return (
 		<ScrollView style={styles.container}>
@@ -47,7 +45,7 @@ const HomeScreen = (props: any) => {
 					<Text style={styles.heading}>My Avatars</Text>
 					<TouchableOpacity onPress={()=>{
 						props.navigation.navigate('HomeTab',{screen:'CustomizeCardScreen',params:{cardId:null}})}}>
-						<Text style={{...styles.heading, color:'red'}}>+</Text>
+						<Text style={{...styles.heading, color:'rgb(255,100,20)'}}>+</Text>
 					</TouchableOpacity>
 				</View>
 				<Button
@@ -81,8 +79,8 @@ const HomeScreen = (props: any) => {
                 {Object.values(props.credentials).map((credential:any,index)=><CredentialTile key={index} navigation={props.navigation} credential={credential}/>)}
             </View> */}
 			</View>
-			<Text style={styles.heading}>Saved contacts</Text>
-			<Text style={styles.heading}>Search by name</Text>
+			<Text style={styles.heading}>Recently saved</Text>
+			{/* Show top 5 recently added cards */}
 			<View
 				style={styles.sharedCardsContainer}>
 				{sharedCards.map((card: Card, index) => {
@@ -106,7 +104,8 @@ const mapStateToProps = (state: any) => ({
 	user: state.auth.user,
 	credentials: state.credentials,
 	userCards: state.cards.userCards,
-	sharedCards: state.cards.sharedCards,
+	sharedCards: selectSharedCards(state.cards.sharedCards , state.filters),
+	filters: state.filters
 });
 
 const styles = StyleSheet.create({

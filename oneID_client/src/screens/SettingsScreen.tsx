@@ -17,7 +17,6 @@ const SettingsScreen = (props:any) => {
             <Text>Share feedback</Text>
             <Text>Contact Us</Text>
             <Text>Leave a review</Text>
-            <Text>Logout</Text>
             <Button
 					text='Logout'
 					onPressed={() => {
@@ -38,6 +37,7 @@ const mapStateToProps = (state:any) => ({
 
 const styles = StyleSheet.create({
     container:{
+        paddingTop: 100,
         width:'100%',
         height:'100%'
     }

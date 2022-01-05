@@ -13,6 +13,7 @@ import CameraScreen from "../screens/CameraScreen";
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 import { Ionicons } from "@expo/vector-icons";
 import SettingsScreen from "../screens/SettingsScreen";
+import ContactsScreen from "../screens/ContactsScreen";
 
 const Stack = createNativeStackNavigator();
 
@@ -33,11 +34,11 @@ const MyTabs = () => {
                        />
                     )
                 }
-                else if(route.name=="CameraScreen"){
+                else if(route.name=="ContactsScreen"){
                     return(
                        <Ionicons
                        name={
-                           focused ? "camera":'camera-outline'
+                           focused ? 'phone-portrait':'phone-portrait-outline'
                        }
                        size={size}
                        color={color}
@@ -60,7 +61,7 @@ const MyTabs = () => {
             tabBarActiveTintColor:'tomato'
         })}>
 			<Tab.Screen options={{ headerShown:false }} name="HomeTab" component={Home}/>
-			{/* <Tab.Screen options={{ headerShown:false }} name="CameraScreen" component={CameraScreen}/> */}
+			<Tab.Screen options={{ headerShown:false }} name="ContactsScreen" component={ContactsScreen}/>
 			<Tab.Screen options={{ headerShown:false }} name="SettingsScreen" component={SettingsScreen}/>
 		</Tab.Navigator>
 	)

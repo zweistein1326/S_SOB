@@ -5,5 +5,5 @@ interface User{
     email: String[],
     social: String[],
     cards: String[]
-    sharedCards: String[]
+    sharedCards: SharedCard[]
 }
