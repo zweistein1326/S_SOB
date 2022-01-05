@@ -82,6 +82,7 @@ const HomeScreen = (props: any) => {
             </View> */}
 			</View>
 			<Text style={styles.heading}>Saved contacts</Text>
+			<Text style={styles.heading}>Search by name</Text>
 			<View
 				style={styles.sharedCardsContainer}>
 				{sharedCards.map((card: Card, index) => {

@@ -13,11 +13,13 @@ import IconFontisto from 'react-native-vector-icons/Fontisto';
 const UserCard = (props: any) => {
 	console.log(props.card);
 
+	const {cardInfo} = props.card;
+
 	return (
 		<View
 			style={styles.cardContainer}>
 			{props.card.id !== '' ? (
-				// <Text style={[styles.cardText,{color:'white'}]}>{props.card.cardInfo.title}</Text>
+				// <Text style={[styles.cardText,{color:'white'}]}>{cardInfo.title}</Text>
 				<View style={styles.card}>
 					<View>
 						{1==1?<QRCode
@@ -34,32 +36,37 @@ const UserCard = (props: any) => {
 							<Text
 								style={{ ...styles.cardText, fontSize: 16, color: props.card.foregroundColor }}>
 								@{props.user.username}{' '}
+
 							</Text>
 						) : null}
 						{/* <Text style={[styles.cardText,{color:'white'}]}>Avatar</Text> */}
 					</View>
 					<View style={{ width: '60%' }}>
 								<TouchableOpacity onPress={()=>{
-									Linking.openURL('https://www.youtube.com/watch?v=9v1071hD_j8&ab_channel=RobinSharma')
+									Linking.openURL(`mailto:${cardInfo.email}`)
 								}} style={styles.social}>
 									<IconFontisto name="email" size={18}/>
-									<Text style={styles.socialText}> {props.card.cardInfo.email}</Text>
+									<Text style={styles.socialText}> {cardInfo.email}</Text>
 								</TouchableOpacity>
-								<TouchableOpacity style={styles.social}>
+								<TouchableOpacity onPress={()=>{
+									Linking.openURL(`https://www.instagram.com`)
+								}} style={styles.social}>
 									<IconFontisto name="instagram" size={18}/>
-									<Text style={styles.socialText}> {props.card.cardInfo.social1}</Text>
+									<Text style={styles.socialText}> {cardInfo.social1}</Text>
 								</TouchableOpacity>
-								<TouchableOpacity style={styles.social}>
+								<TouchableOpacity onPress={()=>{
+									Linking.openURL(`https://www.linkedin.com`)
+								}} style={styles.social}>
 									<IconFontisto name="linkedin" size={18}/>
-									<Text style={styles.socialText}> {props.card.cardInfo.social2}</Text>
+									<Text style={styles.socialText}> {cardInfo.social2}</Text>
 								</TouchableOpacity>
-								<TouchableOpacity style={styles.social}>
+								<TouchableOpacity onPress={()=>{
+									Linking.openURL(`https://www.facebook.com`)
+								}} style={styles.social}>
 									<IconFontisto name="facebook" size={18}/>
-									<Text style={styles.socialText}> {props.card.cardInfo.social3}</Text>
+									<Text style={styles.socialText}> {cardInfo.social3}</Text>
 								</TouchableOpacity>
 					</View>
-					{/* <Text>UID: </Text>
-                <Text>UID: </Text> */}
 				</View>
 			) : null}
 			{props.customize && !props.sharedCard ? (
