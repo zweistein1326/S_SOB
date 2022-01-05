@@ -17,3 +17,8 @@ export interface CardInfo{
     social2: String,
     social3: String,
 }
+
+export interface SharedCard{
+    id: String,
+    iat: String,
+}

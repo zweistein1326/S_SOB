@@ -32,11 +32,10 @@ const UserCard = (props: any) => {
 								'&receiverId='
 							}
 						/>:null}
-						{!props.sharedCard ? (
+						{1==1 ? (
 							<Text
 								style={{ ...styles.cardText, fontSize: 16, color: props.card.foregroundColor }}>
-								@{props.user.username}{' '}
-
+								@{cardInfo.name}
 							</Text>
 						) : null}
 						{/* <Text style={[styles.cardText,{color:'white'}]}>Avatar</Text> */}
@@ -103,7 +102,7 @@ const styles = StyleSheet.create({
 		justifyContent: 'space-between',
 		flexDirection: 'column',
 		alignItems: 'center',
-		backgroundColor: 'red',
+		backgroundColor: 'rgb(255,120,10)',
 		width: '95%',
 		height: 250,
 		borderRadius: 20,
