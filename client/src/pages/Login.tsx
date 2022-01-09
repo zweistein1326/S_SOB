@@ -14,7 +14,6 @@ import {
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import { useNavigate } from 'react-router-dom';
 import {connect} from 'react-redux';
-import { login } from '../actions/auth';
 import { User } from '../models/User';
 
 
@@ -130,9 +129,9 @@ const Login = (props:any) => {
   );
 };
 
-const mapDispatchToProps = (dispatch:any)=> ({
-  login: (userData:User) => dispatch(login(userData)),
-  // logout: () => dispatch(logout())
-});
+// const mapDispatchToProps = (dispatch:any)=> ({
+//   login: (userData:User) => dispatch(login(userData)),
+//   // logout: () => dispatch(logout())
+// });
 
-export default connect(null, mapDispatchToProps)(Login)
+export default connect(null, null)(Login)

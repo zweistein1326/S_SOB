@@ -1,0 +1,16 @@
+.Card{
+    background-color: rgb(200,140,20);
+    padding: 3rem;
+    border-radius: 20px;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-around;
+    position: relative;
+}
+
+.cardImage{
+    height: 200px;
+    width: 200px;
+    border-radius: 50%;
+}
