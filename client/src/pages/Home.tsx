@@ -37,8 +37,6 @@ const Home = (props:any) => {
     }
   }
 
-  console.log(props.credentials);
-
   return (
     <Box>
       <Header/>
@@ -56,10 +54,10 @@ const Home = (props:any) => {
           >
             Add new NFT
           </Button> */}
-          <Typography>Your NFTs</Typography>
-          {props.credentials.length >0 ? <Box >
+          <Typography>My NFTs</Typography>
+          {props.credentials.length >0 ? <Box style={{display:'flex', flexDirection:'row'}}>
             {props.credentials.map((credential:any,index:number)=>(
-              <Box key={index}>
+              <Box key={index} style={{margin:'1rem'}}>
                 <Typography>NFT: {credential.name}</Typography>
                 {credential ? <img style={{height:'200px', width:'200px'}} src={credential.image} alt="token"/> : null}
               </Box>)
@@ -73,7 +71,8 @@ const Home = (props:any) => {
 
 const mapStateToProps = (state:any) => ({
   account:state.auth.account,
-  credentials: state.credentials
+  credentials: state.credentials,
+  user: state.auth.user
 })
 
 export default connect(mapStateToProps)(Home);

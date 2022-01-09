@@ -9,6 +9,7 @@ import { Provider } from 'react-redux';
 import configureStore from './store/configureStore';
 import RequestCredential from './pages/RequestCredential';
 import Header from './components/Header';
+import EditCardScreen from './pages/EditCardScreen';
 
 
 declare var window: any;
@@ -39,13 +40,12 @@ function App() {
       <Provider store={store}>
       <Router>
         <Routes>
-          <Route path="/" element={<Home />} />
-          <Route path="/login" element={<Login />} />
-          <Route path="/register" element={<Register />} />
-          <Route path="/user/:id" element={<Home />} />
+          <Route path="/" element={<Register />} />
+          <Route path="/:address" element={<Home />} />
           <Route path="/user/:id/:credentialId" element={<CredentialPage />} />
           <Route path="/addCredential" element={<AddCredential />} />
           <Route path="/requestCredential" element={<RequestCredential />} />
+          <Route path="/editCard" element={<EditCardScreen />} />
         </Routes>
       </Router>
       </Provider>

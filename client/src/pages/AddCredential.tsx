@@ -3,7 +3,7 @@ import { Box, Button, FormControl, FormHelperText, Input, InputLabel, TextField,
 import { useState } from "react";
 import { connect } from "react-redux";
 import { useNavigate } from "react-router-dom";
-import {  setCredentials } from "../actions/credentials";
+import { setCredentials } from "../actions/credentials";
 import { getNFT } from "../functions/axios";
 
 var CryptoJS = require('crypto-js');
@@ -56,6 +56,7 @@ const AddCredential = (props:any) => {
     const addNFT = async(event:React.FormEvent<HTMLFormElement>) => {
         event.preventDefault();
         const data = new FormData(event.currentTarget);
+        console.log(props.account);
         const payload = {
         default_account: props.account,
         contract_address: data.get('contract_address'),
@@ -116,7 +117,8 @@ const AddCredential = (props:any) => {
 }
 
 const mapStateToProps = (state:any)=>({
-    auth:state.auth
+    auth:state.auth,
+    account: state.auth.account
 })
 
 const mapDispatchToProps = (dispatch:any) => ({

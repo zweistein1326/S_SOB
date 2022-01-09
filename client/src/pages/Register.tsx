@@ -14,10 +14,11 @@ import {
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import { useNavigate } from 'react-router-dom';
 import { ethers } from 'ethers';
-import { getNFT } from '../functions/axios';
+import { getAllCredentialData, getNFT, register } from '../functions/axios';
 import { Image } from '@mui/icons-material';
 import { connect } from 'react-redux';
-import { setAccount } from '../actions/auth';
+import { setAccount, setUser } from '../actions/auth';
+import { setCredentials } from '../actions/credentials';
 
 declare var window: any;
 
@@ -35,9 +36,7 @@ const Register = (props:any) => {
     if(window.ethereum){
       window.ethereum.request({method:'eth_requestAccounts'}).then(async (result:any[]) => {
         await accountChangeHandler(result[0]);
-      }).then(()=>{
-        navigate('/')
-      });
+      })
     }
     else{
       setErrorMessage('Install Metamask');
@@ -48,6 +47,12 @@ const Register = (props:any) => {
     setDefaultAccount(newAccount);
     props.setAccount(newAccount);
     getUserBalance(newAccount);
+    const user = await register(newAccount);
+    props.setUser(user);
+    const credentials = await getAllCredentialData(user.credentials);
+    console.log(credentials)
+    props.setCredentials(credentials)
+    navigate(`/${newAccount}`)
   }
 
   const getUserBalance = (address:any) =>{
@@ -129,7 +134,9 @@ const Register = (props:any) => {
 };
 
 const mapDispatchToProps = (dispatch:any) => ({
-  setAccount: (account:any) => dispatch(setAccount(account))
+  setAccount: (account:any) => dispatch(setAccount(account)),
+  setUser: (user:any) => dispatch(setUser(user)),
+  setCredentials: (credentials:any[]) => dispatch(setCredentials(credentials))
 })
 
 export default connect(null,mapDispatchToProps)(Register);
