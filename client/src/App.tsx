@@ -1,6 +1,4 @@
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
-import { ApolloProvider, ApolloClient, InMemoryCache } from '@apollo/client';
-import { RestLink } from 'apollo-link-rest';
 import Login from './pages/Login';
 import Home from './pages/Home';
 import Register from './pages/Register';
@@ -10,16 +8,10 @@ import AddCredential from './pages/AddCredential';
 import { Provider } from 'react-redux';
 import configureStore from './store/configureStore';
 import RequestCredential from './pages/RequestCredential';
+import Header from './components/Header';
 
 
 declare var window: any;
-
-const restLink = new RestLink({ uri: '/api' });
-
-const client = new ApolloClient({
-  cache: new InMemoryCache(),
-  link: restLink,
-});
 
 const {ethereum} = window;
 
@@ -35,7 +27,6 @@ const connectWalletHandler = async () => {
 
 export const store = configureStore();
 const auth = store.getState().auth
-console.log(auth);
 
 
 function App() {
@@ -45,11 +36,10 @@ function App() {
   },[])
 
   return (
-    <ApolloProvider client={client}>
       <Provider store={store}>
       <Router>
         <Routes>
-          <Route path="/" element={<Login />} />
+          <Route path="/" element={<Home />} />
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />
           <Route path="/user/:id" element={<Home />} />
@@ -59,7 +49,6 @@ function App() {
         </Routes>
       </Router>
       </Provider>
-    </ApolloProvider>
   );
 }
 

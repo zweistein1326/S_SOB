@@ -3,7 +3,8 @@ import { Box, Button, FormControl, FormHelperText, Input, InputLabel, TextField,
 import { useState } from "react";
 import { connect } from "react-redux";
 import { useNavigate } from "react-router-dom";
-import { ADDCREDENTIAL } from "../graphql";
+import {  setCredentials } from "../actions/credentials";
+import { getNFT } from "../functions/axios";
 
 var CryptoJS = require('crypto-js');
 var SHA256 = require('crypto-js/sha256');
@@ -14,8 +15,6 @@ const privateKey = 'MIICXAIBAAKBgQDLyT/Ah5gtJu74KRpNatZgFzdePXdRYLvknjBCqanlhzkf
 const AddCredential = (props:any) => {
 
     const navigate = useNavigate();
-    const [addCredential,{loading,error}] = useMutation(ADDCREDENTIAL);
-
 
     const handleSubmit = async(event: React.FormEvent<HTMLFormElement>)=>{
         event.preventDefault();
@@ -40,57 +39,77 @@ const AddCredential = (props:any) => {
 
         let payload = {...tempPayload, hash, signature}
 
-        addCredential({
-            variables:{
-                input:payload
-            }
-        }).then((res)=>{
-            const {status, credential, message} = res.data.addCredential;
-            if(status==="success"){
-                console.log(credential);
-            }
-        })
+        // addCredential({
+        //     variables:{
+        //         input:payload
+        //     }
+        // }).then((res)=>{
+        //     const {status, credential, message} = res.data.addCredential;
+        //     if(status==="success"){
+        //         console.log(credential);
+        //     }
+        // })
+    }
+
+    const [tokenData, setTokenData] = useState<any>(null);
+
+    const addNFT = async(event:React.FormEvent<HTMLFormElement>) => {
+        event.preventDefault();
+        const data = new FormData(event.currentTarget);
+        const payload = {
+        default_account: props.account,
+        contract_address: data.get('contract_address'),
+        token_id: data.get('token_id')
+        }
+        const tokenData = await getNFT(payload); 
+        props.setCredentials([tokenData]);
+        setTokenData(tokenData);
     }
     return (
         <Box>
             <Typography>Create new credential</Typography>
-            <Box component="form" noValidate sx={{ mt: 1 }} onSubmit={handleSubmit}>
+            <Box component="form" noValidate sx={{ mt: 1 }} onSubmit={addNFT}>
                 <TextField
-                margin ="normal"
+                margin="normal"
                 required
                 fullWidth
-                id="title"
-                label="Credential title"
-                name="credential_title"
-                autoComplete="text"
-                autoFocus/>
-                Select credential type: Text, Image, JSON, Video, Smart Contract, 
+                name="contract_address"
+                label="Contract Address"
+                type="text"
+                id="contract_address"
+                autoComplete="contract_address"
+                />
                 <TextField
-                margin ="normal"
-                required
-                fullWidth
-                id="value"
-                label="Credential value"
-                name="credential_value"
-                autoComplete="text"
-                autoFocus/>
-                <TextField
-                margin ="normal"
-                required
-                fullWidth
-                id="receiver_id"
-                label="Receiver Id"
-                name="receiver_id"
-                autoComplete="text"
-                autoFocus/>
-                <Button 
-                type="submit" 
-                variant="contained" 
-                sx = {{ mt:3, mb:2 }}
-                disabled={loading}
+                    margin="normal"
+                    required
+                    fullWidth
+                    name="token_id"
+                    label="Token Id"
+                    type="text"
+                    id="token_id"
+                    autoComplete="token_id"
+                />
+                <Button
+                    type="submit"
+                    fullWidth
+                    variant="contained"
+                    sx={{ mt: 3, mb: 2 }}
+                    // disabled={loading}
                 >
-                    Submit
+                    Add NFT
                 </Button>
+                <Button
+                    onClick={()=>{navigate('/')}}
+                    type="submit"
+                    fullWidth
+                    variant="contained"
+                    sx={{ mt: 3, mb: 2 }}
+                    // disabled={loading}
+                >
+                    Home
+                </Button>
+                <Typography>NFT: {tokenData?tokenData.name:''}</Typography>
+                {tokenData ? <img style={{height:'200px', width:'200px'}} src={tokenData.image} alt="token"/> : null}
             </Box>
         </Box>
     )
@@ -100,4 +119,8 @@ const mapStateToProps = (state:any)=>({
     auth:state.auth
 })
 
-export default connect(mapStateToProps)(AddCredential);
+const mapDispatchToProps = (dispatch:any) => ({
+    setCredentials: (credentials:any[]) => dispatch(setCredentials(credentials))
+})
+
+export default connect(mapStateToProps,mapDispatchToProps)(AddCredential);

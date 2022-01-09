@@ -1,4 +1,6 @@
+import { Navigation } from '@mui/icons-material';
 import {Button} from '@mui/material'
+import { Box } from '@mui/system';
 import { useNavigate } from 'react-router-dom';
 
 const Header = (props:any) => {
@@ -16,7 +18,11 @@ const Header = (props:any) => {
     }
 
     return(
-        props.loggedIn? <Button onClick={handleLogout}>Logout</Button>: <Button href="/login">Login</Button>
+        <Box>
+            {props.loggedIn? <Button onClick={handleLogout}>Logout</Button>: <Button href="/register">Login</Button>}
+            <Button onClick={()=>{navigate('/')}}>Home</Button>
+            <Button onClick={()=>{navigate('/addCredential')}}>Add</Button>
+        </Box>
         )
 }
 

@@ -79,8 +79,45 @@ const HomeScreen = (props: any) => {
                 {Object.values(props.credentials).map((credential:any,index)=><CredentialTile key={index} navigation={props.navigation} credential={credential}/>)}
             </View> */}
 			</View>
-			<Text style={styles.heading}>Recently saved</Text>
-			{/* Show top 5 recently added cards */}
+			<Text>My profile</Text>
+			<Text>Connected Apps</Text>
+			<Text>My NFT Collection</Text>
+			<View style={{width:'100%'}}>
+				<View style={{flexDirection:'row', alignItems:'center', justifyContent:'space-evenly'}}>
+					<View style={{height:100}}>
+						<Text>NFT1</Text>
+					</View>
+					<View style={{height:100}}>
+						<Text>NFT1</Text>
+					</View>
+					<View style={{height:100}}>
+						<Text>NFT1</Text>
+					</View>
+				</View>
+				<View style={{flexDirection:'row', alignItems:'center', justifyContent:'space-evenly'}}>
+					<View style={{height:100}}>
+						<Text>NFT1</Text>
+					</View>
+					<View style={{height:100}}>
+						<Text>NFT1</Text>
+					</View>
+					<View style={{height:100}}>
+						<Text>NFT1</Text>
+					</View>
+				</View>
+				<View style={{flexDirection:'row', alignItems:'center', justifyContent:'space-evenly'}}>
+					<View style={{height:100}}>
+						<Text>NFT1</Text>
+					</View>
+					<View style={{height:100}}>
+						<Text>NFT1</Text>
+					</View>
+					<View style={{height:100}}>
+						<Text>NFT1</Text>
+					</View>
+				</View>
+			</View>
+			{/* <Text style={styles.heading}>Recently saved</Text>
 			<View
 				style={styles.sharedCardsContainer}>
 				{sharedCards.map((card: Card, index) => {
@@ -95,7 +132,7 @@ const HomeScreen = (props: any) => {
 						/>
 					);
 				})}
-			</View>
+			</View> */}
 		</ScrollView>
 	);
 };

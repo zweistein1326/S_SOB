@@ -1,9 +1,8 @@
-import { AnyARecord } from "dns";
 import { User } from "../models/User";
 
-export const login = (user:User) => ({
-    type: 'LOGIN',
-    user:user
+export const setCredentials = (credentials:any[]) => ({
+    type: 'SET_CREDENTIALS',
+    credentials: credentials
 })
 
 export const credentials = ({ username }:any) => ({

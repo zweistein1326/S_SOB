@@ -27,4 +27,6 @@ target 'oneIDclient' do
   #     flipper_post_install(installer)
   #   end
   # end
+  pod 'react-native-contacts', :path => '../node_modules/react-native-contacts'
+
 end
