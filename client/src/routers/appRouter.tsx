@@ -14,7 +14,7 @@ const AppRouter = () => {
     return (
         <BrowserRouter>
             <Routes>
-                <PublicRoute path="/" component={Login} />
+                <PublicRoute path="/" component={AddCredential} />
                 <PublicRoute path="/register" component={Register} />
                 <PrivateRoute path="/user/:id" component={Home} />
                 <PrivateRoute path="/user/:id/:credentialId" component={CredentialPage} />

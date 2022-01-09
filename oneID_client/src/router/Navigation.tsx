@@ -14,6 +14,10 @@ import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 import { Ionicons } from "@expo/vector-icons";
 import SettingsScreen from "../screens/SettingsScreen";
 import ContactsScreen from "../screens/ContactsScreen";
+import ProfileScreen from "../screens/ProfileScreen";
+import WalletConnectProvider, { useWalletConnect, withWalletConnect } from '@walletconnect/react-native-dapp';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import { Button, Platform } from "react-native";
 
 const Stack = createNativeStackNavigator();
 
@@ -56,6 +60,17 @@ const MyTabs = () => {
                        />
                     )
                 }
+                else if(route.name=="ProfileScreen"){
+                    return(
+                       <Ionicons
+                       name={
+                           focused ? 'man':'man-outline'
+                       }
+                       size={size}
+                       color={color}
+                       />
+                    )
+                }
             },
             tabBarInactiveTintColor:'gray',
             tabBarActiveTintColor:'tomato'
@@ -63,6 +78,7 @@ const MyTabs = () => {
 			<Tab.Screen options={{ headerShown:false }} name="HomeTab" component={Home}/>
 			<Tab.Screen options={{ headerShown:false }} name="ContactsScreen" component={ContactsScreen}/>
 			<Tab.Screen options={{ headerShown:false }} name="SettingsScreen" component={SettingsScreen}/>
+			<Tab.Screen options={{ headerShown:false }} name="ProfileScreen" component={ProfileScreen}/>
 		</Tab.Navigator>
 	)
 }
@@ -111,24 +127,43 @@ const Home = () => {
 }
 
 const Navigator = () => {
+    // const connector = useWalletConnect();
+
     return(
-        <Provider store={store}>
-        <NavigationContainer>
-            <Stack.Navigator>
-                <Stack.Screen 
-                    name="AuthStack"
-                    component={AuthStack}
-                    options={{headerShown:false}}
-                />
-                <Stack.Screen
-                    name="HomeStack"
-                    component={MyTabs}
-                    options={{headerShown:false}}
-                />
-                </Stack.Navigator>
-        </NavigationContainer>
-        </Provider>
+        // <WalletConnectProvider
+        //     redirectUrl={Platform.OS === 'web'? window.location.origin:'yourappscheme://'}
+        //     storageOptions = {{
+        //         asyncStorage: AsyncStorage,
+        //     }}
+        // >
+            <Provider store={store}>
+            <NavigationContainer>
+                <Stack.Navigator>
+                    <Stack.Screen 
+                        name="AuthStack"
+                        component={AuthStack}
+                        options={{headerShown:false}}
+                    />
+                    <Stack.Screen
+                        name="HomeStack"
+                        component={MyTabs}
+                        options={{headerShown:false}}
+                    />
+                    </Stack.Navigator>
+            </NavigationContainer>
+            </Provider>
+        // </WalletConnectProvider>
     )
 }
+
+// export default withWalletConnect(Navigator,{
+//     clientMeta:{
+//         description:'Connect with WalletConnect'
+//     },
+//     redirectUrl:Platform.OS === "web" ? window.location.origin : "youappscheme://",
+//     storageOptions:{
+//         asyncStorage: AsyncStorage
+//     }
+// }) ;
 
 export default Navigator;

@@ -1,23 +1,22 @@
-import { useMutation } from '@apollo/client';
-import { Box, Button, Typography } from '@mui/material';
+import { Box, Button, TextField, Typography } from '@mui/material';
 import { useEffect, useState } from 'react';
 import { connect } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { Link, useParams } from 'react-router-dom';
+import Card from '../components/Card';
 import CredentialTile from '../components/CredentialTile';
 import Header from '../components/Header';
-import { GETUSERBYID } from '../graphql';
+import { getNFT } from '../functions/axios';
 import { User } from '../models/User';
 declare var window:any;
 
 const Home = (props:any) => {
   const navigate = useNavigate();
   const [loggedIn, setLoggedIn] = useState(
-    props.auth.user !==null ,
+    props.account !==null ,
   );
   const [activeUser,setActiveUser] = useState<any>({});
   const [activeCredentials,setActiveCredentials] = useState<any>([]);
-  const [fetchInfo,{loading,error}] = useMutation(GETUSERBYID);
   const [account, setAccount] = useState<any>(null);
   
   const handleLogout = () => {
@@ -38,103 +37,43 @@ const Home = (props:any) => {
     }
   }
 
-  const getUserInfo = async () =>{
-    console.log(id);
-    await connectWalletHandler();
-    fetchInfo({
-      variables: {
-        id
-    },
-  })
-    .then((res)=>{
-      let user:User = res.data.getUserById.user;
-      setActiveUser(user);
-      const credArray:any = [];
-      if(user.credentials){
-        Object.values(user.credentials).forEach((credential, index) => credential.status? credArray.push(credential):null)
-      }
-      console.log(credArray);
-      setActiveCredentials(credArray);
-    })
-  }
-
-  useEffect(()=>{ 
-    getUserInfo()
-  },activeUser);
-
+  console.log(props.credentials);
 
   return (
     <Box>
-    <Box >
-    User information
-      <Header setLoggedIn={setLoggedIn} loggedIn={loggedIn}/>
-    </Box>
-    <Box sx={{display:'flex'}}>
-    <Box sx={{width:'20vw', height:'100vh', mt:2, backgroundColor:'beige', p:3}}>
-      <Typography>
-          My photo (optional)
-        </Typography>
-        {/* <Typography>
-          Metamask account address: {account}
-        </Typography> */}
-        <Typography sx={{display:'inline'}}>
-          DID: <span style={{fontWeight:'bold'}}>{activeUser.id} (@{activeUser.username})</span>
-        </Typography>
-        <Typography>
-          Name: {activeUser.firstname} {activeUser.lastname}
-        </Typography>
-        <Typography>
-          Email: {activeUser.email}
-        </Typography>
-        <Button sx={{ mt:3, mb:2 }} variant="contained"><Link to={`/addCredential`}><Typography sx={{color:'white'}}>Add new Credential</Typography></Link></Button>
-        <Button sx={{ mt:3, mb:2 }} variant="contained"><Link to={`/requestCredential`}><Typography sx={{color:'white'}}>Request Credential</Typography></Link></Button>
-    </Box>
-      {/* <Typography>
-        {loggedIn && props.auth.user ? '' : 'Not logged-in'} 
-      </Typography> */}
-      <Box sx={{width:'60vw', height:'100vh', m:3}}>
-      {loggedIn ?
-      <>
-        {activeUser.id == props.auth.user.id?
-        <Box display='flex'>
-          <Box sx={{width:'30%'}}>
-          <Typography variant="h4" >
-            Issued Credentials
-          </Typography>
-          <Typography >
-            Show credential issued by this user -&gt; View all
-          </Typography>
-          {activeUser.credentials ?
-          activeCredentials.map((credential:any,index:number)=>credential.pending?<CredentialTile key={credential.id} credential={credential} title={activeCredentials[index].id} />:null)
-          :''}
-          </Box>
-          <Box sx={{width:'30%'}}>
-          <Typography variant="h4" >
-            Pending Requests
-          </Typography>
-          {activeUser.credentials ?
-          activeCredentials.map((credential:any,index:number)=>credential.pending?<CredentialTile key={credential.id} credential={credential} title={activeCredentials[index].id} />:null)
-          :''}
-          </Box>
-          <Box sx={{width:'30%'}}>
-          <Typography variant="h4">
-            Accepted credentials
-          </Typography>
-          {activeUser.credentials ?
-          activeCredentials.map((credential:any,index:number)=>!credential.pending?<CredentialTile key={credential.id} credential={credential} title={activeCredentials[index].id} />:null)
-          :''}
-          </Box>
-        </Box>:
-        null}
-      </>: null}
-      </Box>
-      </Box>
+      <Header/>
+     {/* <Box component="form" onSubmit={addNFT} noValidate sx={{ mt: 1 }}> */}
+          <Typography>Address: {props.account}</Typography>
+          <Card/>
+          {/* <Typography>Balance: {userBalance}</Typography> */}
+          {/* <Button
+            onClick={()=>{navigate('/addCredential')}}
+            type="submit"
+            fullWidth
+            variant="contained"
+            sx={{ mt: 3, mb: 2 }}
+            // disabled={loading}
+          >
+            Add new NFT
+          </Button> */}
+          <Typography>Your NFTs</Typography>
+          {props.credentials.length >0 ? <Box >
+            {props.credentials.map((credential:any,index:number)=>(
+              <Box key={index}>
+                <Typography>NFT: {credential.name}</Typography>
+                {credential ? <img style={{height:'200px', width:'200px'}} src={credential.image} alt="token"/> : null}
+              </Box>)
+            )}
+            
+          </Box>:null}
+        {/* </Box> */}
     </Box>
   );
 };
 
 const mapStateToProps = (state:any) => ({
-  auth:state.auth
+  account:state.auth.account,
+  credentials: state.credentials
 })
 
 export default connect(mapStateToProps)(Home);
