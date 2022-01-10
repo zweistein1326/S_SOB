@@ -9,10 +9,13 @@ const instance = axios.create({
     baseURL: baseURL,
 });
 
-export const getNFT = async (formData) => {
+export const getNFT = async (credential,address) => {
     // save contract address and nft id linked to user id if sender is the owner of the fetched nft otherwise send error
-    const { data } = await instance.post('/getCredential', formData);
-    return data;
+    const { data } = await instance.post('/getCredential', {...credential,address});
+    if(data){
+        return data;
+    }
+    return null
 }
 
 export const register = async (address) => {
@@ -21,11 +24,13 @@ export const register = async (address) => {
     return data.user;
 }
 
-export const getAllCredentialData = async (credentials) => {
+export const getAllCredentialData = async (credentials,address) => {
     let credentialArray = []
     for (const credential of Object.values(credentials)) {
-        const credentialData = await getNFT(credential);
-        credentialArray.push(credentialData);
+        const credentialData = await getNFT(credential,address);
+        if(credentialData){
+            credentialArray.push(credentialData);
+        }
     }
     return credentialArray;
 }

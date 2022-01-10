@@ -1,4 +1,4 @@
-import { Box, Button, TextField, Typography } from '@mui/material';
+import { Box, Button, Grid, TextField, Typography } from '@mui/material';
 import { useEffect, useState } from 'react';
 import { connect } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
@@ -6,8 +6,11 @@ import { Link, useParams } from 'react-router-dom';
 import Card from '../components/Card';
 import CredentialTile from '../components/CredentialTile';
 import Header from '../components/Header';
+import NFTCard from '../components/NFTCard';
+import Sidebar from '../components/Sidebar';
 import { getNFT } from '../functions/axios';
 import { User } from '../models/User';
+import '../styles/Home.css'
 declare var window:any;
 
 const Home = (props:any) => {
@@ -28,21 +31,15 @@ const Home = (props:any) => {
 
   const {ethereum} = window;
 
-  const connectWalletHandler = async () => {
-    try{
-      const accounts = await ethereum.request({method: 'eth_requestAccounts'});
-      setAccount(accounts[0]);
-    } catch(err){
-      console.log(err);
-    }
-  }
+  console.log(props.user);
 
   return (
-    <Box>
-      <Header/>
+    <Box style={{backgroundColor:'#332E2E', color:'white', padding:'20px', minHeight:'100vh', display:'flex', flexDirection:'row'}}>
+      {/* <Header/> */}
      {/* <Box component="form" onSubmit={addNFT} noValidate sx={{ mt: 1 }}> */}
-          <Typography>Address: {props.account}</Typography>
-          <Card/>
+     <Sidebar user={props.user}/>
+     <Box style={{flex:1, padding:'20px'}}>
+          <Card account={props.user.id}/>
           {/* <Typography>Balance: {userBalance}</Typography> */}
           {/* <Button
             onClick={()=>{navigate('/addCredential')}}
@@ -54,25 +51,27 @@ const Home = (props:any) => {
           >
             Add new NFT
           </Button> */}
-          <Typography>My NFTs</Typography>
-          {props.credentials.length >0 ? <Box style={{display:'flex', flexDirection:'row'}}>
+          <Box style={{display:'flex', flexDirection:'row', alignItems:'center', justifyContent:'flex-end'}}>
+            <Box style={{flex:1}}>
+              <Typography style={{backgroundColor:'#EEEEEE', color:'black', margin:20, padding:10}}>Username, Address</Typography>
+            </Box>
+            <Button onClick = {()=>{}} style={{backgroundColor:'#02F9A7', margin:20, padding:10}}>Follow</Button>
+            <Button onClick = {()=>{}} style={{backgroundColor:'#02F9A7', margin:20, padding:10}}>Add NFT</Button>
+          </Box>
+          {props.credentials.length > 0 ? <Grid container columns={3}>
             {props.credentials.map((credential:any,index:number)=>(
-              <Box key={index} style={{margin:'1rem'}}>
-                <Typography>NFT: {credential.name}</Typography>
-                {credential ? <img style={{height:'200px', width:'200px'}} src={credential.image} alt="token"/> : null}
-              </Box>)
+              <NFTCard credential={credential} key={index}/>)
             )}
-            
-          </Box>:null}
+          </Grid> : null }
+        </Box>
         {/* </Box> */}
     </Box>
   );
 };
 
 const mapStateToProps = (state:any) => ({
-  account:state.auth.account,
   credentials: state.credentials,
   user: state.auth.user
 })
 
-export default connect(mapStateToProps)(Home);
+export default connect(mapStateToProps,null)(Home);

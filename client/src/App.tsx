@@ -10,6 +10,7 @@ import configureStore from './store/configureStore';
 import RequestCredential from './pages/RequestCredential';
 import Header from './components/Header';
 import EditCardScreen from './pages/EditCardScreen';
+import './styles/index.css';
 
 
 declare var window: any;
