@@ -11,7 +11,7 @@ const Feed = () => {
     const user = useSelector((state:any)=>state.auth.user);
     
     return(
-        <Box style={{backgroundColor:'#332E2E', color:'white', width:'100%', minHeight:'100vh', display:'flex', flexDirection:'row'}}>
+        <Box style={{backgroundColor:'#332E2E', color:'white', padding:'20px', minHeight:'100vh', display:'flex', flexDirection:'row'}}>
             <Sidebar user={user}/>
             <Box style={{backgroundColor:'#332E2E', color:'white', width:'100%', minHeight:'100vh', display:'flex', flexDirection:'column'}}>
                 <Box style={{width:'100%'}}>

@@ -68,7 +68,7 @@ const AddCredential = (props:any) => {
         setTokenData(tokenData);
     }
     return (
-        <Box className="Container" style={{backgroundColor:'#332E2E', minHeight:'100vh', padding:'20px 0px', display:'flex', flexDirection:'row'}}>
+        <Box className="Container" style={{backgroundColor:'#332E2E', color:'white', padding:'20px', minHeight:'100vh', display:'flex', flexDirection:'row'}}>
             <Sidebar user={props.user}/>
             <Box component="form" style={{width:'100%', display:'flex', flexDirection:'column', alignItems:'center'}} noValidate sx={{ mt: 1 }} onSubmit={addNFT}>
                 <TextField
@@ -94,7 +94,7 @@ const AddCredential = (props:any) => {
                     autoComplete="token_id"
                 />
                 <Box style={{backgroundColor:'#333333'}}>
-                    <Typography>NFT: {tokenData?tokenData.name:''}</Typography>
+                    <Typography>{tokenData ? tokenData.name:''}</Typography>
                     {tokenData ? <img style={{height:'200px', width:'200px'}} src={tokenData.image} alt="token"/> : null}
                 </Box>
                 <Button

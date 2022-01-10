@@ -19,6 +19,7 @@ import { Image } from '@mui/icons-material';
 import { connect } from 'react-redux';
 import { setAccount, setUser } from '../actions/auth';
 import { setCredentials } from '../actions/credentials';
+import BG from '../assets/bg.jpeg';
 
 declare var window: any;
 
@@ -28,7 +29,7 @@ const Register = (props:any) => {
   const [errorMessage, setErrorMessage] = useState<any>(null);
   const [defaultAccount, setDefaultAccount] = useState<any>(null);
   const [userBalance, setUserBalance] = useState<any>(null);
-  const [connButtonText, setConnButtonText] = useState('Connect Wallet');
+  const [connButtonText, setConnButtonText] = useState('Connect');
   
 
   const connectWalletHandler = (event:any) => {
@@ -66,27 +67,21 @@ const Register = (props:any) => {
   }
 
   return (
-    <Container component="main" maxWidth="xs">
+    <Box component="main" sx={{backgroundImage:`url(${BG})`, backgroundSize:'cover', width:'100vw', minHeight:'100vh'}}>   
       <Box
         sx={{
-          marginTop: 8,
           display: 'flex',
           flexDirection: 'column',
           alignItems: 'center',
+          height:'100vh'
         }}
       >
-        <Avatar sx={{ m: 1, bgcolor: 'secondary.main' }}>
-          <LockOutlinedIcon />
-        </Avatar>
-        <Typography component="h1" variant="h5">
-          Register
-        </Typography>
         {message && (
           <Typography variant="body1" color="red" sx={{ mt: 2 }}>
             {message}
           </Typography>
         )}
-        <Box component="form" onSubmit={connectWalletHandler} noValidate sx={{ mt: 1 }}>
+        <Box component="form" onSubmit={connectWalletHandler} noValidate sx={{ mt: 1, height:'100%',display:'flex', alignItems:'center', justifyContent:'center', }}>
           {/* <TextField
             margin="normal"
             required
@@ -107,13 +102,13 @@ const Register = (props:any) => {
             id="confirm-password"
             autoComplete="current-password"
           /> */}
-          <Typography>Address: {defaultAccount}</Typography>
-          <Typography>Balance: {userBalance}</Typography>
+          {/* <Typography>Address: {defaultAccount}</Typography>
+          <Typography>Balance: {userBalance}</Typography> */}
           <Button
             type="submit"
             fullWidth
             variant="contained"
-            sx={{ mt: 3, mb: 2 }}
+            sx={{ mt: 3, mb: 2, backgroundColor:'#333333', border:'1px solid #02F9A7', color:'#02F9A7' }}
             // disabled={loading}
           >
             {connButtonText}
@@ -132,7 +127,7 @@ const Register = (props:any) => {
           </Grid> */}
         </Box>
       </Box>
-    </Container>
+    </Box>
   );
 };
 
