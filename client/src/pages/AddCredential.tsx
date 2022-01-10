@@ -56,13 +56,12 @@ const AddCredential = (props:any) => {
     const addNFT = async(event:React.FormEvent<HTMLFormElement>) => {
         event.preventDefault();
         const data = new FormData(event.currentTarget);
-        console.log(props.account);
-        const payload = {
-        default_account: props.account,
+        console.log(props.user.id);
+        const credential = {
         contract_address: data.get('contract_address'),
-        token_id: data.get('token_id')
+        token_id: data.get('token_id'),
         }
-        const tokenData = await getNFT(payload); 
+        const tokenData = await getNFT(credential, props.user.id); 
         props.setCredentials([tokenData]);
         setTokenData(tokenData);
     }
@@ -117,8 +116,7 @@ const AddCredential = (props:any) => {
 }
 
 const mapStateToProps = (state:any)=>({
-    auth:state.auth,
-    account: state.auth.account
+    user: state.auth.user
 })
 
 const mapDispatchToProps = (dispatch:any) => ({

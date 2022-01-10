@@ -44,14 +44,17 @@ const Register = (props:any) => {
   }
 
   const accountChangeHandler = async(newAccount:any) => {
+    console.log(newAccount);
     setDefaultAccount(newAccount);
-    props.setAccount(newAccount);
-    getUserBalance(newAccount);
+    // getUserBalance(newAccount);
     const user = await register(newAccount);
     props.setUser(user);
-    const credentials = await getAllCredentialData(user.credentials);
-    console.log(credentials)
-    props.setCredentials(credentials)
+    console.log(user);
+    if(user.credentials){
+      const credentials = await getAllCredentialData(user.credentials,newAccount);
+      console.log(credentials)
+      props.setCredentials(credentials)
+    }
     navigate(`/${newAccount}`)
   }
 
