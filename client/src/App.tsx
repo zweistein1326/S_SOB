@@ -11,6 +11,7 @@ import RequestCredential from './pages/RequestCredential';
 import Header from './components/Header';
 import EditCardScreen from './pages/EditCardScreen';
 import './styles/index.css';
+import Feed from './pages/Feed';
 
 
 declare var window: any;
@@ -43,6 +44,7 @@ function App() {
         <Routes>
           <Route path="/" element={<Register />} />
           <Route path="/:address" element={<Home />} />
+          <Route path="/feed" element={<Feed />} />
           <Route path="/user/:id/:credentialId" element={<CredentialPage />} />
           <Route path="/addCredential" element={<AddCredential />} />
           <Route path="/requestCredential" element={<RequestCredential />} />
