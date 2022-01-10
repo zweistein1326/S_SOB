@@ -1,4 +1,4 @@
-import { Box, Button, TextField, Typography } from '@mui/material';
+import { Box, Button, Grid, TextField, Typography } from '@mui/material';
 import { useEffect, useState } from 'react';
 import { connect } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
@@ -7,8 +7,10 @@ import Card from '../components/Card';
 import CredentialTile from '../components/CredentialTile';
 import Header from '../components/Header';
 import NFTCard from '../components/NFTCard';
+import Sidebar from '../components/Sidebar';
 import { getNFT } from '../functions/axios';
 import { User } from '../models/User';
+import '../styles/Home.css'
 declare var window:any;
 
 const Home = (props:any) => {
@@ -32,9 +34,11 @@ const Home = (props:any) => {
   console.log(props.user);
 
   return (
-    <Box style={{backgroundColor:'#332E2E', color:'white', padding:'20px', minHeight:'100vh'}}>
+    <Box style={{backgroundColor:'#332E2E', color:'white', padding:'20px', minHeight:'100vh', display:'flex', flexDirection:'row'}}>
       {/* <Header/> */}
      {/* <Box component="form" onSubmit={addNFT} noValidate sx={{ mt: 1 }}> */}
+     <Sidebar user={props.user}/>
+     <Box style={{flex:1, padding:'20px'}}>
           <Card account={props.user.id}/>
           {/* <Typography>Balance: {userBalance}</Typography> */}
           {/* <Button
@@ -54,11 +58,12 @@ const Home = (props:any) => {
             <Button onClick = {()=>{}} style={{backgroundColor:'#02F9A7', margin:20, padding:10}}>Follow</Button>
             <Button onClick = {()=>{}} style={{backgroundColor:'#02F9A7', margin:20, padding:10}}>Add NFT</Button>
           </Box>
-          {props.credentials.length > 0 ? <Box style={{display:'flex', flexDirection:'row'}}>
+          {props.credentials.length > 0 ? <Grid container columns={3}>
             {props.credentials.map((credential:any,index:number)=>(
               <NFTCard credential={credential} key={index}/>)
             )}
-          </Box> : null }
+          </Grid> : null }
+        </Box>
         {/* </Box> */}
     </Box>
   );

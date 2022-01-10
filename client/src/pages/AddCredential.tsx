@@ -4,7 +4,9 @@ import { useState } from "react";
 import { connect } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { setCredentials } from "../actions/credentials";
+import Sidebar from "../components/Sidebar";
 import { getNFT } from "../functions/axios";
+import '../styles/index.css'
 
 var CryptoJS = require('crypto-js');
 var SHA256 = require('crypto-js/sha256');
@@ -66,10 +68,11 @@ const AddCredential = (props:any) => {
         setTokenData(tokenData);
     }
     return (
-        <Box>
-            <Typography>Create new credential</Typography>
-            <Box component="form" noValidate sx={{ mt: 1 }} onSubmit={addNFT}>
+        <Box className="Container" style={{backgroundColor:'#332E2E', minHeight:'100vh', padding:'20px 0px', display:'flex', flexDirection:'row'}}>
+            <Sidebar user={props.user}/>
+            <Box component="form" style={{width:'100%', display:'flex', flexDirection:'column', alignItems:'center'}} noValidate sx={{ mt: 1 }} onSubmit={addNFT}>
                 <TextField
+                style={{backgroundColor:'#EEEEEE', margin:10, width:'90%'}}
                 margin="normal"
                 required
                 fullWidth
@@ -80,6 +83,7 @@ const AddCredential = (props:any) => {
                 autoComplete="contract_address"
                 />
                 <TextField
+                    style={{backgroundColor:'#EEEEEE', margin:10, width:'90%'}}
                     margin="normal"
                     required
                     fullWidth
@@ -89,6 +93,10 @@ const AddCredential = (props:any) => {
                     id="token_id"
                     autoComplete="token_id"
                 />
+                <Box style={{backgroundColor:'#333333'}}>
+                    <Typography>NFT: {tokenData?tokenData.name:''}</Typography>
+                    {tokenData ? <img style={{height:'200px', width:'200px'}} src={tokenData.image} alt="token"/> : null}
+                </Box>
                 <Button
                     type="submit"
                     fullWidth
@@ -98,18 +106,6 @@ const AddCredential = (props:any) => {
                 >
                     Add NFT
                 </Button>
-                <Button
-                    onClick={()=>{navigate('/')}}
-                    type="submit"
-                    fullWidth
-                    variant="contained"
-                    sx={{ mt: 3, mb: 2 }}
-                    // disabled={loading}
-                >
-                    Home
-                </Button>
-                <Typography>NFT: {tokenData?tokenData.name:''}</Typography>
-                {tokenData ? <img style={{height:'200px', width:'200px'}} src={tokenData.image} alt="token"/> : null}
             </Box>
         </Box>
     )
