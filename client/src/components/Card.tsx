@@ -16,7 +16,7 @@ const Card = (props:any) => {
                 <Typography className="cardText">Instagram</Typography>
                 <Typography className="cardText">Discord</Typography>
             </Box>
-            <img src="https://bafkreiglrr2xonkkfs37toim6fqy3vogogpz4yrw4wex2ds4ktjrdzlsqq.ipfs.dweb.link" className = "cardImage"/>
+            <img src="https://i1.wp.com/slotshurra.com/wp-content/uploads/2021/08/Leonardo-Da-Vinci-Slot-Game-Symbol-03-1.jpg?resize=564%2C500&ssl=1" className = "cardImage"/>
             <Box>
                 <Typography className="cardText">{props.account}</Typography>
                 <Typography className="cardText">@zweistein1326</Typography>
