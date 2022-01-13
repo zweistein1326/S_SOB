@@ -1,4 +1,4 @@
-import { Box, Button, Grid, TextField, Typography } from '@mui/material';
+import { Box,  Grid, Button, TextField, Typography } from '@mui/material';
 import { useEffect, useState } from 'react';
 import { connect } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
@@ -34,12 +34,13 @@ const Home = (props:any) => {
   console.log(props.user);
 
   return (
-    <Box style={{backgroundColor:'#332E2E', color:'white', padding:'20px', minHeight:'100vh', display:'flex', flexDirection:'row'}}>
+    <Box style={{backgroundColor:'#EEEEEE', color:'white', padding:'20px', minHeight:'100vh', display:'flex', flexDirection:'row'}}>
       {/* <Header/> */}
      {/* <Box component="form" onSubmit={addNFT} noValidate sx={{ mt: 1 }}> */}
-     <Sidebar user={props.user}/>
-     <Box style={{flex:1, padding:'20px'}}>
-          <Card account={props.user.id}/>
+     {/* <Sidebar user={props.user}/> */}
+     <Box style={{flex:1, padding:'20px', alignItems:'center', display:'flex', flexDirection:'column'}}>
+
+          <Card user={props.user}/>
           {/* <Typography>Balance: {userBalance}</Typography> */}
           {/* <Button
             onClick={()=>{navigate('/addCredential')}}
@@ -51,14 +52,14 @@ const Home = (props:any) => {
           >
             Add new NFT
           </Button> */}
-          <Box style={{display:'flex', flexDirection:'row', alignItems:'center', justifyContent:'flex-end'}}>
+          <Box style={{display:'flex', flexDirection:'row', alignItems:'center', justifyContent:'flex-end',width:'100%'}}>
             <Box style={{flex:1}}>
-              <Typography style={{backgroundColor:'#EEEEEE', color:'black', margin:20, padding:10}}>Username, Address</Typography>
+              <Typography style={{backgroundColor:'#02F9A7', color:'black', margin:20, padding:'10px 20px', width:'40%', borderRadius:'20px'}}>Username, Address</Typography>
             </Box>
-            <Button onClick = {()=>{}} style={{backgroundColor:'#02F9A7', margin:20, padding:10}}>Follow</Button>
-            <Button onClick = {()=>{}} style={{backgroundColor:'#02F9A7', margin:20, padding:10}}>Add NFT</Button>
+            <Button onClick = {()=>{console.log('follow')}} style={{backgroundColor:'#02F9A7', margin:20, padding:10, color:'black', borderRadius:'20px', width:'100px'}}>Follow</Button>
+            <Button onClick = {()=>{navigate('/addCredential')}} style={{backgroundColor:'#02F9A7', margin:20, padding:10, color:'black', borderRadius:'20px',  width:'100px'}}>+ Add NFT</Button>
           </Box>
-          {props.credentials.length > 0 ? <Grid container columns={3}>
+          {props.credentials.length > 0 ? <Grid container columns={3} style={{justifyContent:'center'}}>
             {props.credentials.map((credential:any,index:number)=>(
               <NFTCard credential={credential} key={index}/>)
             )}
