@@ -32,6 +32,7 @@ const Register = (props:any) => {
   const [userBalance, setUserBalance] = useState<any>(null);
   const [connButtonText, setConnButtonText] = useState('Connect');
   const [loading, setLoading] = useState<boolean>(false);
+
   
 
   const connectWalletHandler = (event:any) => {
