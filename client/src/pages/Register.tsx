@@ -20,6 +20,7 @@ import { connect } from 'react-redux';
 import { setAccount, setUser } from '../actions/auth';
 import { setCredentials } from '../actions/credentials';
 import BG from '../assets/bg.jpeg';
+import { ThreeDots } from 'react-loader-spinner';
 
 declare var window: any;
 
@@ -30,10 +31,12 @@ const Register = (props:any) => {
   const [defaultAccount, setDefaultAccount] = useState<any>(null);
   const [userBalance, setUserBalance] = useState<any>(null);
   const [connButtonText, setConnButtonText] = useState('Connect');
+  const [loading, setLoading] = useState<boolean>(false);
   
 
   const connectWalletHandler = (event:any) => {
     event.preventDefault()
+    setLoading(true);
     if(window.ethereum){
       window.ethereum.request({method:'eth_requestAccounts'}).then(async (result:any[]) => {
         await accountChangeHandler(result[0]);
@@ -56,6 +59,7 @@ const Register = (props:any) => {
       console.log(credentials)
       props.setCredentials(credentials)
     }
+    setLoading(false);
     navigate(`/${newAccount}`)
   }
 
@@ -104,7 +108,7 @@ const Register = (props:any) => {
           /> */}
           {/* <Typography>Address: {defaultAccount}</Typography>
           <Typography>Balance: {userBalance}</Typography> */}
-          <Button
+          {!loading?<Button
             type="submit"
             fullWidth
             variant="contained"
@@ -112,7 +116,7 @@ const Register = (props:any) => {
             // disabled={loading}
           >
             {connButtonText}
-          </Button>
+          </Button>:<ThreeDots height="100" width="100" color="grey"/>}
           {/* <Grid container>
             <Grid item xs>
               <Link href="#" variant="body2">
