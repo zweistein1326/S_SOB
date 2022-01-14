@@ -14,7 +14,7 @@ import {
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import { useNavigate } from 'react-router-dom';
 import { ethers } from 'ethers';
-import { getAllCredentialData, getNFT, register } from '../functions/axios';
+import { getNFT, register } from '../functions/axios';
 import { Image } from '@mui/icons-material';
 import { connect } from 'react-redux';
 import { setAccount, setUser } from '../actions/auth';
@@ -33,7 +33,6 @@ const Register = (props:any) => {
   const [connButtonText, setConnButtonText] = useState('Connect');
   const [loading, setLoading] = useState<boolean>(false);
 
-  
 
   const connectWalletHandler = (event:any) => {
     event.preventDefault()
@@ -52,23 +51,9 @@ const Register = (props:any) => {
     console.log(newAccount);
     setDefaultAccount(newAccount);
     // getUserBalance(newAccount);
-    const user = await register(newAccount);
-    props.setUser(user);
-    console.log(user);
-    if(user.credentials){
-      const credentials = await getAllCredentialData(user.credentials,newAccount);
-      console.log(credentials)
-      props.setCredentials(credentials)
-    }
+    const user = await props.register(newAccount);
     setLoading(false);
     navigate(`/${newAccount}`)
-  }
-
-  const getUserBalance = (address:any) =>{
-    window.ethereum.request({method:'eth_getBalance', params:[address,'latest']}).then((balance:any)=>{
-      console.log(balance);
-      setUserBalance(ethers.utils.formatEther(balance));
-    })
   }
 
   return (
@@ -137,9 +122,7 @@ const Register = (props:any) => {
 };
 
 const mapDispatchToProps = (dispatch:any) => ({
-  setAccount: (account:any) => dispatch(setAccount(account)),
-  setUser: (user:any) => dispatch(setUser(user)),
-  setCredentials: (credentials:any[]) => dispatch(setCredentials(credentials))
+  register: (address:string)=> dispatch(register(address))
 })
 
 export default connect(null,mapDispatchToProps)(Register);

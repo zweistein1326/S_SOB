@@ -1,8 +1,8 @@
 import { User } from "../models/User";
 
-export const setCredentials = (credentials:any[]) => ({
+export const setCredentials = (credential:any) => ({
     type: 'SET_CREDENTIALS',
-    credentials: credentials
+    credential: credential
 })
 
 export const credentials = ({ username }:any) => ({
