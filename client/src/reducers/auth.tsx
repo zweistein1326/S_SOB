@@ -1,11 +1,13 @@
 export default (state = {}, action:any) => {
     switch (action.type) {
         case 'SET_USER':
-            return {user:action.user}
+            return {...state, user: action.user }
+        case 'SET_ALL_USERS':
+            return {...state, allUsers: action.allUsers }
         // case 'CREDENTIALS':
         //     return { username: action.username }
         case 'SET_ACCOUNT':
-            return {account: action.account}
+            return {...state, account: action.account}
         case 'LOGOUT':
             return {}
         default: return state;

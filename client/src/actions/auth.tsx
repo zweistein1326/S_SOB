@@ -10,6 +10,11 @@ export const setUser = (user:any ) => ({
     type:'SET_USER',
     user
 })
+
+export const setAllUsers = (users:any[])=>({
+    type:'SET_ALL_USERS',
+    allUsers : users
+})
 // export const startLogout = () => {
 //     return (dispatch) => {
 //         //if auth provider == firebase

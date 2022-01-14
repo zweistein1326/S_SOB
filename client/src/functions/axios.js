@@ -1,5 +1,6 @@
 import axios, { Axios } from 'axios';
 import { resolve } from 'dns';
+import { setUser, setAllUsers } from '../actions/auth';
 import { setCredentials } from '../actions/credentials';
 import { baseURL } from '../constant/Constants';
 
@@ -18,26 +19,56 @@ export const getNFT = async (credential, address) => {
     return null
 }
 
-export const register = async (address) => {
-    const { data } = await instance.post('/register', { address });
-    console.log(data.user);
-    return data.user;
+export const register = (address) => {
+    return async (dispatch) => {
+        const { data } = await instance.post('/register', { address });
+        await dispatch(setUser(data.user));
+        await dispatch(getAllUsers());
+        data.user.credentials.forEach(async (credential) => { await dispatch(getCredentialById(credential)) })
+        return data.user;
+    }
 }
 
-export const getAllCredentialData = async (credentials, address) => {
-    let credentialArray = []
-    for (const credential of Object.values(credentials)) {
-        const credentialData = await getNFT(credential, address);
-        if (credentialData) {
-            credentialArray.push(credentialData);
-        }
+export const getCredentialById = (credentialId) => {
+    return async (dispatch) => {
+        const { data } = await instance.get(`/credential/${credentialId}`);
+        console.log(data);
+        return dispatch(setCredentials(data));
     }
-    return credentialArray;
+}
+
+export const getUserById = (userId) => {
+    return async (dispatch) => {
+        const { data } = await instance.get(`/user/${userId}`);
+        const promise = new Promise((resolve, reject) => {
+            data.user.credentials.forEach(async (credential, index) => {
+                await dispatch(getCredentialById(credential));
+                if (index == data.user.credentials.length - 1) {
+                    resolve(null)
+                }
+            })
+        })
+        await promise;
+        return data;
+    }
+}
+
+export const getAllUsers = () => {
+    return async (dispatch) => {
+        const { data } = await instance.get('/users');
+        return dispatch(setAllUsers(data));
+    }
+}
+
+export const getCredentials = async (address) => {
+    const { data } = await instance.get('/credentials', { address });
 }
 
 export const followUser = async (userId, followingId) => {
-    let followers = [];
-    const newFollowing = await instance.post('/followUser', { userId, followingId });
-    console.log(newFollowing);
-    return newFollowing;
+    return async (dispatch) => {
+        let followers = [];
+        const newFollowing = await instance.post('/followUser', { userId, followingId });
+        console.log(newFollowing);
+        return newFollowing;
+    }
 }

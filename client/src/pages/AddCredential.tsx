@@ -54,18 +54,26 @@ const AddCredential = (props:any) => {
     }
 
     const [tokenData, setTokenData] = useState<any>(null);
+    const [imageUrl, setImageUrl] = useState<any>(null);
 
     const addNFT = async(event:React.FormEvent<HTMLFormElement>) => {
         event.preventDefault();
         const data = new FormData(event.currentTarget);
-        console.log(props.user.id);
         const credential = {
         contract_address: data.get('contract_address'),
         token_id: data.get('token_id'),
         }
         const tokenData = await getNFT(credential, props.user.id); 
+        console.log(tokenData);
         props.setCredentials([tokenData]);
         setTokenData(tokenData);
+        if(tokenData.image.split('://')[0]=="ipfs"){
+            console.log(tokenData.image.split('://')[1]);
+            setImageUrl(`https://gateway.ipfs.io/ipfs/${tokenData.image.split('://')[1]}`);
+        }
+        else{
+            setImageUrl(tokenData.image);
+        }
     }
     return (
         <Box className="Container" style={{backgroundColor:'#332E2E', color:'white', padding:'20px', minHeight:'100vh', display:'flex', flexDirection:'row'}}>
@@ -95,7 +103,7 @@ const AddCredential = (props:any) => {
                 />
                 <Box style={{backgroundColor:'#333333'}}>
                     <Typography>{tokenData ? tokenData.name:''}</Typography>
-                    {tokenData ? <img style={{height:'200px', width:'200px'}} src={tokenData.image} alt="token"/> : null}
+                    {tokenData ? <img style={{height:'200px', width:'200px'}} src={`${imageUrl}`} alt="token"/> : null}
                 </Box>
                 <Button
                     type="submit"
