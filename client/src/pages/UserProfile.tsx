@@ -15,7 +15,6 @@ import {searchByText} from '../actions/filters';
 import usersSelector from '../selectors/users';
 import { ThreeDots } from 'react-loader-spinner';
 
-
 declare var window:any;
 
 const Home = (props:any) => {
@@ -55,7 +54,6 @@ const Home = (props:any) => {
   ])
   
   const {ethereum} = window;
-
   return (
     <Box style={{backgroundColor:'#EEEEEE', color:'white', padding:'20px', minHeight:'100vh', display:'flex', flexDirection:'row'}}>
       {/* <Header/> */}
