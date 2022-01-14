@@ -37,7 +37,7 @@ const Home = (props:any) => {
     <Box style={{backgroundColor:'#EEEEEE', color:'white', padding:'20px', minHeight:'100vh', display:'flex', flexDirection:'row'}}>
       {/* <Header/> */}
      {/* <Box component="form" onSubmit={addNFT} noValidate sx={{ mt: 1 }}> */}
-     {/* <Sidebar user={props.user}/> */}
+     <Sidebar user={props.user}/>
      <Box style={{flex:1, padding:'20px', alignItems:'center', display:'flex', flexDirection:'column'}}>
 
           <Card user={props.user}/>
@@ -49,22 +49,24 @@ const Home = (props:any) => {
             variant="contained"
             sx={{ mt: 3, mb: 2 }}
             // disabled={loading}
-          >
+            >
             Add new NFT
           </Button> */}
-          <Box style={{display:'flex', flexDirection:'row', alignItems:'center', justifyContent:'flex-end',width:'100%'}}>
+          <Box style={{display:'flex', flexDirection:'row', alignItems:'center', justifyContent:'flex-end', width:'80%',padding: '1rem'}}>
             <Box style={{flex:1}}>
-              <Typography style={{backgroundColor:'#02F9A7', color:'black', margin:20, padding:'10px 20px', width:'40%', borderRadius:'20px'}}>Username, Address</Typography>
+              <Typography style={{backgroundColor:'#02F9A7', color:'black', margin:'20px 0px', padding:'10px 20px', width:'50%', borderRadius:'20px'}}>Username, Address</Typography>
             </Box>
-            <Button onClick = {()=>{console.log('follow')}} style={{backgroundColor:'#02F9A7', margin:20, padding:10, color:'black', borderRadius:'20px', width:'100px'}}>Follow</Button>
-            <Button onClick = {()=>{navigate('/addCredential')}} style={{backgroundColor:'#02F9A7', margin:20, padding:10, color:'black', borderRadius:'20px',  width:'100px'}}>+ Add NFT</Button>
+            <Button onClick = {()=>{console.log('follow')}} style={{backgroundColor:'#02F9A7', margin:20, padding:10, color:'black', borderRadius:'20px', width:'15%'}}>Follow</Button>
+            <Button onClick = {()=>{navigate('/addCredential')}} style={{backgroundColor:'#02F9A7', margin:'20px 0px 20px 20px', padding:10, color:'black', borderRadius:'20px',  width:'15%'}}>+ Add NFT</Button>
           </Box>
           {props.credentials.length > 0 ? <Grid container columns={3} style={{justifyContent:'center'}}>
             {props.credentials.map((credential:any,index:number)=>(
               <NFTCard credential={credential} key={index}/>)
-            )}
+              )}
           </Grid> : null }
         </Box>
+          {/* <Sidebar user={props.user}/> */}
+
         {/* </Box> */}
     </Box>
   );
