@@ -13,6 +13,7 @@ import EditCardScreen from './pages/EditCardScreen';
 import './styles/index.css';
 import Feed from './pages/Feed';
 import NFTScreen from './pages/CredentialScreen';
+import { getCredentials } from './functions/axios';
 
 
 declare var window: any;
@@ -37,6 +38,7 @@ function App() {
 
   useEffect(()=>{
     connectWalletHandler();
+    store.dispatch(getCredentials());
   },[])
 
   return (

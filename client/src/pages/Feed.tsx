@@ -4,11 +4,13 @@ import { Link } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 import FeedCard from '../components/FeedCard';
 import Sidebar from '../components/Sidebar';
+import sortCredentials from '../selectors/credentials';
 
 const Feed = () => {
 
-    const credentials = useSelector((state:any)=>state.credentials);
+    const credentials = useSelector((state:any)=> sortCredentials(state.credentials));
     const user = useSelector((state:any)=>state.auth.user);
+    console.log(credentials);
     
     return(
         <Box style={{backgroundColor:'#EEEEEE', color:'white', padding:'20px', minHeight:'100vh', display:'flex', flexDirection:'row'}}>

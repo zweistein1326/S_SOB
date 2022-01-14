@@ -76,7 +76,7 @@ const AddCredential = (props:any) => {
         }
     }
     return (
-        <Box className="Container" style={{backgroundColor:'#332E2E', color:'white', padding:'20px', minHeight:'100vh', display:'flex', flexDirection:'row'}}>
+        <Box className="Container" style={{backgroundColor:'#EEEEEE', color:'white', padding:'20px', minHeight:'100vh', display:'flex', flexDirection:'row'}}>
             <Sidebar user={props.user}/>
             <Box component="form" style={{width:'100%', display:'flex', flexDirection:'column', alignItems:'center'}} noValidate sx={{ mt: 1 }} onSubmit={addNFT}>
                 <TextField
@@ -109,7 +109,7 @@ const AddCredential = (props:any) => {
                     type="submit"
                     fullWidth
                     variant="contained"
-                    sx={{ mt: 3, mb: 2 }}
+                    sx={{ mt: 3, mb: 2, width:'20%', backgroundColor:'#02F9A7', color:'black' }}
                     // disabled={loading}
                 >
                     Add NFT

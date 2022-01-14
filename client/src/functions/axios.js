@@ -60,8 +60,14 @@ export const getAllUsers = () => {
     }
 }
 
-export const getCredentials = async (address) => {
-    const { data } = await instance.get('/credentials', { address });
+export const getCredentials = () => {
+    return async (dispatch) => {
+        const { data } = await instance.get('/credentials');
+        console.log(data.allCredentials);
+        Object.values(data.allCredentials).forEach((credential) => dispatch(setCredentials(credential)))
+        return data.allCredentials;
+    }
+
 }
 
 export const followUser = (userId, followingId) => {
