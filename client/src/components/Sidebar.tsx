@@ -11,9 +11,9 @@ const Sidebar = (props:any) => {
             <Box style={{padding:'25px 10px', margin:'10px 0px', backgroundColor:'#777777', width:'90%', display:'flex', justifyContent:'center'}}>
                 <Link to='/feed' style={{textDecoration:'none', color:'white'}}>Feed</Link>
             </Box>
-            <Box style={{padding:'25px 10px', margin:'10px 0px',backgroundColor:'#777777', width:'90%', display:'flex', justifyContent:'center'}}>
+            {/* <Box style={{padding:'25px 10px', margin:'10px 0px',backgroundColor:'#777777', width:'90%', display:'flex', justifyContent:'center'}}>
                 <Link to='/addCredential' style={{textDecoration:'none', color:'white'}}>Add NFT</Link>
-            </Box>
+            </Box> */}
             <Box style={{padding:'25px 10px', margin:'10px 0px', backgroundColor:'#777777', width:'90%', display:'flex', justifyContent:'center'}}>
                 <Link to={`/${props.user.id}`} style={{textDecoration:'none', color:'white'}}>My Profile</Link>
             </Box>

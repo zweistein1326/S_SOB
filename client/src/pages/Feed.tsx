@@ -11,13 +11,13 @@ const Feed = () => {
     const user = useSelector((state:any)=>state.auth.user);
     
     return(
-        <Box style={{backgroundColor:'#332E2E', color:'white', padding:'20px', minHeight:'100vh', display:'flex', flexDirection:'row'}}>
+        <Box style={{backgroundColor:'#EEEEEE', color:'white', padding:'20px', minHeight:'100vh', display:'flex', flexDirection:'row'}}>
             <Sidebar user={user}/>
-            <Box style={{backgroundColor:'#332E2E', color:'white', width:'100%', minHeight:'100vh', display:'flex', flexDirection:'column'}}>
+            <Box style={{backgroundColor:'#EEEEEE', color:'white', width:'100%', minHeight:'100vh', display:'flex', flexDirection:'column'}}>
                 <Box style={{width:'100%'}}>
-                <Typography style={{backgroundColor:'#EEEEEE', color:'black', margin:20, padding:10}}>Username, Address</Typography>
+                <Typography style={{backgroundColor:'#02F9A7', color:'black', margin:20, padding:'10px 30px', borderRadius:'20px'}}>Username, Address</Typography>
                 </Box>
-                <Box style={{backgroundColor:'#332E2E', color:'white', padding:'10px 200px', display:'flex', flexDirection:'column', alignItems:'center',}}>
+                <Box style={{backgroundColor:'#EEEEEE', color:'white', padding:'10px 200px', display:'flex', flexDirection:'column', alignItems:'center',}}>
                     {credentials.map((credential:any,index:number)=>(
                     <FeedCard credential={credential} key={index}/>)
                     )}

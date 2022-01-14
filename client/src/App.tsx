@@ -1,6 +1,6 @@
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import Login from './pages/Login';
-import Home from './pages/Home';
+import Home from './pages/UserProfile';
 import Register from './pages/Register';
 import CredentialPage from './pages/CredentialPage';
 import { useEffect } from 'react';
@@ -12,6 +12,7 @@ import Header from './components/Header';
 import EditCardScreen from './pages/EditCardScreen';
 import './styles/index.css';
 import Feed from './pages/Feed';
+import NFTScreen from './pages/CredentialScreen';
 
 
 declare var window: any;
@@ -45,6 +46,7 @@ function App() {
           <Route path="/" element={<Register />} />
           <Route path="/:address" element={<Home />} />
           <Route path="/feed" element={<Feed />} />
+          <Route path="/credential/:id" element={<NFTScreen />} />
           <Route path="/user/:id/:credentialId" element={<CredentialPage />} />
           <Route path="/addCredential" element={<AddCredential />} />
           <Route path="/requestCredential" element={<RequestCredential />} />
