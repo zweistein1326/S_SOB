@@ -47,6 +47,7 @@ function App() {
         <Routes>
           <Route path="/" element={<Register />} />
           <Route path="/:address" element={<Home />} />
+          <Route path="/settings" element={<Home />} />
           <Route path="/feed" element={<Feed />} />
           <Route path="/credential/:credentialId" element={<NFTScreen />} />
           <Route path="/user/:id/:credentialId" element={<CredentialPage />} />

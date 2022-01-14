@@ -59,7 +59,7 @@ const Home = (props:any) => {
     <Box style={{backgroundColor:'#EEEEEE', color:'white', padding:'20px', minHeight:'100vh', display:'flex', flexDirection:'row'}}>
       {/* <Header/> */}
      {/* <Box component="form" onSubmit={addNFT} noValidate sx={{ mt: 1 }}> */}
-     {/* <Sidebar user={props.user}/> */}
+     <Sidebar user={props.user}/>
      <Box style={{flex:1, padding:'20px', alignItems:'center', display:'flex', flexDirection:'column'}}>
 
           {/* <Card user={props.user}/> */}
@@ -92,7 +92,7 @@ const Home = (props:any) => {
               )}
           </Grid> : <ThreeDots height="100" width="100" color="grey"/> }
         </Box>
-          {/* <Sidebar user={props.user}/> */}
+        {/* <Sidebar user={props.user}/> */}
 
         {/* </Box> */}
     </Box>
