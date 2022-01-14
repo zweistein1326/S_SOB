@@ -17,7 +17,7 @@ import { ethers } from 'ethers';
 import { getNFT, register } from '../functions/axios';
 import { Image } from '@mui/icons-material';
 import { connect } from 'react-redux';
-import { setAccount, setUser } from '../actions/auth';
+import { setAccount, setUser } from '../actions/user';
 import { setCredentials } from '../actions/credentials';
 import BG from '../assets/bg.jpeg';
 import { ThreeDots } from 'react-loader-spinner';

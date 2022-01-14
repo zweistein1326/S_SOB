@@ -1,6 +1,6 @@
 import axios, { Axios } from 'axios';
 import { resolve } from 'dns';
-import { setUser, setAllUsers } from '../actions/auth';
+import { setUser, setAllUsers, setFollowing } from '../actions/user';
 import { setCredentials } from '../actions/credentials';
 import { baseURL } from '../constant/Constants';
 
@@ -64,11 +64,11 @@ export const getCredentials = async (address) => {
     const { data } = await instance.get('/credentials', { address });
 }
 
-export const followUser = async (userId, followingId) => {
+export const followUser = (userId, followingId) => {
     return async (dispatch) => {
         let followers = [];
         const newFollowing = await instance.post('/followUser', { userId, followingId });
-        console.log(newFollowing);
+        setFollowing(newFollowing);
         return newFollowing;
     }
 }

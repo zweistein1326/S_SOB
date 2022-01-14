@@ -8,7 +8,7 @@ import CredentialTile from '../components/CredentialTile';
 import Header from '../components/Header';
 import NFTCard from '../components/NFTCard';
 import Sidebar from '../components/Sidebar';
-import { getCredentialById, getNFT, getUserById } from '../functions/axios';
+import { getCredentialById, getNFT, getUserById, followUser} from '../functions/axios';
 import { User } from '../models/User';
 import '../styles/Home.css'
 import {searchByText} from '../actions/filters';
@@ -42,7 +42,8 @@ const Home = (props:any) => {
     (async ()=>{
       setActiveCredentials([]);
       const {user} = await props.getUserById(address);
-      console.log(user);
+      setIsUserProfile(address?.toLowerCase()===props.user.id.toLowerCase());
+      console.log(address?.toLowerCase(),props.user.id.toLowerCase());
       setActiveUser(user);
       user.credentials.forEach(async(credentialId:string,index:number)=>{
           setActiveCredentials([...activeCredentials,credentialId])
@@ -82,7 +83,7 @@ const Home = (props:any) => {
               <Input name="search_text" placeholder="Search by Username, Address" value={props.filters.text} onChange={(event)=>{props.searchByText(event.target.value)}} disableUnderline={true} style={{ width:'80%',backgroundColor:'#02F9A7', color:'black', margin:'20px 0px', padding:'10px 20px', borderRadius:'20px'}}/>
               {/* <Typography style={{backgroundColor:'#02F9A7', color:'black', margin:'20px 0px', padding:'10px 20px', width:'50%', borderRadius:'20px'}}>Username, Address</Typography> */}
             </Box>
-            {isUserProfile ?  null: <Button onClick = {()=>{}} style={{backgroundColor:'#02F9A7', margin:20, padding:10, color:'black', borderRadius:'20px', width:'15%'}}>Follow</Button>}
+            {isUserProfile ?  null: <Button onClick = {()=>{props.followUser(props.user.id, activeUser.id)}} style={{backgroundColor:'#02F9A7', margin:20, padding:10, color:'black', borderRadius:'20px', width:'15%'}}>Follow</Button>}
             <Button onClick = {()=>{navigate('/addCredential')}} style={{backgroundColor:'#02F9A7', margin:'20px 0px 20px 20px', padding:10, color:'black', borderRadius:'20px',  width:'15%'}}>+ Add NFT</Button>
           </Box>
           {activeUser.credentials && !loading ? <Grid container columns={3} style={{justifyContent:'center'}}>
@@ -108,6 +109,7 @@ const mapStateToProps = (state:any) => ({
 const mapDispatchToProps = (dispatch:any) => ({
     searchByText:(text:string) => dispatch(searchByText(text)),
     getUserById: (userId:string) => dispatch(getUserById(userId)),
+    followUser: (userId:string, followingId:string) => dispatch(followUser(userId,followingId))
 })
 
 
