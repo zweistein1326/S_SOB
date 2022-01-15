@@ -14,9 +14,9 @@ import {
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import { useNavigate } from 'react-router-dom';
 import { ethers } from 'ethers';
-import { getNFT, register } from '../functions/axios';
+import { getNFT, getUserById, register } from '../functions/axios';
 import { Image } from '@mui/icons-material';
-import { connect } from 'react-redux';
+import { connect, useDispatch } from 'react-redux';
 import { setAccount, setUser } from '../actions/user';
 import { setCredentials } from '../actions/credentials';
 import BG from '../assets/bg.jpeg';
@@ -30,30 +30,56 @@ const Register = (props:any) => {
   const [errorMessage, setErrorMessage] = useState<any>(null);
   const [defaultAccount, setDefaultAccount] = useState<any>(null);
   const [userBalance, setUserBalance] = useState<any>(null);
-  const [connButtonText, setConnButtonText] = useState('Connect');
+  const [connButtonText, setConnButtonText] = useState('Connect Metamask wallet');
   const [loading, setLoading] = useState<boolean>(false);
+  const [walletConnected, setWalletConnected] = useState<boolean>(false);
+  const dispatch = useDispatch();
 
 
   const connectWalletHandler = (event:any) => {
     event.preventDefault()
     setLoading(true);
+   
     if(window.ethereum){
       window.ethereum.request({method:'eth_requestAccounts'}).then(async (result:any[]) => {
-        await accountChangeHandler(result[0]);
+        const user:any = await dispatch(getUserById(result[0]));
+        if(!!user){
+          console.log(user.user);
+          setLoading(false);
+          dispatch(setUser(user.user));
+          navigate(`/${user.user.id}`)
+        }else{
+          if(walletConnected){
+            await accountChangeHandler(result[0],event.target.elements.username.value);
+          }
+          else{
+            setWalletConnected(true);
+            setLoading(false);
+          }
+        }
       })
     }
     else{
       setErrorMessage('Install Metamask');
     }
+    
+    // else{
+    //   setWalletConnected(true);
+    //   setLoading(false);
+    // }
   }
 
-  const accountChangeHandler = async(newAccount:any) => {
-    console.log(newAccount);
-    setDefaultAccount(newAccount);
-    // getUserBalance(newAccount);
-    const user = await props.register(newAccount);
-    setLoading(false);
-    navigate(`/${newAccount}`)
+  const accountChangeHandler = async(address:any,username:string) => {
+    console.log(address,username);
+    setDefaultAccount(address);
+    if(username!==''){
+      // getUserBalance(newAccount);
+      const user = await props.register({address,username});
+      setLoading(false);
+      navigate(`/${user.id}`)
+    }else{
+      setErrorMessage('Username cannot be empty');
+    }
   }
 
   return (
@@ -71,7 +97,7 @@ const Register = (props:any) => {
             {message}
           </Typography>
         )}
-        <Box component="form" onSubmit={connectWalletHandler} noValidate sx={{ mt: 1, height:'100%',display:'flex', alignItems:'center', justifyContent:'center', }}>
+        <Box component="form" onSubmit={connectWalletHandler} noValidate sx={{ mt: 1, height:'100%',display:'flex', alignItems:'center', flexDirection:'column', justifyContent:'center' }}>
           {/* <TextField
             margin="normal"
             required
@@ -94,6 +120,17 @@ const Register = (props:any) => {
           /> */}
           {/* <Typography>Address: {defaultAccount}</Typography>
           <Typography>Balance: {userBalance}</Typography> */}
+          {walletConnected?<TextField
+            margin="normal"
+            required
+            fullWidth
+            name="username"
+            label="Username"
+            type="text"
+            id="username"
+            autoComplete="username"
+            sx={{ mt: 3, mb: 2, backgroundColor:'#333333', border:'1px solid #02F9A7', color:'#02F9A7' }}
+          />:null}
           {!loading?<Button
             type="submit"
             fullWidth

@@ -13,9 +13,9 @@ import EditCardScreen from './pages/EditCardScreen';
 import './styles/index.css';
 import Feed from './pages/Feed';
 import NFTScreen from './pages/CredentialScreen';
-import { getCredentials } from './functions/axios';
+import { getAllUsers, getCredentials } from './functions/axios';
 import SettingsScreen from './pages/SettingsScreen';
-
+import {uploadBytes} from 'firebase/storage';
 
 declare var window: any;
 
@@ -32,14 +32,13 @@ const connectWalletHandler = async () => {
 }
 
 export const store = configureStore();
-const auth = store.getState().auth
-
 
 function App() {
 
   useEffect(()=>{
     connectWalletHandler();
     store.dispatch(getCredentials());
+    store.dispatch(getAllUsers());
   },[])
 
   return (

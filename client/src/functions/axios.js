@@ -19,9 +19,9 @@ export const getNFT = async (credential, address) => {
     return null
 }
 
-export const register = (address) => {
+export const register = (user) => {
     return async (dispatch) => {
-        const { data } = await instance.post('/register', { address });
+        const { data } = await instance.post('/register', user);
         await dispatch(setUser(data.user));
         await dispatch(getAllUsers());
         if (data.user.credentials) {
@@ -42,21 +42,27 @@ export const getCredentialById = (credentialId) => {
 export const getUserById = (userId) => {
     return async (dispatch) => {
         const { data } = await instance.get(`/user/${userId}`);
-        const promise = new Promise((resolve, reject) => {
-            if (data.user.credentials) {
-                data.user.credentials.forEach(async (credential, index) => {
-                    await dispatch(getCredentialById(credential));
-                    if (index == data.user.credentials.length - 1) {
-                        resolve(null)
-                    }
-                })
-            }
-            else {
-                resolve(null);
-            }
-        })
-        await promise;
-        return data;
+        try {
+            const promise = new Promise((resolve, reject) => {
+                if (data.user.credentials) {
+                    data.user.credentials.forEach(async (credential, index) => {
+                        await dispatch(getCredentialById(credential));
+                        if (index == data.user.credentials.length - 1) {
+                            resolve(null)
+                        }
+                    })
+                }
+                else {
+                    resolve(null);
+                }
+            })
+            await promise;
+            return data;
+        }
+        catch (e) {
+            console.log(e.message);
+            return null;
+        }
     }
 }
 
@@ -76,7 +82,12 @@ export const getCredentials = () => {
         }
         return data.allCredentials;
     }
+}
 
+export const updateUser = (updates) => {
+    return async (dispatch) => {
+        const { data } = await instance.post('/updateUser', updates);
+    }
 }
 
 export const followUser = (userId, followingId) => {

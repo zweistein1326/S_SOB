@@ -63,23 +63,12 @@ const Home = (props:any) => {
      {/* <Box component="form" onSubmit={addNFT} noValidate sx={{ mt: 1 }}> */}
      <Sidebar user={props.user}/>
      <Box style={{flex:1, padding:'20px', alignItems:'center', display:'flex', flexDirection:'column', height:'90vh',overflowY:'auto', width:0}}>
-
-          {/* <Card user={props.user}/> */}
-          {/* <Typography>Balance: {userBalance}</Typography> */}
-          {/* <Button
-            onClick={()=>{navigate('/addCredential')}}
-            type="submit"
-            fullWidth
-            variant="contained"
-            sx={{ mt: 3, mb: 2 }}
-            // disabled={loading}
-            >
-            Add new NFT
-          </Button> */}
-            {props.filters.text ==='' ? null :
-            <Box style={{ width:'100%', height:'20%'}}>
-              {props.allUsers.map((user:any)=>{return(<Link to={`/${user.id}`} onClick={()=>{props.searchByText('')}}><Typography style={{color:'black'}}>{user.username}</Typography></Link>)})}
-            </Box>}
+        {props.filters.text ==='' ? null :
+          <Box style={{ width:'100%', height:'20%'}}>
+            {props.allUsers.map((user:any)=>{
+              return(<Link to={`/${user.id}`} onClick={()=>{props.searchByText('')}}><Typography style={{color:'black'}}>{user.username}</Typography></Link>)})
+            }
+          </Box>}
           <Box style={{display:'flex', flexDirection:'row', alignItems:'center', justifyContent:'flex-end', width:'80%',padding: '1rem'}}>
             <Box style={{flex:1}}>
               <Input name="search_text" placeholder="Search by Username, Address" value={props.filters.text} onChange={(event)=>{props.searchByText(event.target.value)}} disableUnderline={true} style={{ width:'80%',backgroundColor:'#02F9A7', color:'black', margin:'20px 0px', padding:'10px 20px', borderRadius:'20px'}}/>
@@ -88,11 +77,12 @@ const Home = (props:any) => {
             {isUserProfile ?  null: <Button onClick = {()=>{props.followUser(props.user.id, activeUser.id)}} style={{backgroundColor:'#02F9A7', margin:20, padding:10, color:'black', borderRadius:'20px', width:'15%'}}>Follow</Button>}
             <Button onClick = {()=>{navigate('/addCredential')}} style={{backgroundColor:'#02F9A7', margin:'20px 0px 20px 20px', padding:10, color:'black', borderRadius:'20px',  width:'15%'}}>+ Add NFT</Button>
           </Box>
-          {activeUser.credentials && !loading ? <Grid container columns={3} style={{justifyContent:'center'}}>
+          {loading?<ThreeDots height="100" width="100" color="grey"/>: ( activeUser.credentials ? <Grid container columns={3} style={{justifyContent:'center'}}>
             {activeUser.credentials.map((credentialId:string,index:number)=>(
-              <NFTCard credentialId={credentialId} key={index}/>)
-              )}
-          </Grid> : <ThreeDots height="100" width="100" color="grey"/> }
+              <NFTCard credentialId={credentialId} key={index}/>))
+            }
+          </Grid> : <Typography style={{color:'black'}}>No NFTs yet Redirect to buying site</Typography>
+          )}
         </Box>
         {/* <Sidebar user={props.user}/> */}
 

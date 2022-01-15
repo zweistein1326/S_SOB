@@ -5,11 +5,11 @@ export default (state = {}, action:any) => {
         case 'SET_ALL_USERS':
             return {...state, allUsers: action.allUsers }
         case 'SET_FOLLOWING':
-            return {...state, following:action.following}
+            return {...state, following: action.following }
         // case 'CREDENTIALS':
         //     return { username: action.username }
         case 'SET_ACCOUNT':
-            return {...state, account: action.account}
+            return {...state, account: action.account }
         case 'LOGOUT':
             return {}
         default: return state;
