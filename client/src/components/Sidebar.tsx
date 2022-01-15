@@ -1,8 +1,12 @@
 import { Typography ,Box} from '@mui/material';
 import React from 'react';
+import { useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
 
 const Sidebar = (props:any) => {
+
+    const user = useSelector((state:any)=>state.auth.user);
+
     return (
         <Box style={{position:'relative', zIndex:'999999', height:'100vh', backgroundColor:'#EEEEEE', minWidth:'3vw', maxWidth:'12vw', display:'flex', flexDirection:'column', alignItems:'center', justifyContent:'center', padding:'10px 20px'}}>
             <Box style={{padding:'20px 10px',borderRadius:'30px', margin:'20px 0px', backgroundColor:'#000000', width:'90%', display:'flex', justifyContent:'center'}}>
@@ -25,7 +29,7 @@ const Sidebar = (props:any) => {
                     <Typography style={{overflowWrap:'anywhere', color:'black'}}>{props.user.id}</Typography>
                     <Typography style={{overflowWrap:'normal', color:'black'}}>@{props.user.username}</Typography>
                 </Box>
-                <img src="https://i1.wp.com/slotshurra.com/wp-content/uploads/2021/08/Leonardo-Da-Vinci-Slot-Game-Symbol-03-1.jpg?resize=564%2C500&ssl=1" className = "sidebarImage"/>
+                <img src={user.profileImageUrl || ''} className = "sidebarImage"/>
             </Box>
         </Box>
     )

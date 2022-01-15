@@ -20,6 +20,7 @@ const NFTCard = (props:Props) => {
     const [imageUrl,setImageUrl] = useState('');
     const [credential, setCredential] = useState<any>(null);
     const credentials = useSelector((state:State)=>state.credentials);
+    const user = useSelector((state:any)=>state.auth.user);
 
     useEffect(()=>{
         const credential = credentials.get(props.credentialId);
@@ -41,7 +42,7 @@ const NFTCard = (props:Props) => {
             <Box style={{backgroundColor:'rgba(0,0,0,0.6)', height:'20%', width:'100%', position:'absolute',borderRadius:'30px', bottom:0, display:'flex', alignItems:'center', justifyContent:'flex-end'}}>
                 {credential.name?<Typography color="white">{credential.name} #{credential.token_id}</Typography>:null}
                 <Box style={{ height:'100%', width:'30%', borderRadius:'30px', display:'flex', alignItems:'center', justifyContent:'center'}}>
-                    <img src="https://i1.wp.com/slotshurra.com/wp-content/uploads/2021/08/Leonardo-Da-Vinci-Slot-Game-Symbol-03-1.jpg?resize=564%2C500&ssl=1" style={{objectFit:'cover', width:'50%', height:'50%'}} className = "cardImage"/>
+                    <img src={user.profileImageUrl || ''} style={{backgroundColor:'pink', objectFit:'cover', width:'50%', height:'50%'}} className = "cardImage"/>
                 </Box>
             </Box>
             {/* <Typography>NFT: opensea.io//{props.credential.contract_address}/{props.credential.token_id}</Typography> */}
