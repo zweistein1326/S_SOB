@@ -47,6 +47,9 @@ export const getUserById = (userId) => {
                 if (data.user.credentials) {
                     data.user.credentials.forEach(async (credential, index) => {
                         await dispatch(getCredentialById(credential));
+                        if (data.user.following) {
+                            await dispatch(setFollowing(data.user.following));
+                        }
                         if (index == data.user.credentials.length - 1) {
                             resolve(null)
                         }
@@ -94,7 +97,8 @@ export const followUser = (userId, followingId) => {
     return async (dispatch) => {
         let followers = [];
         const newFollowing = await instance.post('/followUser', { userId, followingId });
-        setFollowing(newFollowing);
+        console.log(newFollowing.data);
+        dispatch(setFollowing(newFollowing.data));
         return newFollowing;
     }
 }

@@ -1,6 +1,6 @@
 import { Box,  Grid, Button, TextField, Typography, Input } from '@mui/material';
 import { useEffect, useState } from 'react';
-import { connect } from 'react-redux';
+import { connect, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { Link, useParams } from 'react-router-dom';
 import Card from '../components/Card';
@@ -28,6 +28,8 @@ const Home = (props:any) => {
   const [searchText, setSearchText] = useState<string>('');
   const [isUserProfile, setIsUserProfile] = useState<boolean>(false);
   const [loading,setLoading]= useState(false);
+  const [isFollowing, setIsFollowing] = useState(false);
+  const followingIds = useSelector((state:any)=>state.auth.following);
   
   const handleLogout = () => {
     localStorage.removeItem('token');
@@ -43,6 +45,13 @@ const Home = (props:any) => {
       setActiveCredentials([]);
       const {user} = await props.getUserById(address);
       setIsUserProfile(address?.toLowerCase()===props.user.id.toLowerCase());
+      console.log(followingIds);
+      if(followingIds){
+        const resAddress= followingIds.find((id:any)=>id===address);
+        setIsFollowing(!!resAddress);
+      }else{
+        setIsFollowing(false);
+      }
       console.log(address?.toLowerCase(),props.user.id.toLowerCase());
       setActiveUser(user);
       if(user.credentials){
@@ -54,6 +63,7 @@ const Home = (props:any) => {
   setLoading(false);
   },[
     address,
+    followingIds
   ])
   
   const {ethereum} = window;
@@ -74,7 +84,10 @@ const Home = (props:any) => {
               <Input name="search_text" placeholder="Search by Username, Address" value={props.filters.text} onChange={(event)=>{props.searchByText(event.target.value)}} disableUnderline={true} style={{ width:'80%',backgroundColor:'#02F9A7', color:'black', margin:'20px 0px', padding:'10px 20px', borderRadius:'20px'}}/>
               {/* <Typography style={{backgroundColor:'#02F9A7', color:'black', margin:'20px 0px', padding:'10px 20px', width:'50%', borderRadius:'20px'}}>Username, Address</Typography> */}
             </Box>
-            {isUserProfile ?  null: <Button onClick = {()=>{props.followUser(props.user.id, activeUser.id)}} style={{backgroundColor:'#02F9A7', margin:20, padding:10, color:'black', borderRadius:'20px', width:'15%'}}>Follow</Button>}
+            {isUserProfile ?  null: <Button onClick = {()=>{
+              setIsFollowing(!isFollowing);
+              props.followUser(props.user.id, activeUser.id)
+              }} style={{backgroundColor:'#02F9A7', margin:20, padding:10, color:'black', borderRadius:'20px', width:'15%'}}>{isFollowing?'Unfollow':'Follow'}</Button>}
             <Button onClick = {()=>{navigate('/addCredential')}} style={{backgroundColor:'#02F9A7', margin:'20px 0px 20px 20px', padding:10, color:'black', borderRadius:'20px',  width:'15%'}}>+ Add NFT</Button>
           </Box>
           {loading?<ThreeDots height="100" width="100" color="grey"/>: ( activeUser.credentials ? <Grid container columns={3} style={{justifyContent:'center'}}>

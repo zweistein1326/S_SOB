@@ -18,7 +18,7 @@ export const setAllUsers = (users:any[])=>({
 
 export const setFollowing = (followingIds:string[])=>({
     type:'SET_FOLLOWING',
-    following:followingIds
+    following: followingIds
 })
 // export const startLogout = () => {
 //     return (dispatch) => {

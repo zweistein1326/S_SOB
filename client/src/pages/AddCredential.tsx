@@ -17,42 +17,6 @@ const privateKey = 'MIICXAIBAAKBgQDLyT/Ah5gtJu74KRpNatZgFzdePXdRYLvknjBCqanlhzkf
 const AddCredential = (props:any) => {
 
     const navigate = useNavigate();
-
-    const handleSubmit = async(event: React.FormEvent<HTMLFormElement>)=>{
-        event.preventDefault();
-        const data = new FormData(event.currentTarget);
-
-        let tempPayload = {
-            title: data.get('credential_title'),
-            value: data.get('credential_value'),
-            issuerId: props.auth.user.id,
-            receiverId: data.get('receiver_id')
-        }
-
-        // generate hash
-
-        const hash = SHA256(tempPayload).toString();
-        
-        // sign hash
-
-        var signature = CryptoJS.AES.encrypt(hash,privateKey).toString();
-
-        console.log(signature);
-
-        let payload = {...tempPayload, hash, signature}
-
-        // addCredential({
-        //     variables:{
-        //         input:payload
-        //     }
-        // }).then((res)=>{
-        //     const {status, credential, message} = res.data.addCredential;
-        //     if(status==="success"){
-        //         console.log(credential);
-        //     }
-        // })
-    }
-
     const [tokenData, setTokenData] = useState<any>(null);
     const [imageUrl, setImageUrl] = useState<any>(null);
     const [privacy, setPrivacy] = useState(0);
@@ -67,7 +31,7 @@ const AddCredential = (props:any) => {
         }
         const tokenData = await getNFT(credential, props.user.id); 
         console.log(tokenData);
-        props.setCredentials([tokenData]);
+        props.setCredentials(tokenData);
         setTokenData(tokenData);
         if(tokenData.image.split('://')[0]=="ipfs"){
             console.log(tokenData.image.split('://')[1]);
@@ -81,6 +45,7 @@ const AddCredential = (props:any) => {
     const handleChange = (event:any) => {
         setPrivacy(event.target.value);
     }
+
     return (
         <Box className="Container" style={{backgroundColor:'#EEEEEE', color:'white', padding:'20px', minHeight:'100vh', display:'flex', flexDirection:'row'}}>
             <Sidebar user={props.user}/>
@@ -134,7 +99,7 @@ const AddCredential = (props:any) => {
                 >
                     Import NFT
                 </Button>
-                <Button
+                {/* <Button
                     type="submit"
                     fullWidth
                     variant="contained"
@@ -142,7 +107,7 @@ const AddCredential = (props:any) => {
                     // disabled={loading}
                 >
                     +Add
-                </Button>
+                </Button> */}
             </Box>
         </Box>
     )

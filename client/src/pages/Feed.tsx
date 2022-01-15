@@ -10,14 +10,15 @@ import { searchByText } from '../actions/filters';
 const Feed = () => {
 
     const credentials = useSelector((state:any)=> sortCredentials(state.credentials));
+    const sortedCredentials = credentials.sort((a:any, b:any) => b.iat - a.iat)
     const user = useSelector((state:any)=>state.auth.user);
     const allUsers = useSelector((state:any)=>state.auth.allUsers);
     const filters = useSelector((state:any)=>state.filters);
     const dispatch = useDispatch();
-    console.log(credentials);
+    console.log(sortedCredentials);
     
     return(
-        <Box style={{backgroundColor:'red', color:'white', minHeight:'90vh', display:'flex', flexDirection:'row'}}>
+        <Box style={{backgroundColor:'#EEEEEE', color:'white', padding:'20px', minHeight:'90vh', display:'flex', flexDirection:'row'}}>
             <Sidebar user={user}/>
             <Box style={{backgroundColor:'#EEEEEE', color:'white', width:'100%', minHeight:'90vh', display:'flex', flexDirection:'column', alignItems:'center'}}>
                 {/* {filters.text ==='' ? null :

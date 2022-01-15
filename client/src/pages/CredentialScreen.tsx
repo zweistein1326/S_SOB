@@ -38,7 +38,7 @@ const NFTScreen = (props:any) => {
                 {credential.name ? <Typography style={{fontSize:'24px', fontWeight:'bold'}} color="black">Collection: {credential.name} #{credential.token_id}</Typography> : null}
                 {/* <Typography>Token ID: {credential.token_id}</Typography> */}
                 <Typography onClick={()=>{navigate(`/${credential.owner}`)}}>Owner: {credential.owner}</Typography> 
-                <Box style={{ backgroundColor:'rgba(2, 249, 167,0.4)', borderRadius:'20px', padding:'1rem'}}>
+                <Box style={{ backgroundColor:'rgba(2, 249, 167,0)', borderRadius:'20px', padding:'1rem'}}>
                     <Typography style={{fontSize:'24px', fontWeight:'bold', color:'black'}}>Attributes</Typography>
                     <Grid container columns={3} style={{width:'40vw', height:'60vh', justifyContent:'center', alignItems:'center', overflowY:'scroll'}}>
                     {credential.attributes.map(({trait_type,value}:any)=>{return(
