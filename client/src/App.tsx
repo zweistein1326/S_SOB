@@ -14,6 +14,7 @@ import './styles/index.css';
 import Feed from './pages/Feed';
 import NFTScreen from './pages/CredentialScreen';
 import { getCredentials } from './functions/axios';
+import SettingsScreen from './pages/SettingsScreen';
 
 
 declare var window: any;
@@ -47,7 +48,7 @@ function App() {
         <Routes>
           <Route path="/" element={<Register />} />
           <Route path="/:address" element={<Home />} />
-          <Route path="/settings" element={<Home />} />
+          <Route path="/settings" element={<SettingsScreen />} />
           <Route path="/feed" element={<Feed />} />
           <Route path="/credential/:credentialId" element={<NFTScreen />} />
           <Route path="/user/:id/:credentialId" element={<CredentialPage />} />

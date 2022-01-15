@@ -1,5 +1,5 @@
 import { useMutation } from "@apollo/client";
-import { Box, Button, FormControl, FormHelperText, Input, InputLabel, TextField, Typography } from "@mui/material";
+import { Box, Button, FormControl, FormHelperText, Input, InputLabel, MenuItem, Select, TextField, Typography } from "@mui/material";
 import { useState } from "react";
 import { connect } from "react-redux";
 import { useNavigate } from "react-router-dom";
@@ -55,6 +55,7 @@ const AddCredential = (props:any) => {
 
     const [tokenData, setTokenData] = useState<any>(null);
     const [imageUrl, setImageUrl] = useState<any>(null);
+    const [privacy, setPrivacy] = useState(0);
 
     const addNFT = async(event:React.FormEvent<HTMLFormElement>) => {
         event.preventDefault();
@@ -62,6 +63,7 @@ const AddCredential = (props:any) => {
         const credential = {
         contract_address: data.get('contract_address'),
         token_id: data.get('token_id'),
+        private: privacy === 1
         }
         const tokenData = await getNFT(credential, props.user.id); 
         console.log(tokenData);
@@ -74,6 +76,10 @@ const AddCredential = (props:any) => {
         else{
             setImageUrl(tokenData.image);
         }
+    }
+
+    const handleChange = (event:any) => {
+        setPrivacy(event.target.value);
     }
     return (
         <Box className="Container" style={{backgroundColor:'#EEEEEE', color:'white', padding:'20px', minHeight:'100vh', display:'flex', flexDirection:'row'}}>
@@ -101,6 +107,20 @@ const AddCredential = (props:any) => {
                     id="token_id"
                     autoComplete="token_id"
                 />
+                <Select
+                    style={{backgroundColor:'#EEEEEE', margin:10, width:'90%'}}
+                    required
+                    fullWidth
+                    value={privacy}
+                    name="token_id"
+                    labelId="Token Id"
+                    type="text"
+                    id="token_id"
+                    onChange = {handleChange}
+                >
+                    <MenuItem value={0}>Public</MenuItem>
+                    <MenuItem value={1}>Private</MenuItem>
+                </Select>
                 <Box style={{backgroundColor:'#333333'}}>
                     <Typography>{tokenData ? tokenData.name:''}</Typography>
                     {tokenData ? <img style={{height:'200px', width:'200px'}} src={`${imageUrl}`} alt="token"/> : null}
@@ -112,7 +132,16 @@ const AddCredential = (props:any) => {
                     sx={{ mt: 3, mb: 2, width:'20%', backgroundColor:'#02F9A7', color:'black' }}
                     // disabled={loading}
                 >
-                    Add NFT
+                    Import NFT
+                </Button>
+                <Button
+                    type="submit"
+                    fullWidth
+                    variant="contained"
+                    sx={{ mt: 3, mb: 2, width:'20%', backgroundColor:'#02F9A7', color:'black' }}
+                    // disabled={loading}
+                >
+                    +Add
                 </Button>
             </Box>
         </Box>

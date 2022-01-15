@@ -24,7 +24,9 @@ export const register = (address) => {
         const { data } = await instance.post('/register', { address });
         await dispatch(setUser(data.user));
         await dispatch(getAllUsers());
-        data.user.credentials.forEach(async (credential) => { await dispatch(getCredentialById(credential)) })
+        if (data.user.credentials) {
+            data.user.credentials.forEach(async (credential) => { await dispatch(getCredentialById(credential)) })
+        }
         return data.user;
     }
 }
@@ -41,12 +43,17 @@ export const getUserById = (userId) => {
     return async (dispatch) => {
         const { data } = await instance.get(`/user/${userId}`);
         const promise = new Promise((resolve, reject) => {
-            data.user.credentials.forEach(async (credential, index) => {
-                await dispatch(getCredentialById(credential));
-                if (index == data.user.credentials.length - 1) {
-                    resolve(null)
-                }
-            })
+            if (data.user.credentials) {
+                data.user.credentials.forEach(async (credential, index) => {
+                    await dispatch(getCredentialById(credential));
+                    if (index == data.user.credentials.length - 1) {
+                        resolve(null)
+                    }
+                })
+            }
+            else {
+                resolve(null);
+            }
         })
         await promise;
         return data;
@@ -64,7 +71,9 @@ export const getCredentials = () => {
     return async (dispatch) => {
         const { data } = await instance.get('/credentials');
         console.log(data.allCredentials);
-        Object.values(data.allCredentials).forEach((credential) => dispatch(setCredentials(credential)))
+        if (data.allCredentials) {
+            Object.values(data.allCredentials).forEach((credential) => dispatch(setCredentials(credential)))
+        }
         return data.allCredentials;
     }
 

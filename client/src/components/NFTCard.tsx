@@ -39,7 +39,7 @@ const NFTCard = (props:Props) => {
         return(
         <Grid onClick ={()=>{navigate(`/credential/${credential.id}`)}} item key={props.key} style={{height:'350px',width:'350px', margin:'1rem', position:'relative', backgroundColor:'#EEEEEE', borderRadius:'50px'}}>
             <Box style={{backgroundColor:'rgba(0,0,0,0.6)', height:'20%', width:'100%', position:'absolute',borderRadius:'30px', bottom:0, display:'flex', alignItems:'center', justifyContent:'flex-end'}}>
-                {credential.name?<Typography color="white">{credential.name}</Typography>:null}
+                {credential.name?<Typography color="white">{credential.name} #{credential.token_id}</Typography>:null}
                 <Box style={{ height:'100%', width:'30%', borderRadius:'30px', display:'flex', alignItems:'center', justifyContent:'center'}}>
                     <img src="https://i1.wp.com/slotshurra.com/wp-content/uploads/2021/08/Leonardo-Da-Vinci-Slot-Game-Symbol-03-1.jpg?resize=564%2C500&ssl=1" style={{objectFit:'cover', width:'50%', height:'50%'}} className = "cardImage"/>
                 </Box>

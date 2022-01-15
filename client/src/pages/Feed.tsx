@@ -14,18 +14,18 @@ const Feed = () => {
     
     return(
         <Box style={{backgroundColor:'#EEEEEE', color:'white', padding:'20px', minHeight:'100vh', display:'flex', flexDirection:'row'}}>
-            <Sidebar user={user}/>
-            <Box style={{backgroundColor:'#EEEEEE', color:'white', width:'55%', minHeight:'100vh', display:'flex', flexDirection:'column', alignItems:'center'}}>
+            {/* <Sidebar user={user}/> */}
+            <Box style={{backgroundColor:'#EEEEEE', color:'white', width:'100%', minHeight:'100vh', display:'flex', flexDirection:'column', alignItems:'center'}}>
                 <Box style={{width:'80%'}}>
                 <Typography style={{backgroundColor:'#02F9A7', color:'black', margin:20, padding:'10px 30px', borderRadius:'20px'}}>Username, Address</Typography>
                 </Box>
-                <Box style={{backgroundColor:'#EEEEEE', color:'white', padding:'10px 200px', display:'flex', flexDirection:'column', alignItems:'center',}}>
+                <Box style={{backgroundColor:'#EEEEEE', color:'white', padding:'10px 20px', display:'flex', flexDirection:'column', alignItems:'center', height:'90vh', overflowY:'auto',}}>
                     {credentials.map((credential:any,index:number)=>(
                         <FeedCard credential={credential} key={index}/>)
                         )}
                 </Box>
             </Box>
-            <Sidebar user={user}/>
+            {/* <Sidebar user={user}/> */}
         </Box>
     )
 }

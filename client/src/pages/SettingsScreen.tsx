@@ -9,3 +9,5 @@ const SettingsScreen = () => {
         </Box>
     )
 }
+
+export default SettingsScreen;

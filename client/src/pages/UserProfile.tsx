@@ -45,9 +45,11 @@ const Home = (props:any) => {
       setIsUserProfile(address?.toLowerCase()===props.user.id.toLowerCase());
       console.log(address?.toLowerCase(),props.user.id.toLowerCase());
       setActiveUser(user);
-      user.credentials.forEach(async(credentialId:string,index:number)=>{
+      if(user.credentials){
+         user.credentials.forEach(async(credentialId:string,index:number)=>{
           setActiveCredentials([...activeCredentials,credentialId])
     });
+      }
   })();
   setLoading(false);
   },[
@@ -56,11 +58,11 @@ const Home = (props:any) => {
   
   const {ethereum} = window;
   return (
-    <Box style={{backgroundColor:'#EEEEEE', color:'white', padding:'20px', minHeight:'100vh', display:'flex', flexDirection:'row'}}>
+    <Box style={{backgroundColor:'#EEEEEE', color:'white', padding:'20px', minHeight:'90vh', display:'flex', flexDirection:'row'}}>
       {/* <Header/> */}
      {/* <Box component="form" onSubmit={addNFT} noValidate sx={{ mt: 1 }}> */}
      <Sidebar user={props.user}/>
-     <Box style={{flex:1, padding:'20px', alignItems:'center', display:'flex', flexDirection:'column'}}>
+     <Box style={{flex:1, padding:'20px', alignItems:'center', display:'flex', flexDirection:'column', height:'90vh',overflowY:'auto', width:0}}>
 
           {/* <Card user={props.user}/> */}
           {/* <Typography>Balance: {userBalance}</Typography> */}
