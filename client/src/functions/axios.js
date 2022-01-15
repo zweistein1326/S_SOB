@@ -12,11 +12,17 @@ const instance = axios.create({
 
 export const getNFT = async (credential, address) => {
     // save contract address and nft id linked to user id if sender is the owner of the fetched nft otherwise send error
-    const { data } = await instance.post('/getCredential', { ...credential, address });
-    if (data) {
-        return data;
+    try {
+        const { data } = await instance.post('/getCredential', { ...credential, address });
+        console.log(data);
+        if (data) {
+            return data;
+        }
     }
-    return null
+    catch (err) {
+        return null
+    }
+
 }
 
 export const register = (user) => {

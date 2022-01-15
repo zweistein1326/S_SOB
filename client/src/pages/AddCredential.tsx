@@ -30,15 +30,18 @@ const AddCredential = (props:any) => {
         private: privacy === 1
         }
         const tokenData = await getNFT(credential, props.user.id); 
-        console.log(tokenData);
-        props.setCredentials(tokenData);
-        setTokenData(tokenData);
-        if(tokenData.image.split('://')[0]=="ipfs"){
-            console.log(tokenData.image.split('://')[1]);
-            setImageUrl(`https://gateway.ipfs.io/ipfs/${tokenData.image.split('://')[1]}`);
-        }
-        else{
-            setImageUrl(tokenData.image);
+        if(tokenData.id){
+            props.setCredentials(tokenData);
+            setTokenData(tokenData);
+            if(tokenData.image.split('://')[0]=="ipfs"){
+                console.log(tokenData.image.split('://')[1]);
+                setImageUrl(`https://gateway.ipfs.io/ipfs/${tokenData.image.split('://')[1]}`);
+            }
+            else{
+                setImageUrl(tokenData.image);
+            }
+        }else{
+            alert(tokenData.message);
         }
     }
 
@@ -86,9 +89,9 @@ const AddCredential = (props:any) => {
                     <MenuItem value={0}>Public</MenuItem>
                     <MenuItem value={1}>Private</MenuItem>
                 </Select>
-                <Box style={{backgroundColor:'#333333'}}>
+                <Box style={{backgroundColor:'pink'}}>
                     <Typography>{tokenData ? tokenData.name:''}</Typography>
-                    {tokenData ? <img style={{height:'200px', width:'200px'}} src={`${imageUrl}`} alt="token"/> : null}
+                    {tokenData ? <img style={{height:'400px', width:'400px'}} src={`${imageUrl}`} alt="token"/> : null}
                 </Box>
                 <Button
                     type="submit"

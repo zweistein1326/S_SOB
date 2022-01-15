@@ -36,6 +36,7 @@ const NFTScreen = (props:any) => {
                     <img src="https://i1.wp.com/slotshurra.com/wp-content/uploads/2021/08/Leonardo-Da-Vinci-Slot-Game-Symbol-03-1.jpg?resize=564%2C500&ssl=1" style={{objectFit:'cover', width:'50%', height:'50%'}} className = "cardImage"/>
                 </Box> */}
                 {credential.name ? <Typography style={{fontSize:'24px', fontWeight:'bold'}} color="black">Collection: {credential.name} #{credential.token_id}</Typography> : null}
+                <a href={credential.external_link}>{credential.external_link}</a>
                 {/* <Typography>Token ID: {credential.token_id}</Typography> */}
                 <Typography onClick={()=>{navigate(`/${credential.owner}`)}}>Owner: {credential.owner}</Typography> 
                 <Box style={{ backgroundColor:'rgba(2, 249, 167,0)', borderRadius:'20px', padding:'1rem'}}>
@@ -49,7 +50,6 @@ const NFTScreen = (props:any) => {
                     )})}
                     </Grid>
                 </Box>
-                <a href={credential.external_link}>{credential.external_link}</a>
             </Box>:null}
             {/* <Typography>NFT: opensea.io//{props.credential.contract_address}/{props.credential.token_id}</Typography> */}
             {credential ? <img style={{height:'600px', width:'600px', borderRadius:'30px'}} src={imageUrl} alt="token"/> : null}
