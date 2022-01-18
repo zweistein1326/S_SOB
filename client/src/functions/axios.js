@@ -14,7 +14,6 @@ export const getNFT = async (credential, address) => {
     // save contract address and nft id linked to user id if sender is the owner of the fetched nft otherwise send error
     try {
         const { data } = await instance.post('/getCredential', { ...credential, address });
-        console.log(data);
         if (data) {
             return data;
         }
@@ -40,7 +39,6 @@ export const register = (user) => {
 export const getCredentialById = (credentialId) => {
     return async (dispatch) => {
         const { data } = await instance.get(`/credential/${credentialId}`);
-        console.log(data);
         return dispatch(setCredentials(data));
     }
 }
@@ -57,7 +55,6 @@ export const getUserById = (userId) => {
                             await dispatch(setFollowing(data.user.following));
                         }
                         if (data.user.favorite) {
-                            console.log(data.user.favorite);
                             await dispatch(setFavorite(data.user.favorite));
                         }
                         if (index == data.user.credentials.length - 1) {
@@ -89,7 +86,6 @@ export const getAllUsers = () => {
 export const getCredentials = () => {
     return async (dispatch) => {
         const { data } = await instance.get('/credentials');
-        console.log(data.allCredentials);
         if (data.allCredentials) {
             Object.values(data.allCredentials).forEach((credential) => dispatch(setCredentials(credential)))
         }
@@ -107,7 +103,6 @@ export const followUser = (userId, followingId) => {
     return async (dispatch) => {
         let followers = [];
         const newFollowing = await instance.post('/followUser', { userId, followingId });
-        console.log(newFollowing.data);
         dispatch(setFollowing(newFollowing.data));
         return newFollowing;
     }
@@ -127,18 +122,41 @@ export const favorite = (favoriteId) => {
 export const like = (credentialId) => {
     return async (dispatch, getState) => {
         const user = getState().auth.user;
-        const newLikes = await instance.post('/credential/like', { userId: user.id, credentialId });
-        dispatch(getUserById(user.id));
-        dispatch(getCredentialById(credentialId));
-        return newLikes;
+        const newCredential = await instance.post('/credential/like', { userId: user.id, credentialId });
+        dispatch(setCredentials(newCredential.data));
+        return newCredential;
     }
 }
 
 export const comment = (credentialId, comment) => {
     return async (dispatch, getState) => {
         const user = getState().auth.user;
-        const postComment = await instance.post('/credential/comment', { userId: user.id, credentialId, comment });
-        console.log(postComment);
-        return postComment;
+        const newCredential = await instance.post('/credential/comment', { userId: user.id, credentialId, comment });
+        dispatch(setCredentials(newCredential.data));
+        return newCredential;
+    }
+}
+
+export const changePrivacy = (credentialId, privacy) => {
+    return async (dispatch, getState) => {
+        const newCredential = await instance.post('/credential/privacy', { credentialId, privacy });
+        dispatch(setCredentials(newCredential.data));
+        return newCredential.data;
+    }
+}
+
+export const submitBid = (credentialId, bid) => {
+    return async (dispatch, getState) => {
+        const newCredential = await instance.post('/credential/bid', { credentialId, bid });
+        dispatch(setCredentials(newCredential.data));
+        return newCredential.data;
+    }
+}
+
+export const submitMinPrice = (credentialId, minPrice) => {
+    return async (dispatch, getState) => {
+        const newCredential = await instance.post('/credential/minPrice', { credentialId, minPrice });
+        dispatch(setCredentials(newCredential.data));
+        return newCredential.data;
     }
 }

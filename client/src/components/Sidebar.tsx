@@ -19,7 +19,7 @@ const Sidebar = (props:any) => {
             </Box> */}
             <Link to={`/${props.user.id}`} style={{padding:'20px 10px',borderRadius:'30px', margin:'20px 0px', backgroundColor:'#000000', width:'90%', display:'flex', justifyContent:'center',textDecoration:'none', color:'#02F9A7'}}>
                 <Box>
-                    My Profile
+                    My Portfolio
                 </Box>        
             </Link>
     

@@ -36,14 +36,15 @@ const NFTCard = (props:Props) => {
         }
     },[props.credentialId])
 
-    if(credential){
+    if(credential && (!credential.private || user.id===credential.owner)){
         return(
         <Grid onClick ={()=>{navigate(`/credential/${credential.id}`)}} item key={props.key} style={{height:'350px',width:'350px', margin:'1rem', position:'relative', backgroundColor:'#EEEEEE', borderRadius:'50px'}}>
-            <Box style={{backgroundColor:'rgba(0,0,0,0.6)', height:'20%', width:'100%', position:'absolute',borderRadius:'30px', bottom:0, display:'flex', alignItems:'center', justifyContent:'flex-end'}}>
-                {credential.name?<Typography color="white">{credential.name} #{credential.token_id}</Typography>:null}
-                <Box style={{ height:'100%', width:'30%', borderRadius:'30px', display:'flex', alignItems:'center', justifyContent:'center'}}>
-                    <img src={user.profileImageUrl || ''} style={{backgroundColor:'pink', objectFit:'cover', width:'50%', height:'50%'}} className = "cardImage"/>
+            <Box style={{backgroundColor:'rgba(0,0,0,0.6)', height:'20%', width:'100%', position:'absolute',borderRadius:'30px', bottom:0, display:'flex', alignItems:'center', justifyContent:'space-around'}}>
+                <Box style={{ height:'100%',backgroundColor:'transparent', width:'30%', borderRadius:'30px', display:'flex', alignItems:'center', justifyContent:'center'}}>
+                    <img src={user.profileImageUrl || ''} style={{backgroundColor:'pink', objectFit:'cover', width:'40px', height:'40px'}} className = "cardImage"/>
                 </Box>
+                {credential.name?<Typography style={{flex:1}} color="white">{credential.name} #{credential.token_id}</Typography>:null}
+                {/* {credential.minPrice?<Typography style={{flex:1}} color="white">{credential.minPrice}</Typography>:null} */}
             </Box>
             {/* <Typography>NFT: opensea.io//{props.credential.contract_address}/{props.credential.token_id}</Typography> */}
             {credential ? <img style={{height:'350px', width:'350px', borderRadius:'30px'}} src={imageUrl} alt="token"/> : null}

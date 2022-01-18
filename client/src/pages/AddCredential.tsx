@@ -105,7 +105,7 @@ const AddCredential = (props:any) => {
                     fullWidth
                     value={comment}
                     name="comment"
-                    label="Comment"
+                    label="Comments"
                     type="text"
                     id="comment"
                     autoComplete="comment"
@@ -120,7 +120,7 @@ const AddCredential = (props:any) => {
                 >
                     Import NFT
                 </Button>
-                <Button
+                {/* <Button
                     type="submit"
                     fullWidth
                     variant="contained"
@@ -128,7 +128,7 @@ const AddCredential = (props:any) => {
                     // disabled={loading}
                 >
                     Generate NFT
-                </Button>
+                </Button> */}
                 {/* <Button
                     type="submit"
                     fullWidth
