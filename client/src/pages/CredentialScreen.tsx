@@ -160,7 +160,10 @@ const NFTScreen = (props:any) => {
                                 <BiUpArrow color={isLiked ? 'red':'black'} onClick={setLike}/>
                                 {<Typography style={{fontSize:'24px'}}>{credential.likes ? credential.likes.length : 0}</Typography>}
                             </Box>
-                            {isFavorite? <FavoriteIcon style={{color:'red', padding:'10px'}} onClick = {setFavorite}/>: <FavoriteIcon style={{color:'grey',padding:'10px'}} onClick = {setFavorite}/>}
+                            <Box onClick = {setFavorite} style={{display:'flex', flexDirection:'row', borderRadius:'10px', border:'1px solid black', alignItems:'center', padding:'10px 10px'}}>
+                                {isFavorite? <FavoriteIcon style={{color:'red'}} />: <FavoriteIcon style={{color:'grey',padding:'10px'}}/>}
+                                <Typography>Favorite</Typography>
+                            </Box>
                             {/* <BiDownArrow onClick={setLike}/> */}
                         </Box> 
                         : 
