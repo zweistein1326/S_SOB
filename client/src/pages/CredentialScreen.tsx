@@ -19,6 +19,7 @@ const NFTScreen = (props:any) => {
     const [isFavorite, setIsFavorite] = useState<boolean>(false);
     const favoriteIds = useSelector((state:any)=> state.auth.favorite);
     const user = useSelector((state:any)=> state.auth.user);
+    const allUsers = useSelector((state:any)=> state.auth.allUsers);
     const dispatch = useDispatch();
     const [isLiked, setLiked] = useState(false);
     const [comment,setComment] = useState<string>('');
@@ -26,6 +27,7 @@ const NFTScreen = (props:any) => {
     const [isPrivate, setPrivacy]= useState<number>(0);
     const [bidAmount, setBidAmount]= useState<number>(0);
     const [minPrice, setMinPrice]= useState<number>(0);
+    const [credentialOwner, setCredentialOwner] = useState<any>(null);
 
     const setFavorite = () => {
         setIsFavorite(!isFavorite);
@@ -41,8 +43,12 @@ const NFTScreen = (props:any) => {
         setPrivacy(cred.private?1:0);
         setMinPrice(cred.minPrice);
         setCredential(cred);
+        // const owner = allUsers.get(cred.owner);
+        // setCredentialOwner(owner);
+        console.log(favoriteIds);
         if (!!favoriteIds && credential){
             if(favoriteIds.find((id:string)=>id.toLowerCase()==credential.id.toLowerCase())){
+                console.log(true);
                 setIsFavorite(true);
             }
         }
@@ -62,7 +68,7 @@ const NFTScreen = (props:any) => {
         }
         setLoading(false);
     },[
-        credentialId, credentials
+        credentialId, credentials, favoriteIds
     ]);
 
     const setLike = async() => {
@@ -93,9 +99,9 @@ const NFTScreen = (props:any) => {
 
     return(
         <Box>
-            <Box style={{display:'flex', alignItems:'center', justifyContent:'center', minHeight:'100vh'}}>
+            <Box style={{display:'flex', alignItems:'center', justifyContent:'center',}}>
                 {!loading && credential?
-                <Box style={{margin:'40px', textAlign:'center'}}>
+                <Box style={{margin:'20px 10px', textAlign:'center'}}>
                     {/* <Box style={{ height:'100%', width:'30%', borderRadius:'30px', display:'flex', alignItems:'center', justifyContent:'center'}}>
                         <img src="https://i1.wp.com/slotshurra.com/wp-content/uploads/2021/08/Leonardo-Da-Vinci-Slot-Game-Symbol-03-1.jpg?resize=564%2C500&ssl=1" style={{objectFit:'cover', width:'50%', height:'50%'}} className = "cardImage"/>
                     </Box> */}
@@ -103,11 +109,10 @@ const NFTScreen = (props:any) => {
                     {credential.name ? <Typography style={{fontSize:'24px', fontWeight:'bold'}} color="black">Token: #{credential.token_id}</Typography> : null}
                     <a target="_blank" href={`https://etherscan.io/address/${credential.contract_address}`}>View on Etherscan</a>
                     <a href={credential.external_link}>{credential.external_link}</a>
-                            {isFavorite? <FavoriteIcon style={{color:'red', padding:'10px'}} onClick = {setFavorite}/>: <FavoriteIcon style={{color:'grey',padding:'10px'}} onClick = {setFavorite}/>}
                     {/* <Typography>Token ID: {credential.token_id}</Typography> */}
                     <Typography onClick={()=>{navigate(`/${credential.owner}`)}}>Owner: {credential.owner}</Typography> 
                     <Box style={{ backgroundColor:'rgba(2, 249, 167,0)', borderRadius:'20px', padding:'1rem'}}>
-                        {/* <Typography style={{fontSize:'24px', fontWeight:'bold', color:'black'}}>Attributes</Typography>
+                        <Typography style={{fontSize:'24px', fontWeight:'bold', color:'black'}}>Attributes</Typography>
                         <Grid container columns={3} style={{width:'40vw', height:'30vh', justifyContent:'center', alignItems:'center', overflowY:'scroll'}}>
                         {credential.attributes.map(({trait_type,value}:any)=>{return(
                             <Grid item style={{border:'1px solid #02F9A7', backgroundColor:'#000000', padding:'0.2rem', minWidth:'10rem', margin:'0.4rem'}}>
@@ -115,21 +120,7 @@ const NFTScreen = (props:any) => {
                                 <Typography style={{fontSize:'14px', fontWeight:'500', color:'#FFFFFF'}}>{value}</Typography>
                             </Grid>
                         )})}
-                        </Grid> */}
-                        {credential? 
-                            <Box>
-                                <BiUpArrow color={isLiked ? 'red':'black'} onClick={setLike}/>
-                                {<Typography style={{fontSize:'24px'}}>{credential.likes ? credential.likes.length : 0}</Typography>}
-                                {/* <BiDownArrow onClick={setLike}/> */}
-                            </Box> 
-                            : 
-                        null}
-                        <Box style={{padding:'0px 40px', margin:'20px 0px'}}>
-                            <Typography style={{fontSize:'24px'}}>Comments</Typography>
-                            {credential?(credential.comments ? credential.comments.map((comment:any)=>{return (<CommentTile comment={comment}/>)}) : null):null}
-                            <Input name="comment" value={comment} onChange={(event)=>{setComment(event.target.value)}} placeholder="Comment" id="comment"/>
-                            <Button onClick = {submitComment}>Submit</Button>
-                        </Box>
+                        </Grid>
                         {isEdit?<Box>
                             <Select
                                 style={{backgroundColor:'#EEEEEE', margin:10, width:'90%'}}
@@ -149,18 +140,42 @@ const NFTScreen = (props:any) => {
                         null}
                         {!isEdit?<Box style={{padding:'0px 40px', margin:'20px 0px'}}>
                             <Typography style={{fontSize:'24px'}}>Bid</Typography>
-                            <Input name="bid" value={bidAmount} onChange={(event)=>{setBidAmount(parseFloat(event.target.value))}} type="number" placeholder="Bid" id="bid_amount"/>
+                            <Input name="bid" value={bidAmount} onChange={(event:any)=>{setBidAmount(parseFloat(event.target.value))}} type="number" placeholder="Bid" id="bid_amount"/>
                             <Button onClick = {submitNewBid}>Submit Bid</Button>
                         </Box>:<Box style={{padding:'0px 40px', margin:'20px 0px'}}>
                             <Typography style={{fontSize:'24px'}}>Minimum Price</Typography>
-                            <Input name="min_price" value={minPrice} onChange={(event)=>{setMinPrice(parseFloat(event.target.value))}} type="number" placeholder="Minimum Price" id="minPrice"/>
+                            <Input name="min_price" value={minPrice} onChange={(event:any)=>{setMinPrice(parseFloat(event.target.value))}} type="number" placeholder="Minimum Price" id="minPrice"/>
                             <Button onClick = {submitNewMinPrice}>Set</Button>
                         </Box>}
                     </Box>
                 </Box>:null}
-                {/* <Typography>NFT: opensea.io//{props.credential.contract_address}/{props.credential.token_id}</Typography> */}
-                {credential ? <img style={{height:'600px', width:'600px', borderRadius:'30px'}} src={imageUrl} alt="token"/> : null}
+                <Box>
+                    {credential ? <img style={{height:'600px', width:'600px', borderRadius:'30px'}} src={imageUrl} alt="token"/> : null}
+                    {/* <Typography>NFT: opensea.io//{props.credential.contract_address}/{props.credential.token_id}</Typography> */}
+                </Box>
             </Box>
+            {credential? 
+                        <Box style={{display:'flex', flexDirection:'row', width:'10%', alignItems:'center', justifyContent:'space-around', padding:'0px 40px'}}>
+                            <Box style={{display:'flex', flexDirection:'row', alignItems:'center',}}>
+                                <BiUpArrow color={isLiked ? 'red':'black'} onClick={setLike}/>
+                                {<Typography style={{fontSize:'24px'}}>{credential.likes ? credential.likes.length : 0}</Typography>}
+                            </Box>
+                            {isFavorite? <FavoriteIcon style={{color:'red', padding:'10px'}} onClick = {setFavorite}/>: <FavoriteIcon style={{color:'grey',padding:'10px'}} onClick = {setFavorite}/>}
+                            {/* <BiDownArrow onClick={setLike}/> */}
+                        </Box> 
+                        : 
+                    null}
+                    <Box style={{padding:'0px 40px', margin:'20px 0px'}}>
+                        <Typography style={{fontSize:'24px'}}>Comments</Typography>
+                        {credential ?(credential.comments ? credential.comments.map((comment:any)=>{return (<CommentTile comment={comment}/>)}) : null):null}
+                        <Box style={{width:'100%', display:'flex', flexDirection:'row', padding:'5px'}}>
+                            {user.profileImageUrl? <img src={user.profileImageUrl || ''} style={{height:'40px', width:'40px', borderRadius:'50%'}}/> : null }
+                            <Box style={{flex:1, padding:'0px 10px'}}>
+                                <Input style={{width:'100%'}} name="comment" value={comment} onChange={(event:any)=>{setComment(event.target.value)}} placeholder="Comment" id="comment"/>
+                            </Box>
+                            <Button onClick = {submitComment}>Submit</Button>
+                        </Box>
+                    </Box>
         </Box>
     );
 }

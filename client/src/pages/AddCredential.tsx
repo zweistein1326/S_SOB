@@ -20,7 +20,7 @@ const AddCredential = (props:any) => {
     const [tokenData, setTokenData] = useState<any>(null);
     const [imageUrl, setImageUrl] = useState<any>(null);
     const [privacy, setPrivacy] = useState(0);
-    const [comment, setComment] = useState<string>('');
+    const [caption, setCaption] = useState<string>('');
 
     const addNFT = async(event:React.FormEvent<HTMLFormElement>) => {
         event.preventDefault();
@@ -28,7 +28,7 @@ const AddCredential = (props:any) => {
         const credential = {
         contract_address: data.get('contract_address'),
         token_id: data.get('token_id'),
-        comment: data.get('comment'),
+        caption: data.get('caption'),
         private: privacy === 1
         }
         const tokenData = await getNFT(credential, props.user.id); 
@@ -51,8 +51,8 @@ const AddCredential = (props:any) => {
         setPrivacy(event.target.value);
     }
 
-    const handleCommentChange = (event:any) => {
-        setComment(event.target.value)
+    const handleCaptionChange = (event:any) => {
+        setCaption(event.target.value)
     }
 
     return (
@@ -103,13 +103,13 @@ const AddCredential = (props:any) => {
                     style={{backgroundColor:'#EEEEEE', margin:10, width:'90%'}}
                     margin="normal"
                     fullWidth
-                    value={comment}
-                    name="comment"
-                    label="Comments"
+                    value={caption}
+                    name="caption"
+                    label="Caption"
                     type="text"
-                    id="comment"
-                    autoComplete="comment"
-                    onChange={handleCommentChange}
+                    id="caption"
+                    autoComplete="caption"
+                    onChange={handleCaptionChange}
                 />
                 <Button
                     type="submit"

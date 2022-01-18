@@ -20,10 +20,12 @@ const CommentTile = (props:any) => {
     },[props.comment]);
 
     return(
-        <Box style={{display:'flex', flexDirection:'row', alignItems:'center', padding:'5px'}}>
-            {commenter? <img src={commenter.profileImageUrl || ''} style={{height:'40px', width:'40px', borderRadius:'50%'}}/> : null }
-            {commenter? <Typography style={{padding:'0px 10px'}}>{commenter.username}</Typography> : null }
-            <Typography style={{padding:'0px 10px'}}>{comment.comment}</Typography>
+        <Box style={{display:'flex', flexDirection:'row', alignItems:'center', justifyContent:'space-between', padding:'5px', width:'100%'}}>
+            <Box style={{display:'flex', flexDirection:'row', alignItems:'center'}}>
+                {commenter? <img src={commenter.profileImageUrl || ''} style={{height:'40px', width:'40px', borderRadius:'50%'}}/> : null }
+                {commenter? <Typography style={{padding:'0px 10px'}}>{commenter.username}</Typography> : null }
+                <Typography style={{padding:'0px 10px'}}>{comment.comment}</Typography>
+            </Box>
             <Typography style={{padding:'0px 10px'}}>{timestamp}</Typography>
         </Box>
     )

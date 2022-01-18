@@ -58,7 +58,10 @@ const FeedCard = (props:any) => {
             {/* <Typography color="black">{props.credential.name}</Typography> */}
             {/* <Typography>NFT: opensea.io//{props.credential.contract_address}/{props.credential.token_id}</Typography> */}
                 <Box style={{width:'80%', display:'flex', flexDirection:'row', justifyContent:'space-around', alignItems:'center'}}>
-                    <Typography color="white">{props.credential.name} #{props.credential.token_id}</Typography>
+                    <Box>
+                        <Typography color="white">{props.credential.name} #{props.credential.token_id}</Typography>
+                        <Typography color="white">{props.credential.caption}</Typography>
+                    </Box>
                     {credential? 
                     <Box style={{zIndex:99999, display:'flex', flexDirection:'row', alignItems:'center'}}>
                         <BiUpArrow size={22} color={isLiked ? '#02F9A7':'red'} onClick={setLike}/>

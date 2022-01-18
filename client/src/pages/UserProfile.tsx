@@ -56,7 +56,7 @@ const Home = (props:any) => {
       setActiveUser(user);
       if(user.credentials){
          user.credentials.forEach(async(credentialId:string,index:number)=>{
-          setActiveCredentials([...activeCredentials,credentialId])
+          setActiveCredentials([...activeCredentials,credentialId].sort((a:any,b:any)=>b.iat-a.iat))
     });
       }
   })();
