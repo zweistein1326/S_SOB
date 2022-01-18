@@ -3,7 +3,7 @@ import PrivateRoute from "./PrivateRoute";
 import PublicRoute from "./PublicRoute";
 import {createBrowserHistory} from 'history';
 import Login from "../pages/Login";
-import Home from "../pages/Home";
+import Home from "../pages/UserProfile";
 import Register from "../pages/Register";
 import CredentialPage from "../pages/CredentialPage";
 import AddCredential from "../pages/AddCredential";
@@ -14,7 +14,7 @@ const AppRouter = () => {
     return (
         <BrowserRouter>
             <Routes>
-                <PublicRoute path="/" component={Login} />
+                <PublicRoute path="/" component={AddCredential} />
                 <PublicRoute path="/register" component={Register} />
                 <PrivateRoute path="/user/:id" component={Home} />
                 <PrivateRoute path="/user/:id/:credentialId" component={CredentialPage} />

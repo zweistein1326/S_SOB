@@ -1,5 +1,8 @@
+import { Navigation } from '@mui/icons-material';
 import {Button} from '@mui/material'
+import { Box } from '@mui/system';
 import { useNavigate } from 'react-router-dom';
+import playgroundLogo from '../assets/playground_logo.png'
 
 const Header = (props:any) => {
 
@@ -16,7 +19,9 @@ const Header = (props:any) => {
     }
 
     return(
-        props.loggedIn? <Button onClick={handleLogout}>Logout</Button>: <Button href="/login">Login</Button>
+        <Box style={{backgroundColor:'#EEEEEE'}}>
+            <img src={playgroundLogo} style={{height:'10vh', width:'20vw'}}/>
+        </Box>
         )
 }
 

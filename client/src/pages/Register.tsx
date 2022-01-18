@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import React, { useState } from 'react';
 import {
   Avatar,
   Button,
@@ -12,93 +12,93 @@ import {
   Typography,
 } from '@mui/material';
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
-import { useMutation } from '@apollo/client';
 import { useNavigate } from 'react-router-dom';
-import { REGISTER } from '../graphql';
+import { ethers } from 'ethers';
+import { getNFT, getUserById, register } from '../functions/axios';
+import { Image } from '@mui/icons-material';
+import { connect, useDispatch } from 'react-redux';
+import { setAccount, setUser } from '../redux/actions/user';
+import { setCredentials } from '../redux/actions/credentials';
+import BG from '../assets/bg.jpeg';
+import { ThreeDots } from 'react-loader-spinner';
 
-const Register = () => {
+declare var window: any;
+
+const Register = (props:any) => {
   const navigate = useNavigate();
   const [message, setMessage] = useState<string>('');
-  const [submitRegister, { loading, error }] = useMutation(REGISTER);
+  const [errorMessage, setErrorMessage] = useState<any>(null);
+  const [defaultAccount, setDefaultAccount] = useState<any>(null);
+  const [userBalance, setUserBalance] = useState<any>(null);
+  const [connButtonText, setConnButtonText] = useState('Connect Metamask wallet');
+  const [loading, setLoading] = useState<boolean>(false);
+  const [walletConnected, setWalletConnected] = useState<boolean>(false);
+  const dispatch = useDispatch();
 
-  const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
-    event.preventDefault();
-    const data = new FormData(event.currentTarget);
 
-    if (data.get('password') !== data.get('confirm-password')) {
-      setMessage('Password does not match');
-      return;
-    }
-
-    const payload = {
-      username: data.get('username'),
-      email: data.get('email'),
-      password: data.get('password'),
-    };
-
-    submitRegister({
-      variables: {
-        input: payload,
-      },
-    })
-      .then((res) => {
-        const { status, privateKey, message } = res.data.register;
-        if (status === 'success') {
-          localStorage.setItem('privateKey', privateKey);
-          navigate('/');
-        } else {
-          setMessage(message);
+  const connectWalletHandler = (event:any) => {
+    event.preventDefault()
+    setLoading(true);
+   
+    if(window.ethereum){
+      window.ethereum.request({method:'eth_requestAccounts'}).then(async (result:any[]) => {
+        const user:any = await dispatch(getUserById(result[0]));
+        if(!!user){
+          console.log(user.user);
+          setLoading(false);
+          dispatch(setUser(user.user));
+          navigate(`/feed`)
+        }else{
+          if(walletConnected){
+            await accountChangeHandler(result[0],event.target.elements.username.value);
+          }
+          else{
+            setWalletConnected(true);
+            setLoading(false);
+          }
         }
       })
-      .catch((err) => {
-        console.error(err);
-        if (error) setMessage(error.message);
-      });
-  };
+    }
+    else{
+      setErrorMessage('Install Metamask');
+    }
+    
+    // else{
+    //   setWalletConnected(true);
+    //   setLoading(false);
+    // }
+  }
+
+  const accountChangeHandler = async(address:any,username:string) => {
+    console.log(address,username);
+    setDefaultAccount(address);
+    if(username!==''){
+      // getUserBalance(newAccount);
+      const user = await props.register({address,username});
+      setLoading(false);
+      navigate(`/feed`)
+    }else{
+      setErrorMessage('Username cannot be empty');
+    }
+  }
 
   return (
-    <Container component="main" maxWidth="xs">
+    <Box component="main" sx={{backgroundImage:`url(${BG})`, backgroundSize:'cover', width:'100vw', minHeight:'100vh'}}>   
       <Box
         sx={{
-          marginTop: 8,
           display: 'flex',
           flexDirection: 'column',
           alignItems: 'center',
+          height:'100vh'
         }}
       >
-        <Avatar sx={{ m: 1, bgcolor: 'secondary.main' }}>
-          <LockOutlinedIcon />
-        </Avatar>
-        <Typography component="h1" variant="h5">
-          Register
-        </Typography>
         {message && (
           <Typography variant="body1" color="red" sx={{ mt: 2 }}>
             {message}
           </Typography>
         )}
-        <Box component="form" onSubmit={handleSubmit} noValidate sx={{ mt: 1 }}>
-          <TextField
-            margin="normal"
-            required
-            fullWidth
-            id="username"
-            label="User Name"
-            name="username"
-            autoComplete="username"
-            autoFocus
-          />
-          <TextField
-            margin="normal"
-            required
-            fullWidth
-            id="email"
-            label="Email Address"
-            name="email"
-            autoComplete="email"
-            autoFocus
-          />
-          <TextField
+        <Box component="form" onSubmit={connectWalletHandler} noValidate sx={{ mt: 1, height:'100%',display:'flex', alignItems:'center', flexDirection:'column', justifyContent:'center' }}>
+          {/* <TextField
             margin="normal"
             required
             fullWidth
@@ -117,21 +117,30 @@ const Register = () => {
             type="password"
             id="confirm-password"
             autoComplete="current-password"
-          />
-          <FormControlLabel
-            control={<Checkbox value="remember" color="primary" />}
-            label="Remember me"
-          />
-          <Button
+          /> */}
+          {/* <Typography>Address: {defaultAccount}</Typography>
+          <Typography>Balance: {userBalance}</Typography> */}
+          {walletConnected?<TextField
+            margin="normal"
+            required
+            fullWidth
+            name="username"
+            label="Username"
+            type="text"
+            id="username"
+            autoComplete="username"
+            sx={{ mt: 3, mb: 2, backgroundColor:'#333333', border:'1px solid #02F9A7', color:'#02F9A7' }}
+          />:null}
+          {!loading?<Button
             type="submit"
             fullWidth
             variant="contained"
-            sx={{ mt: 3, mb: 2 }}
-            disabled={loading}
+            sx={{ mt: 3, mb: 2, backgroundColor:'#333333', border:'1px solid #02F9A7', color:'#02F9A7' }}
+            // disabled={loading}
           >
-            Register
-          </Button>
-          <Grid container>
+            {connButtonText}
+          </Button>:<ThreeDots height="100" width="100" color="grey"/>}
+          {/* <Grid container>
             <Grid item xs>
               <Link href="#" variant="body2">
                 Forgot password?
@@ -142,11 +151,15 @@ const Register = () => {
                 {'Already have an account? Login'}
               </Link>
             </Grid>
-          </Grid>
+          </Grid> */}
         </Box>
       </Box>
-    </Container>
+    </Box>
   );
 };
 
-export default Register;
+const mapDispatchToProps = (dispatch:any) => ({
+  register: (address:string)=> dispatch(register(address))
+})
+
+export default connect(null,mapDispatchToProps)(Register);

@@ -1,9 +1,12 @@
 import { useMutation } from "@apollo/client";
-import { Box, Button, FormControl, FormHelperText, Input, InputLabel, TextField, Typography } from "@mui/material";
+import { Box, Button, FormControl, FormHelperText, Input, InputLabel, MenuItem, Select, TextField, Typography } from "@mui/material";
 import { useState } from "react";
 import { connect } from "react-redux";
 import { useNavigate } from "react-router-dom";
-import { ADDCREDENTIAL } from "../graphql";
+import { setCredentials } from "../redux/actions/credentials";
+import Sidebar from "../components/Sidebar";
+import { getNFT } from "../functions/axios";
+import '../styles/index.css'
 
 var CryptoJS = require('crypto-js');
 var SHA256 = require('crypto-js/sha256');
@@ -14,90 +17,138 @@ const privateKey = 'MIICXAIBAAKBgQDLyT/Ah5gtJu74KRpNatZgFzdePXdRYLvknjBCqanlhzkf
 const AddCredential = (props:any) => {
 
     const navigate = useNavigate();
-    const [addCredential,{loading,error}] = useMutation(ADDCREDENTIAL);
+    const [tokenData, setTokenData] = useState<any>(null);
+    const [imageUrl, setImageUrl] = useState<any>(null);
+    const [privacy, setPrivacy] = useState(0);
+    const [comment, setComment] = useState<string>('');
 
-
-    const handleSubmit = async(event: React.FormEvent<HTMLFormElement>)=>{
+    const addNFT = async(event:React.FormEvent<HTMLFormElement>) => {
         event.preventDefault();
         const data = new FormData(event.currentTarget);
-
-        let tempPayload = {
-            title: data.get('credential_title'),
-            value: data.get('credential_value'),
-            issuerId: props.auth.user.id,
-            receiverId: data.get('receiver_id')
+        const credential = {
+        contract_address: data.get('contract_address'),
+        token_id: data.get('token_id'),
+        comment: data.get('comment'),
+        private: privacy === 1
         }
-
-        // generate hash
-
-        const hash = SHA256(tempPayload).toString();
-        
-        // sign hash
-
-        var signature = CryptoJS.AES.encrypt(hash,privateKey).toString();
-
-        console.log(signature);
-
-        let payload = {...tempPayload, hash, signature}
-
-        addCredential({
-            variables:{
-                input:payload
+        const tokenData = await getNFT(credential, props.user.id); 
+        if(tokenData.id){
+            props.setCredentials(tokenData);
+            setTokenData(tokenData);
+            if(tokenData.image.split('://')[0]=="ipfs"){
+                console.log(tokenData.image.split('://')[1]);
+                setImageUrl(`https://gateway.ipfs.io/ipfs/${tokenData.image.split('://')[1]}`);
             }
-        }).then((res)=>{
-            const {status, credential, message} = res.data.addCredential;
-            if(status==="success"){
-                console.log(credential);
+            else{
+                setImageUrl(tokenData.image);
             }
-        })
+        }else{
+            alert(tokenData.message);
+        }
     }
+
+    const handleChange = (event:any) => {
+        setPrivacy(event.target.value);
+    }
+
+    const handleCommentChange = (event:any) => {
+        setComment(event.target.value)
+    }
+
     return (
-        <Box>
-            <Typography>Create new credential</Typography>
-            <Box component="form" noValidate sx={{ mt: 1 }} onSubmit={handleSubmit}>
+        <Box className="Container" style={{backgroundColor:'#EEEEEE', color:'white', padding:'20px', minHeight:'100vh', display:'flex', flexDirection:'row'}}>
+            <Sidebar user={props.user}/>
+            <Box component="form" style={{width:'100%', display:'flex', flexDirection:'column', alignItems:'center'}} noValidate sx={{ mt: 1 }} onSubmit={addNFT}>
                 <TextField
-                margin ="normal"
+                style={{backgroundColor:'#EEEEEE', margin:10, width:'90%'}}
+                margin="normal"
                 required
                 fullWidth
-                id="title"
-                label="Credential title"
-                name="credential_title"
-                autoComplete="text"
-                autoFocus/>
-                Select credential type: Text, Image, JSON, Video, Smart Contract, 
+                name="contract_address"
+                label="Contract Address"
+                type="text"
+                id="contract_address"
+                autoComplete="contract_address"
+                />
                 <TextField
-                margin ="normal"
-                required
-                fullWidth
-                id="value"
-                label="Credential value"
-                name="credential_value"
-                autoComplete="text"
-                autoFocus/>
-                <TextField
-                margin ="normal"
-                required
-                fullWidth
-                id="receiver_id"
-                label="Receiver Id"
-                name="receiver_id"
-                autoComplete="text"
-                autoFocus/>
-                <Button 
-                type="submit" 
-                variant="contained" 
-                sx = {{ mt:3, mb:2 }}
-                disabled={loading}
+                    style={{backgroundColor:'#EEEEEE', margin:10, width:'90%'}}
+                    margin="normal"
+                    required
+                    fullWidth
+                    name="token_id"
+                    label="Token Id"
+                    type="text"
+                    id="token_id"
+                    autoComplete="token_id"
+                />
+                <Select
+                    style={{backgroundColor:'#EEEEEE', margin:10, width:'90%'}}
+                    required
+                    fullWidth
+                    value={privacy}
+                    name="token_id"
+                    labelId="Token Id"
+                    type="text"
+                    id="token_id"
+                    onChange = {handleChange}
                 >
-                    Submit
+                    <MenuItem value={0}>Public</MenuItem>
+                    <MenuItem value={1}>Private</MenuItem>
+                </Select>
+                <Box style={{backgroundColor:'pink'}}>
+                    <Typography>{tokenData ? tokenData.name:''}</Typography>
+                    {tokenData ? <img style={{height:'400px', width:'400px'}} src={`${imageUrl}`} alt="token"/> : null}
+                </Box>
+                <TextField
+                    style={{backgroundColor:'#EEEEEE', margin:10, width:'90%'}}
+                    margin="normal"
+                    fullWidth
+                    value={comment}
+                    name="comment"
+                    label="Comment"
+                    type="text"
+                    id="comment"
+                    autoComplete="comment"
+                    onChange={handleCommentChange}
+                />
+                <Button
+                    type="submit"
+                    fullWidth
+                    variant="contained"
+                    sx={{ mt: 3, mb: 2, width:'20%', backgroundColor:'#02F9A7', color:'black' }}
+                    // disabled={loading}
+                >
+                    Import NFT
                 </Button>
+                <Button
+                    type="submit"
+                    fullWidth
+                    variant="contained"
+                    sx={{ mt: 3, mb: 2, width:'20%', backgroundColor:'#02F9A7', color:'black' }}
+                    // disabled={loading}
+                >
+                    Generate NFT
+                </Button>
+                {/* <Button
+                    type="submit"
+                    fullWidth
+                    variant="contained"
+                    sx={{ mt: 3, mb: 2, width:'20%', backgroundColor:'#02F9A7', color:'black' }}
+                    // disabled={loading}
+                >
+                    +Add
+                </Button> */}
             </Box>
         </Box>
     )
 }
 
 const mapStateToProps = (state:any)=>({
-    auth:state.auth
+    user: state.auth.user
 })
 
-export default connect(mapStateToProps)(AddCredential);
+const mapDispatchToProps = (dispatch:any) => ({
+    setCredentials: (credentials:any[]) => dispatch(setCredentials(credentials))
+})
+
+export default connect(mapStateToProps,mapDispatchToProps)(AddCredential);

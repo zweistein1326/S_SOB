@@ -1,25 +1,23 @@
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
-import { ApolloProvider, ApolloClient, InMemoryCache } from '@apollo/client';
-import { RestLink } from 'apollo-link-rest';
 import Login from './pages/Login';
-import Home from './pages/Home';
+import Home from './pages/UserProfile';
 import Register from './pages/Register';
 import CredentialPage from './pages/CredentialPage';
 import { useEffect } from 'react';
 import AddCredential from './pages/AddCredential';
 import { Provider } from 'react-redux';
-import configureStore from './store/configureStore';
+import configureStore from './redux/store/configureStore';
 import RequestCredential from './pages/RequestCredential';
-
+import Header from './components/Header';
+import EditCardScreen from './pages/EditCardScreen';
+import './styles/index.css';
+import Feed from './pages/Feed';
+import NFTScreen from './pages/CredentialScreen';
+import { getAllUsers, getCredentials } from './functions/axios';
+import SettingsScreen from './pages/SettingsScreen';
+import {uploadBytes} from 'firebase/storage';
 
 declare var window: any;
-
-const restLink = new RestLink({ uri: '/api' });
-
-const client = new ApolloClient({
-  cache: new InMemoryCache(),
-  link: restLink,
-});
 
 const {ethereum} = window;
 
@@ -34,32 +32,31 @@ const connectWalletHandler = async () => {
 }
 
 export const store = configureStore();
-const auth = store.getState().auth
-console.log(auth);
-
 
 function App() {
 
   useEffect(()=>{
     connectWalletHandler();
+    store.dispatch(getCredentials());
+    store.dispatch(getAllUsers());
   },[])
 
   return (
-    <ApolloProvider client={client}>
       <Provider store={store}>
       <Router>
         <Routes>
-          <Route path="/" element={<Login />} />
-          <Route path="/login" element={<Login />} />
-          <Route path="/register" element={<Register />} />
-          <Route path="/user/:id" element={<Home />} />
+          <Route path="/" element={<Register />} />
+          <Route path="/:address" element={<Home />} />
+          <Route path="/settings" element={<SettingsScreen />} />
+          <Route path="/feed" element={<Feed />} />
+          <Route path="/credential/:credentialId" element={<NFTScreen />} />
           <Route path="/user/:id/:credentialId" element={<CredentialPage />} />
           <Route path="/addCredential" element={<AddCredential />} />
           <Route path="/requestCredential" element={<RequestCredential />} />
+          <Route path="/editCard" element={<EditCardScreen />} />
         </Routes>
       </Router>
       </Provider>
-    </ApolloProvider>
   );
 }
 

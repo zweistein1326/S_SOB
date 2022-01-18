@@ -1,0 +1,61 @@
+{
+  "main": "index.js",
+  "scripts": {
+    "android": "react-native run-android",
+    "ios": "react-native run-ios",
+    "web": "expo start --web",
+    "start": "react-native start",
+    "test": "jest"
+  },
+  "dependencies": {
+    "@expo/vector-icons": "^12.0.5",
+    "@mui/material": "^5.2.6",
+    "@react-native-async-storage/async-storage": "^1.13.0",
+    "@react-native-community/async-storage": "^1.12.1",
+    "@react-native-community/checkbox": "^0.5.9",
+    "@react-navigation/bottom-tabs": "^6.0.9",
+    "@react-navigation/native": "^6.0.6",
+    "@react-navigation/native-stack": "^6.2.5",
+    "@walletconnect/react-native-dapp": "^1.7.0",
+    "axios": "^0.24.0",
+    "crypto": "^1.0.1",
+    "expo": "~41.0.1",
+    "expo-barcode-scanner": "~10.1.2",
+    "expo-camera": "~11.0.2",
+    "expo-contacts": "~9.1.2",
+    "expo-splash-screen": "~0.10.2",
+    "expo-updates": "~0.5.4",
+    "react": "16.13.1",
+    "react-dom": "16.13.1",
+    "react-native": "~0.63.4",
+    "react-native-camera": "^4.2.1",
+    "react-native-camera-hooks": "^0.5.3",
+    "react-native-contacts": "^7.0.3",
+    "react-native-fs": "^2.18.0",
+    "react-native-gesture-handler": "~1.10.2",
+    "react-native-permissions": "^3.2.0",
+    "react-native-qrcode-scanner": "^1.5.4",
+    "react-native-qrcode-svg": "^6.1.2",
+    "react-native-reanimated": "~2.1.0",
+    "react-native-safe-area-context": "3.2.0",
+    "react-native-screens": "~3.0.0",
+    "react-native-svg": "^12.1.1",
+    "react-native-unimodules": "~0.13.3",
+    "react-native-vector-icons": "^9.0.0",
+    "react-native-web": "~0.13.12",
+    "react-redux": "^7.2.6",
+    "redux": "^4.1.2"
+  },
+  "devDependencies": {
+    "@babel/core": "^7.9.0",
+    "@types/react": "~16.9.35",
+    "@types/react-native": "~0.63.2",
+    "babel-preset-expo": "~8.3.0",
+    "jest-expo": "~41.0.0",
+    "typescript": "~4.0.0"
+  },
+  "jest": {
+    "preset": "react-native"
+  },
+  "private": true
+}

@@ -1,0 +1,25 @@
+.Card{
+    background-color: #DDDDDD;
+    padding: 1rem;
+    border-radius: 20px;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-around;
+    position: relative;
+    width: 80%;
+}
+
+.cardImage{
+    height: 180px;
+    width: 180px;
+    border-radius: 50%;
+}
+
+.cardText{
+    color:'black'
+}
+
+body{
+    margin: 0;
+}
