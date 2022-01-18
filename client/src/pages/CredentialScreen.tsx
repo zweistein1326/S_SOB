@@ -94,9 +94,9 @@ const NFTScreen = (props:any) => {
                 {credential ? <img style={{height:'600px', width:'600px', borderRadius:'30px'}} src={imageUrl} alt="token"/> : null}
                 {credential? <Box>
                         <BiUpArrow color={isLiked ? 'red':'black'} onClick={setLike}/>
-                        <Typography style={{fontSize:'24px'}}>{credential.likes.length}</Typography>
+                        {<Typography style={{fontSize:'24px'}}>{credential.likes ? credential.likes.length : 0}</Typography>}
                         {/* <BiDownArrow onClick={setLike}/> */}
-                    </Box>: null}
+                    </Box> : null}
             </Box>
             <Box style={{padding:'0px 40px', margin:'20px 0px'}}>
                 <Typography style={{fontSize:'24px'}}>Comments</Typography>

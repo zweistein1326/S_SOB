@@ -138,6 +138,7 @@ export const comment = (credentialId, comment) => {
     return async (dispatch, getState) => {
         const user = getState().auth.user;
         const postComment = await instance.post('/credential/comment', { userId: user.id, credentialId, comment });
+        console.log(postComment);
         return postComment;
     }
 }
