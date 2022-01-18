@@ -129,7 +129,15 @@ export const like = (credentialId) => {
         const user = getState().auth.user;
         const newLikes = await instance.post('/credential/like', { userId: user.id, credentialId });
         dispatch(getUserById(user.id));
+        dispatch(getCredentialById(credentialId));
         return newLikes;
     }
 }
 
+export const comment = (credentialId, comment) => {
+    return async (dispatch, getState) => {
+        const user = getState().auth.user;
+        const postComment = await instance.post('/credential/comment', { userId: user.id, credentialId, comment });
+        return postComment;
+    }
+}

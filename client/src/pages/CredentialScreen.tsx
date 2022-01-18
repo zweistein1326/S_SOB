@@ -1,10 +1,10 @@
-import { Box, Grid, Icon, Typography } from '@mui/material';
+import { Box, Button, Grid, Icon, Input, Typography } from '@mui/material';
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Link, useNavigate } from 'react-router-dom';
 import { useParams } from 'react-router-dom';
 import FavoriteIcon from '@mui/icons-material/Favorite';
-import { favorite, like } from '../functions/axios';
+import { favorite, like, comment as postComment } from '../functions/axios';
 import CommentTile from '../components/CommentTile';
 import {BiDownArrow, BiUpArrow} from 'react-icons/bi';
 
@@ -21,6 +21,7 @@ const NFTScreen = (props:any) => {
     const user = useSelector((state:any)=> state.auth.user);
     const dispatch = useDispatch();
     const [isLiked, setLiked] = useState(false);
+    const [comment,setComment] = useState<string>('');
 
     const setFavorite = () => {
         setIsFavorite(!isFavorite);
@@ -60,6 +61,10 @@ const NFTScreen = (props:any) => {
         dispatch(like(credential.id));
     }
 
+    const submitComment = () => {
+        dispatch(postComment(credential.id,comment));
+    }
+
     return(
         <Box>
             <Box style={{display:'flex', alignItems:'center', justifyContent:'center', minHeight:'100vh'}}>
@@ -96,6 +101,8 @@ const NFTScreen = (props:any) => {
             <Box style={{padding:'0px 40px', margin:'20px 0px'}}>
                 <Typography style={{fontSize:'24px'}}>Comments</Typography>
                 {credential?(credential.comments ? credential.comments.map((comment:any)=>{return (<CommentTile comment={comment}/>)}) : null):null}
+                <Input name="comment" value={comment} onChange={(event)=>{setComment(event.target.value)}} placeholder="Comment" id="comment"/>
+                <Button onClick = {submitComment}>Submit</Button>
             </Box>
         </Box>
     );
