@@ -47,7 +47,7 @@ const Register = (props:any) => {
           console.log(user.user);
           setLoading(false);
           dispatch(setUser(user.user));
-          navigate(`/feed`)
+          navigate(`/${user.user.id}`)
         }else{
           if(walletConnected){
             await accountChangeHandler(result[0],event.target.elements.username.value);
@@ -76,7 +76,7 @@ const Register = (props:any) => {
       // getUserBalance(newAccount);
       const user = await props.register({address,username});
       setLoading(false);
-      navigate(`/feed`)
+      navigate(`/${user.id}`)
     }else{
       setErrorMessage('Username cannot be empty');
     }
