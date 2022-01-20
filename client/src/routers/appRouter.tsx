@@ -2,7 +2,6 @@ import { BrowserRouter, Router, Routes } from "react-router-dom";
 import PrivateRoute from "./PrivateRoute";
 import PublicRoute from "./PublicRoute";
 import {createBrowserHistory} from 'history';
-import Login from "../pages/Login";
 import Home from "../pages/UserProfile";
 import Register from "../pages/Register";
 import CredentialPage from "../pages/CredentialPage";

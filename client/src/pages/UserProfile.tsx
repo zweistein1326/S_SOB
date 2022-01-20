@@ -1,5 +1,5 @@
-import { Box,  Grid, Button, TextField, Typography, Input } from '@mui/material';
-import { useEffect, useState } from 'react';
+import { Box,  Grid, Button, TextField, Typography, Input, Select, MenuItem } from '@mui/material';
+import { useEffect, useState, Suspense } from 'react';
 import { connect, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { Link, useParams } from 'react-router-dom';
@@ -14,6 +14,8 @@ import '../styles/Home.css'
 import {searchByText} from '../redux/actions/filters';
 import usersSelector from '../redux/selectors/users';
 import { ThreeDots } from 'react-loader-spinner';
+import { useGLTF } from '@react-three/drei';
+import {Canvas} from '@react-three/fiber';
 
 declare var window:any;
 
@@ -30,13 +32,62 @@ const Home = (props:any) => {
   const [loading,setLoading]= useState(false);
   const [isFollowing, setIsFollowing] = useState(false);
   const followingIds = useSelector((state:any)=>state.auth.following);
+  const [view, setView] = useState<number>(0);
+  const [imageUrl, setImageUrl] = useState<any>(null);
+  const [privacy, setPrivacy] = useState(0);
+  const [caption, setCaption] = useState<string>('');
+  const [tokenData, setTokenData] = useState<any>(null);
   
   const handleLogout = () => {
     localStorage.removeItem('token');
     setLoggedIn(false);
   };
 
+  const addNFT = async(event:React.FormEvent<HTMLFormElement>) => {
+      event.preventDefault();
+      const data = new FormData(event.currentTarget);
+      const credential = {
+      contract_address: data.get('contract_address'),
+      token_id: data.get('token_id'),
+      caption: data.get('caption'),
+      private: privacy === 1
+      }
+      const tokenData = await getNFT(credential, props.user.id); 
+      if(tokenData.name){
+          // props.setCredentials(tokenData);
+          setTokenData(tokenData);
+          if(tokenData.image.split('://')[0]=="ipfs"){
+              console.log(tokenData.image.split('://')[1]);
+              setImageUrl(`https://gateway.ipfs.io/ipfs/${tokenData.image.split('://')[1]}`);
+          }
+          else{
+              setImageUrl(tokenData.image);
+          }
+      // navigate('/feed');
+      }
+      else{
+            alert(tokenData.message);
+      }
+  }
+
+  const createPost = () => {
+
+  }
+
+  const handleChange = (event:any) => {
+      setPrivacy(event.target.value);
+  }
+
+  const handleCaptionChange = (event:any) => {
+      setCaption(event.target.value)
+  }
+
   const {address} = useParams();
+
+  const Model = () => {
+    const {scene} = useGLTF('3Davatar.glb');
+    return(<primitive style={{height:'20vh', width:'20vw'}} object={scene}/>)
+  }
 
   useEffect(()=>{
     console.log('changing');
@@ -65,42 +116,139 @@ const Home = (props:any) => {
     address,
     followingIds
   ])
+
+  const renderView=(view:number)=>{
+    if(view==0){
+      return(
+        activeUser.credentials ? 
+          (activeUser.credentials.map((credentialId:string,index:number)=>(
+            <NFTCard credentialId={credentialId} key={index}/>))
+          )
+          : <Typography style={{color:'white'}}>You haven't added any NFTs yet</Typography>)
+    }
+    else if(view===1){
+      return (
+        activeUser.favorite ? 
+          (activeUser.favorite.map((favoriteId:string,index:number)=>(
+            <NFTCard credentialId={favoriteId} key={index}/>))
+          )
+          : <Typography style={{color:'white'}}>No favorites added</Typography>)
+    }
+    else{
+      return (
+        <Box component="form" style={{width:'100%', display:'flex', flexDirection:'column', alignItems:'center'}} noValidate sx={{ mt: 1 }} onSubmit={addNFT}>
+                <TextField
+                style={{backgroundColor:'#EEEEEE', margin:10, width:'90%'}}
+                margin="normal"
+                required
+                fullWidth
+                name="contract_address"
+                label="Contract Address"
+                type="text"
+                id="contract_address"
+                autoComplete="contract_address"
+                />
+                <TextField
+                    style={{backgroundColor:'#EEEEEE', margin:10, width:'90%'}}
+                    margin="normal"
+                    required
+                    fullWidth
+                    name="token_id"
+                    label="Token Id"
+                    type="text"
+                    id="token_id"
+                    autoComplete="token_id"
+                />
+                <Select
+                    style={{backgroundColor:'#EEEEEE', margin:10, width:'90%'}}
+                    required
+                    fullWidth
+                    value={privacy}
+                    name="token_id"
+                    labelId="Token Id"
+                    type="text"
+                    id="token_id"
+                    onChange = {handleChange}
+                >
+                    <MenuItem value={0}>Public</MenuItem>
+                    <MenuItem value={1}>Private</MenuItem>
+                </Select>
+                <Box component="div" style={{backgroundColor:'pink'}}>
+                    <Typography>{tokenData ? tokenData.name:''}</Typography>
+                    {tokenData ? <img style={{height:'400px', width:'400px'}} src={`${imageUrl}`} alt="token"/> : null}
+                </Box>
+                <TextField
+                    style={{backgroundColor:'#EEEEEE', margin:10, width:'90%'}}
+                    margin="normal"
+                    fullWidth
+                    value={caption}
+                    name="caption"
+                    label="Caption"
+                    type="text"
+                    id="caption"
+                    autoComplete="caption"
+                    onChange={handleCaptionChange}
+                />
+                <Button
+                    type="submit"
+                    fullWidth
+                    variant="contained"
+                    sx={{ mt: 3, mb: 2, width:'20%', backgroundColor:'#02F9A7', color:'black' }}
+                    // disabled={loading}
+                >
+                    Import
+                </Button>
+                <Button
+                    type="submit"
+                    fullWidth
+                    variant="contained"
+                    sx={{ mt: 3, mb: 2, width:'20%', backgroundColor:'#02F9A7', color:'black' }}
+                    // disabled={loading}
+                >
+                    Post
+                </Button>
+                {/* <Button
+                    type="submit"
+                    fullWidth
+                    variant="contained"
+                    sx={{ mt: 3, mb: 2, width:'20%', backgroundColor:'#02F9A7', color:'black' }}
+                    // disabled={loading}
+                >
+                    +Add
+                </Button> */}
+            </Box>
+      );
+    }
+  }
   
   const {ethereum} = window;
-  return (
-    <Box style={{backgroundColor:'#EEEEEE', color:'white', padding:'20px', display:'flex', flexDirection:'row'}}>
-      {/* <Header/> */}
-     {/* <Box component="form" onSubmit={addNFT} noValidate sx={{ mt: 1 }}> */}
-     <Sidebar user={props.user}/>
-     <Box style={{flex:1, padding:'20px', alignItems:'center', display:'flex', flexDirection:'column', height:'90vh',overflowY:'auto', width:0}}>
-        {props.filters.text ==='' ? null :
-          <Box style={{ width:'100%', height:'20%'}}>
-            {props.allUsers.map((user:any)=>{
-              return(<Link to={`/${user.id}`} onClick={()=>{props.searchByText('')}}><Typography style={{color:'black'}}>{user.username}</Typography></Link>)})
-            }
-          </Box>
-        }
-        <Box style={{display:'flex', flexDirection:'row', alignItems:'center', justifyContent:'flex-end', width:'80%',padding: '1rem'}}>
-          <Box style={{flex:1}}>
-            <Input name="search_text" placeholder="Search by Username, Address" value={props.filters.text} onChange={(event)=>{props.searchByText(event.target.value)}} disableUnderline={true} style={{ width:'80%',backgroundColor:'#02F9A7', color:'black', margin:'20px 0px', padding:'10px 20px', borderRadius:'20px'}}/>
-            {/* <Typography style={{backgroundColor:'#02F9A7', color:'black', margin:'20px 0px', padding:'10px 20px', width:'50%', borderRadius:'20px'}}>Username, Address</Typography> */}
-          </Box>
-          {isUserProfile ?  null: <Button onClick = {()=>{
-            setIsFollowing(!isFollowing);
-            props.followUser(props.user.id, activeUser.id)
-            }} style={{backgroundColor:'#02F9A7', margin:20, padding:10, color:'black', borderRadius:'20px', width:'15%'}}>{isFollowing?'Unfollow':'Follow'}</Button>}
-          <Button onClick = {()=>{navigate('/addCredential')}} style={{backgroundColor:'#02F9A7', margin:'20px 0px 20px 20px', padding:10, color:'black', borderRadius:'20px',  width:'15%'}}>+ Add NFT</Button>
-        </Box>
-        {loading?<ThreeDots height="100" width="100" color="grey"/>: ( activeUser.credentials ? <Grid container columns={3} style={{justifyContent:'center'}}>
-          {activeUser.credentials.map((credentialId:string,index:number)=>(
-            <NFTCard credentialId={credentialId} key={index}/>))
-          }
-        </Grid> : <Typography style={{color:'black'}}>No NFTs yet Redirect to buying site</Typography>
-        )}
-        </Box>
-        {/* <Sidebar user={props.user}/> */}
 
-        {/* </Box> */}
+  return (
+    <Box component="div" style={{backgroundColor:'#332E2E', color:'white', padding:'0px 20px', display:'flex', flexDirection:'column', maxHeight:'100vh'}}>
+      <Header/>
+      <Box component="div" style={{display:'flex', flexDirection:'row'}}>
+        {/* <Box component="div" style={{height:'80vh', width:'20vw', backgroundColor:'red'}}>
+          <Canvas camera={{position:[0,0,0],fov:0.5}}>
+            <pointLight position={[10,10,10]} intensity={1.3}/>
+            <Suspense fallback={null}>
+              <Model/>
+            </Suspense>
+            </Canvas>
+        </Box> */}
+      {/* <Box component="form" onSubmit={addNFT} noValidate sx={{ mt: 1 }}> */}
+        <Box component="div" style={{width:'100%', padding:'20px', alignItems:'center', display:'flex', flexDirection:'column', overflow:'auto', height:'83vh', overflowY:'auto'}}>
+          <Box component="div" style={{width:'100%', backgroundColor:'#02F9A7', display:'flex', flexDirection:'row', alignItems:'center', justifyContent:'space-around', padding:'10px 0px'}}>
+            <Button onClick={()=>{setView(0)}}>All</Button>
+            <Button onClick={()=>{setView(1)}}>Favorited</Button>
+            <Button onClick={()=>{setView(2)}}>+Add new</Button>
+          </Box>
+          <Grid container columns={3} style={{justifyContent:'center'}}>
+            {loading? <ThreeDots height="100" width="100" color="grey"/>:
+              renderView(view)
+            }
+          </Grid>
+          </Box>
+        </Box>
     </Box>
   );
 };

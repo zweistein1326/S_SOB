@@ -1,5 +1,4 @@
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
-import Login from './pages/Login';
 import Home from './pages/UserProfile';
 import Register from './pages/Register';
 import CredentialPage from './pages/CredentialPage';
@@ -9,7 +8,6 @@ import { Provider } from 'react-redux';
 import configureStore from './redux/store/configureStore';
 import RequestCredential from './pages/RequestCredential';
 import Header from './components/Header';
-import EditCardScreen from './pages/EditCardScreen';
 import './styles/index.css';
 import Feed from './pages/Feed';
 import NFTScreen from './pages/CredentialScreen';
@@ -53,7 +51,6 @@ function App() {
           <Route path="/user/:id/:credentialId" element={<CredentialPage />} />
           <Route path="/addCredential" element={<AddCredential />} />
           <Route path="/requestCredential" element={<RequestCredential />} />
-          <Route path="/editCard" element={<EditCardScreen />} />
         </Routes>
       </Router>
       </Provider>

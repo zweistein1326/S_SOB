@@ -7,6 +7,7 @@ import { setCredentials } from "../redux/actions/credentials";
 import Sidebar from "../components/Sidebar";
 import { getNFT } from "../functions/axios";
 import '../styles/index.css'
+import Header from "../components/Header";
 
 var CryptoJS = require('crypto-js');
 var SHA256 = require('crypto-js/sha256');
@@ -56,8 +57,8 @@ const AddCredential = (props:any) => {
     }
 
     return (
-        <Box className="Container" style={{backgroundColor:'#EEEEEE', color:'white', padding:'20px', minHeight:'100vh', display:'flex', flexDirection:'row'}}>
-            <Sidebar user={props.user}/>
+        <Box component="div" className="Container" style={{backgroundColor:'#332E2E', color:'white', padding:'0px 20px', minHeight:'100vh', display:'flex', flexDirection:'column'}}>
+            <Header/>
             <Box component="form" style={{width:'100%', display:'flex', flexDirection:'column', alignItems:'center'}} noValidate sx={{ mt: 1 }} onSubmit={addNFT}>
                 <TextField
                 style={{backgroundColor:'#EEEEEE', margin:10, width:'90%'}}
@@ -95,7 +96,7 @@ const AddCredential = (props:any) => {
                     <MenuItem value={0}>Public</MenuItem>
                     <MenuItem value={1}>Private</MenuItem>
                 </Select>
-                <Box style={{backgroundColor:'pink'}}>
+                <Box component="div" style={{backgroundColor:'pink'}}>
                     <Typography>{tokenData ? tokenData.name:''}</Typography>
                     {tokenData ? <img style={{height:'400px', width:'400px'}} src={`${imageUrl}`} alt="token"/> : null}
                 </Box>

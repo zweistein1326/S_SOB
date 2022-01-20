@@ -85,6 +85,7 @@ const Register = (props:any) => {
   return (
     <Box component="main" sx={{backgroundImage:`url(${BG})`, backgroundSize:'cover', width:'100vw', minHeight:'100vh'}}>   
       <Box
+      component="div"
         sx={{
           display: 'flex',
           flexDirection: 'column',

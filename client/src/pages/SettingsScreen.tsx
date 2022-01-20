@@ -7,6 +7,7 @@ import  { uploadBytes, ref, getDownloadURL } from 'firebase/storage';
 import { storage } from '../firebase/firebase';
 import { updateUser } from '../functions/axios';
 import { setUser } from '../redux/actions/user';
+import Header from '../components/Header';
 
 const SettingsScreen = (props:any) => {
 
@@ -32,12 +33,12 @@ const SettingsScreen = (props:any) => {
     }
 
     return(
-        <Box style={{backgroundColor:'#EEEEEE', color:'white', padding:'20px', minHeight:'90vh', display:'flex', flexDirection:'row'}}>
-            <Sidebar user={user}/>
-            <Box style={{ height:'100%', width:'100%', marginTop:'200px', borderRadius:'30px', display:'flex', flexDirection:'column', alignItems:'center', }}>
+        <Box component="div" style={{backgroundColor:'#332E2E', color:'white', padding:'0px 20px', minHeight:'100vh', display:'flex', flexDirection:'column'}}>
+            <Header />
+            <Box component="div"  style={{ height:'100%', width:'100%', marginTop:'100px', borderRadius:'30px', display:'flex', flexDirection:'column', alignItems:'center', }}>
                 {imageUrl?
-                    <Box style={{ height:'100%', width:'30%', borderRadius:'30px', display:'flex', alignItems:'center', justifyContent:'center'}}>
-                        <img src={imageUrl} style={{objectFit:'cover', width:'50%', height:'50%'}} className = "cardImage"/>
+                    <Box component="div"  style={{ height:'100%', width:'30%', borderRadius:'30px', display:'flex', alignItems:'center', justifyContent:'center'}}>
+                        <img src={imageUrl} style={{objectFit:'cover', width:'200px', height:'200px', borderRadius:'50%'}} className = "cardImage"/>
                     </Box>
                 :null}
                 <Input type="file" name="profile_image" onChange={onFileChange} placeholder='Profile Image'/>

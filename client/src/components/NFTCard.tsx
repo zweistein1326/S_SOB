@@ -58,9 +58,9 @@ const NFTCard = (props:Props) => {
 
     if(credential && (!credential.private || user.id===credential.owner)){
         return(
-        <Grid item key={props.key} style={{height:'450px',width:'450px', margin:'1rem', position:'relative', backgroundColor:'#EEEEEE', borderRadius:'30px'}}>
-            <Box style={{backgroundColor:'rgba(0,0,0,0.6)', height:'20%', width:'100%', position:'absolute',borderBottomRightRadius:'30px',borderBottomLeftRadius:'30px', bottom:0, display:'flex', alignItems:'center', justifyContent:'space-around'}}>
-                <Box style={{width:'80%', display:'flex', flexDirection:'row', justifyContent:'space-around', alignItems:'center'}}>
+        <Grid item key={props.key} style={{height:'250px',width:'250px', margin:'1rem', position:'relative', backgroundColor:'#EEEEEE', borderRadius:'30px'}}>
+            <Box component="div" style={{backgroundColor:'rgba(0,0,0,0.6)', height:'20%', width:'100%', position:'absolute',borderBottomRightRadius:'30px',borderBottomLeftRadius:'30px', bottom:0, display:'flex', alignItems:'center', justifyContent:'space-around'}}>
+                <Box component="div" style={{width:'80%', display:'flex', flexDirection:'row', justifyContent:'space-around', alignItems:'center'}}>
                     {/* {user ? <Box onClick={()=>{navigate(`/credential/${credential.id}`)}} style={{position:'absolute', bottom:0, left:0, height:'20%', width:'20%', display:'flex', alignItems:'center', justifyContent:'center', zIndex:'99999'}}>
                         <img src={user.profileImageUrl ? user.profileImageUrl:''} style={{backgroundColor:'pink',objectFit:'cover', width:'50%', height:'50%'}} className = "cardImage"/>
                     </Box> : 
@@ -69,15 +69,15 @@ const NFTCard = (props:Props) => {
                         </Box>
                     </Box>} */}
                     <Typography color="white" style={{fontSize:'18px', fontWeight:'bold'}}>{credential.name} #{credential.token_id}</Typography>
-                    <Button onClick={()=>{}}>Add To Collection</Button>
-                    <Button onClick={()=>{}}>Share</Button>
+                    {/* <Button onClick={()=>{}}>Add To Collection</Button>
+                    <Button onClick={()=>{}}>Share</Button> */}
                     {/* <Typography style={{fontSize:'21px'}} color="white">ETH{props.credential.minPrice}</Typography> */}
                 </Box>
                 {/* {credential.name?<Typography style={{flex:1}} color="white">{credential.name} #{credential.token_id}</Typography>:null} */}
                 {/* {credential.minPrice?<Typography style={{flex:1}} color="white">{credential.minPrice}</Typography>:null} */}
             </Box>
             {/* <Typography>NFT: opensea.io//{props.credential.contract_address}/{props.credential.token_id}</Typography> */}
-            {credential ? <img onClick ={()=>{navigate(`/credential/${credential.id}`)}} style={{height:'450px', width:'450px', borderRadius:'30px'}} src={imageUrl} alt="token"/> : null}
+            {credential ? <img onClick ={()=>{navigate(`/credential/${credential.id}`)}} style={{height:'250px', width:'250px', borderRadius:'30px'}} src={imageUrl} alt="token"/> : null}
         </Grid>
     )
     }else{

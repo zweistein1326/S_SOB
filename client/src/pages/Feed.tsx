@@ -18,14 +18,14 @@ const Feed = () => {
     const dispatch = useDispatch();
     
     return(
-        <Box style={{backgroundColor:'#332E2E', color:'white', minHeight:'90vh', display:'flex', flexDirection:'column'}}>
+        <Box component="div" style={{backgroundColor:'#332E2E', color:'white',padding:'0px 20px', minHeight:'90vh', display:'flex', flexDirection:'column'}}>
             <Header/>
-            <Box style={{backgroundColor:'#332E2E', color:'white', padding:'20px', minHeight:'90vh', display:'flex', flexDirection:'row'}}>
-            <Box style={{backgroundColor:'#332E2E', color:'white', width:'100%', minHeight:'90vh', display:'flex', flexDirection:'column', alignItems:'center' }}>
+            <Box component="div" style={{backgroundColor:'#332E2E', color:'white', padding:'20px', minHeight:'90vh', display:'flex', flexDirection:'row'}}>
+            <Box component="div" style={{backgroundColor:'#332E2E', color:'white', width:'100%', minHeight:'90vh', display:'flex', flexDirection:'column', alignItems:'center' }}>
                 {/* <Box style={{width:'80%'}}>
                 <Typography style={{backgroundColor:'#02F9A7', color:'black', margin:20, padding:'10px 30px', borderRadius:'20px'}}>Username, Address</Typography>
                 </Box> */}
-                <Box style={{backgroundColor:'#332E2E', color:'white', padding:'40px 20px', display:'flex', flexDirection:'column', alignItems:'center', minHeight:'90vh',maxHeight:'98vh', overflowY:'auto',position:'absolute', scrollbarWidth: 'none', width:'95vw'}}>
+                <Box component="div" style={{backgroundColor:'#332E2E', color:'white', padding:'40px 20px', height:'82vh', display:'flex', flexDirection:'column', alignItems:'center', overflowY:'auto',position:'absolute', scrollbarWidth: 'none', width:'95vw'}}>
                     {credentials.map((credential:any,index:number)=>(
                         <FeedCard credential={credential} key={index}/>)
                         )}
