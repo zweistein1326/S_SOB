@@ -7,6 +7,9 @@ import { storage } from '../firebase/firebase';
 import { updateUser } from '../functions/axios';
 import { setUser } from '../redux/actions/user';
 import Header from '../components/Header';
+import WalletConnect from '@walletconnect/client';
+import QRCodeModal from '@walletconnect/qrcode-modal';
+// import { connector } from '../functions/walletConnector';
 
 const SettingsScreen = (props:any) => {
 
@@ -43,9 +46,10 @@ const SettingsScreen = (props:any) => {
                 <Input type="file" name="profile_image" onChange={onFileChange} placeholder='Profile Image'/>
                 {/* <Typography style={{color:'#000000', fontSize:'20px'}}>@{user.username}</Typography> */}
                 <Button onClick = {()=>{navigate('/addCredential')}} style={{padding:'20px 10px',borderRadius:'30px', margin:'20px 0px', backgroundColor:'#02F9A7', color:'#000000', width:'60%', display:'flex', justifyContent:'center'}}>+ Add NFT</Button>
-                <Button onClick = {()=>{
-                    navigate('/')
-                    dispatch(setUser(null))
+                <Button onClick = {async()=>{
+                    window.localStorage.removeItem('walletconnect');
+                    navigate('/');
+                    dispatch(setUser({}));
                 }} 
                     style={{padding:'20px 10px',borderRadius:'30px', margin:'20px 0px', backgroundColor:'#000000', color:'#02F9A7', width:'60%', display:'flex', justifyContent:'center'}}>Logout</Button>
             </Box>

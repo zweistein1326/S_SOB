@@ -226,7 +226,7 @@ const Home = (props:any) => {
   const {ethereum} = window;
 
   return (
-    <Box component="div" style={{backgroundColor:'#332E2E', color:'white', padding:'0px 20px', display:'flex', flexDirection:'column', maxHeight:'100vh'}}>
+    <Box component="div" style={{backgroundColor:'#332E2E', color:'white', padding:'0px 20px', display:'flex', flexDirection:'column', height:'100vh'}}>
       <Header/>
       <Box component="div" style={{display:'flex', flexDirection:'row'}}>
         {/* <Box component="div" style={{height:'80vh', width:'20vw', backgroundColor:'red'}}>
@@ -239,11 +239,11 @@ const Home = (props:any) => {
         </Box> */}
       {/* <Box component="form" onSubmit={addNFT} noValidate sx={{ mt: 1 }}> */}
         <Box component="div" style={{width:'100%', padding:'20px', alignItems:'center', display:'flex', flexDirection:'column', overflow:'auto', height:'83vh', overflowY:'auto'}}>
-          <Box component="div" style={{width:'100%', backgroundColor:'#02F9A7', display:'flex', flexDirection:'row', alignItems:'center', justifyContent:'space-around', padding:'10px 0px'}}>
-            <Button onClick={()=>{setView(0)}}>All</Button>
-            <Button onClick={()=>{setView(1)}}>Favorited</Button>
-            <Button onClick={()=>{setView(2)}}>+Add new</Button>
-          </Box>
+          {activeUser.id===user.id?<Box component="div" style={{width:'100%', backgroundColor:'#02F9A7', display:'flex', flexDirection:'row', alignItems:'center', justifyContent:'space-around', padding:'10px 0px'}}>
+            <Button style={view==0?{backgroundColor:'darkGreen', color:'white'}:{}} onClick={()=>{setView(0)}}>All</Button>
+            <Button style={view==1?{backgroundColor:'darkGreen', color:'white'}:{}} onClick={()=>{setView(1)}}>Favorited</Button>
+            <Button style={view==2?{backgroundColor:'darkGreen', color:'white'}:{}} onClick={()=>{setView(2)}}>+Add new</Button>
+          </Box>:null}
           <Grid container columns={3} style={{justifyContent:'center'}}>
             {loading? <ThreeDots height="100" width="100" color="grey"/>:
               renderView(view)

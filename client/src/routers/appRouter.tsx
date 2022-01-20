@@ -4,7 +4,6 @@ import PublicRoute from "./PublicRoute";
 import {createBrowserHistory} from 'history';
 import Home from "../pages/UserProfile";
 import Register from "../pages/Register";
-import CredentialPage from "../pages/CredentialPage";
 import AddCredential from "../pages/AddCredential";
 
 export const history = createBrowserHistory();
@@ -16,7 +15,6 @@ const AppRouter = () => {
                 <PublicRoute path="/" component={AddCredential} />
                 <PublicRoute path="/register" component={Register} />
                 <PrivateRoute path="/user/:id" component={Home} />
-                <PrivateRoute path="/user/:id/:credentialId" component={CredentialPage} />
                 <PrivateRoute path="/addCredential" component={AddCredential} />
                 {/* <PublicRoute component={NotFoundPage} /> */}
             </Routes>

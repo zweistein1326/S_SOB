@@ -99,10 +99,10 @@ const NFTScreen = (props:any) => {
     }
 
     return(
-        <Box component="div" style={{backgroundColor:'#332E2E', color:'white',padding:'0px 20px', maxHeight:'100vh', display:'flex', flexDirection:'column', overflowY:'scroll'}}>
+        <Box component="div" style={{backgroundColor:'#332E2E', height:'100vh', color:'white',padding:'0px 20px', maxHeight:'100vh', display:'flex', flexDirection:'column', overflowY:'scroll'}}>
             <Header/>
             {credential?
-            <Box component="div" style={{display:'flex',position:'relative', alignItems:'center', justifyContent:'space-between', backgroundColor:'#EEEEEE', margin:'20px 10px 40px 10px'}}>
+            <Box component="div" style={{display:'flex',position:'relative', alignItems:'center', justifyContent:'space-between', backgroundColor:'#EEEEEE', margin:'20px 40px 40px 40px'}}>
                 <Box component="div" className='UserInfo' style={{display:'flex', padding:'20px', flexDirection:'row', alignItems:'center', justifyContent:'space-between', position:'absolute', top:0, left:0, width:'50%'}}>
                     <Box component="div" style={{display:'flex', flexDirection:'row', alignItems:'center'}}>
                         {credentialOwner?<img src={credentialOwner.profileImageUrl ? credentialOwner.profileImageUrl:''} style={{backgroundColor:'pink',objectFit:'cover', width:'50%', height:'50%'}} className = "cardImage"/>:

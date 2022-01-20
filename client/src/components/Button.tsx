@@ -3,7 +3,7 @@ import React from 'react';
 
 const Button = (props:any) => {
     return(
-        <Box style={{width:'', height:'40px'}} onClick = {props.onClick}>
+        <Box component="div" style={{width:'', height:'40px'}} onClick = {props.onClick}>
             <Typography style={{}}>{props.buttonText}</Typography>
         </Box>
     )

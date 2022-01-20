@@ -21,6 +21,9 @@ import { setAccount, setUser } from '../redux/actions/user';
 import { setCredentials } from '../redux/actions/credentials';
 import BG from '../assets/bg.jpeg';
 import { ThreeDots } from 'react-loader-spinner';
+import WalletConnect from '@walletconnect/client';
+import QRCodeModal from '@walletconnect/qrcode-modal';
+import { connector } from '../functions/walletConnector';
 
 declare var window: any;
 
@@ -28,9 +31,6 @@ const Register = (props:any) => {
   const navigate = useNavigate();
   const [message, setMessage] = useState<string>('');
   const [errorMessage, setErrorMessage] = useState<any>(null);
-  const [defaultAccount, setDefaultAccount] = useState<any>(null);
-  const [userBalance, setUserBalance] = useState<any>(null);
-  const [connButtonText, setConnButtonText] = useState('Connect Metamask wallet');
   const [loading, setLoading] = useState<boolean>(false);
   const [walletConnected, setWalletConnected] = useState<boolean>(false);
   const dispatch = useDispatch();
@@ -62,16 +62,66 @@ const Register = (props:any) => {
     else{
       setErrorMessage('Install Metamask');
     }
-    
-    // else{
-    //   setWalletConnected(true);
-    //   setLoading(false);
-    // }
   }
 
+  const walletConnect=async(event:any)=>{
+    event.preventDefault();
+    if(connector.connected){
+      const {accounts,chainId}= connector;
+      (async()=>{
+          console.log(accounts[0]);
+          const user:any = await dispatch(getUserById(accounts[0]));
+          console.log(user);
+          if(!!user){
+            setLoading(false);
+            dispatch(setUser(user.user));
+            navigate(`/${user.user.id}`)
+          }else{
+            if(walletConnected){
+              console.log(event.target);
+            await accountChangeHandler(accounts[0],event.target.elements.username.value);
+          }
+          else{
+            setWalletConnected(true);
+            setLoading(false);
+          }
+        }
+        })();
+    }
+    else{
+      await connector.createSession();
+    }
+    connector.on("connect", async (error, payload) => {
+      if (error) {
+          throw error
+      }
+      const { accounts, chainId } = payload.params[0];
+      (async()=>{
+          console.log(accounts[0]);
+          const user:any = await dispatch(getUserById(accounts[0]));
+          console.log(user);
+          if(!!user){
+            setLoading(false);
+            dispatch(setUser(user.user));
+            navigate(`/${user.user.id}`)
+          }else{
+              setWalletConnected(true);
+              setLoading(false);
+        }
+        })();
+    });
+  }
+
+  connector.on("disconnect", (error:any, payload:any) => {
+    window.localStorage.removeItem('walletconnect');
+    navigate('/');
+    dispatch(setUser({}));
+    if (error) {
+        throw error;
+    }
+  })
+
   const accountChangeHandler = async(address:any,username:string) => {
-    console.log(address,username);
-    setDefaultAccount(address);
     if(username!==''){
       // getUserBalance(newAccount);
       const user = await props.register({address,username});
@@ -98,7 +148,7 @@ const Register = (props:any) => {
             {message}
           </Typography>
         )}
-        <Box component="form" onSubmit={connectWalletHandler} noValidate sx={{ mt: 1, height:'100%',display:'flex', alignItems:'center', flexDirection:'column', justifyContent:'center' }}>
+        <Box component="form" onSubmit={walletConnect} noValidate sx={{ mt: 1, height:'100%',display:'flex', alignItems:'center', flexDirection:'column', justifyContent:'center' }}>
           {/* <TextField
             margin="normal"
             required
@@ -132,15 +182,15 @@ const Register = (props:any) => {
             autoComplete="username"
             sx={{ mt: 3, mb: 2, backgroundColor:'#333333', border:'1px solid #02F9A7', color:'#02F9A7' }}
           />:null}
-          {!loading?<Button
+          <Button
             type="submit"
             fullWidth
             variant="contained"
             sx={{ mt: 3, mb: 2, backgroundColor:'#333333', border:'1px solid #02F9A7', color:'#02F9A7' }}
             // disabled={loading}
           >
-            {connButtonText}
-          </Button>:<ThreeDots height="100" width="100" color="grey"/>}
+            Connect Wallet
+          </Button>
           {/* <Grid container>
             <Grid item xs>
               <Link href="#" variant="body2">
