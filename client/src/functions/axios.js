@@ -21,7 +21,19 @@ export const getNFT = async (credential, address) => {
     catch (err) {
         return null
     }
+}
 
+export const createPost = (credential, userId, caption, privacy) => {
+    // save contract address and nft id linked to user id if sender is the owner of the fetched nft otherwise send error
+    return async (dispatch) => {
+        console.log('sending');
+        const iat = new Date.now().toString()
+        const { data } = await instance.post('/createPost', { ...credential, caption, private: privacy !== 0, userId, iat });
+        if (data) {
+            dispatch(setCredentials(data))
+            return data;
+        }
+    }
 }
 
 export const register = (user) => {

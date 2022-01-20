@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import {Box, Button, Input, Typography} from '@mui/material';
 import { useDispatch, useSelector } from 'react-redux';
-import Sidebar from '../components/Sidebar';
 import { Link, useNavigate } from 'react-router-dom';
 import  { uploadBytes, ref, getDownloadURL } from 'firebase/storage';
 import { storage } from '../firebase/firebase';

@@ -43,24 +43,24 @@ const CredentialTile = (props:any) => {
     // }
 
     return(
-        <Box sx={{ mt:3, mb:2, border:'1px solid grey', p:2 }}>
+        <Box component="div" sx={{ mt:3, mb:2, border:'1px solid grey', p:2 }}>
             <Link to={`${title}`}><Typography variant="h6">{credential.title}</Typography></Link>
             {credential.pending ?
-            <Box>
-            <Button 
-            // onClick={acceptCredential} 
-            color="success" 
-            variant="contained" 
-            sx={{ mt:3, mb:2 }}>
-                Accept
-            </Button>
-            <Button 
-            // onClick={revokeCredential}
-            color="error"
-            variant="contained"
-            sx={{ mt:3, mb:2 }}>
-                Reject
-            </Button>
+            <Box component="div">
+                <Button 
+                // onClick={acceptCredential} 
+                color="success" 
+                variant="contained" 
+                sx={{ mt:3, mb:2 }}>
+                    Accept
+                </Button>
+                <Button 
+                // onClick={revokeCredential}
+                color="error"
+                variant="contained"
+                sx={{ mt:3, mb:2 }}>
+                    Reject
+                </Button>
             </Box> 
             :
             <Button 

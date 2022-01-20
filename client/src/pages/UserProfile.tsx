@@ -1,14 +1,13 @@
 import { Box,  Grid, Button, TextField, Typography, Input, Select, MenuItem } from '@mui/material';
 import { useEffect, useState, Suspense } from 'react';
-import { connect, useSelector } from 'react-redux';
+import { connect, useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { Link, useParams } from 'react-router-dom';
 import Card from '../components/Card';
 import CredentialTile from '../components/CredentialTile';
 import Header from '../components/Header';
 import NFTCard from '../components/NFTCard';
-import Sidebar from '../components/Sidebar';
-import { getCredentialById, getNFT, getUserById, followUser} from '../functions/axios';
+import { getCredentialById, getNFT, getUserById, followUser, createPost} from '../functions/axios';
 import { User } from '../models/User';
 import '../styles/Home.css'
 import {searchByText} from '../redux/actions/filters';
@@ -21,9 +20,6 @@ declare var window:any;
 
 const Home = (props:any) => {
   const navigate = useNavigate();
-  const [loggedIn, setLoggedIn] = useState(
-    props.account !==null ,
-  );
   const [activeUser,setActiveUser] = useState<any>({});
   const [activeCredentials,setActiveCredentials] = useState<any>([]);
   const [account, setAccount] = useState<any>(null);
@@ -31,12 +27,18 @@ const Home = (props:any) => {
   const [isUserProfile, setIsUserProfile] = useState<boolean>(false);
   const [loading,setLoading]= useState(false);
   const [isFollowing, setIsFollowing] = useState(false);
+  
+  const user = useSelector((state:any)=>state.auth.user);
+  const [loggedIn, setLoggedIn] = useState(
+    user !==null ,
+  );
   const followingIds = useSelector((state:any)=>state.auth.following);
   const [view, setView] = useState<number>(0);
   const [imageUrl, setImageUrl] = useState<any>(null);
   const [privacy, setPrivacy] = useState(0);
   const [caption, setCaption] = useState<string>('');
   const [tokenData, setTokenData] = useState<any>(null);
+  const dispatch = useDispatch();
   
   const handleLogout = () => {
     localStorage.removeItem('token');
@@ -52,7 +54,7 @@ const Home = (props:any) => {
       caption: data.get('caption'),
       private: privacy === 1
       }
-      const tokenData = await getNFT(credential, props.user.id); 
+      const tokenData = await getNFT(credential, user.id); 
       if(tokenData.name){
           // props.setCredentials(tokenData);
           setTokenData(tokenData);
@@ -70,8 +72,8 @@ const Home = (props:any) => {
       }
   }
 
-  const createPost = () => {
-
+  const createNewPost = () => {
+    dispatch(createPost(tokenData, user.id, caption, privacy))
   }
 
   const handleChange = (event:any) => {
@@ -94,8 +96,8 @@ const Home = (props:any) => {
     setLoading(true);
     (async ()=>{
       setActiveCredentials([]);
-      const {user} = await props.getUserById(address);
-      setIsUserProfile(address?.toLowerCase()===props.user.id.toLowerCase());
+      const {user}:any = await dispatch(getUserById(address));
+      setIsUserProfile(address?.toLowerCase()===user.id.toLowerCase());
       console.log(followingIds);
       if(followingIds){
         const resAddress= followingIds.find((id:any)=>id===address);
@@ -103,7 +105,7 @@ const Home = (props:any) => {
       }else{
         setIsFollowing(false);
       }
-      console.log(address?.toLowerCase(),props.user.id.toLowerCase());
+      console.log(address?.toLowerCase(),user.id.toLowerCase());
       setActiveUser(user);
       if(user.credentials){
          user.credentials.forEach(async(credentialId:string,index:number)=>{
@@ -114,7 +116,6 @@ const Home = (props:any) => {
   setLoading(false);
   },[
     address,
-    followingIds
   ])
 
   const renderView=(view:number)=>{
@@ -122,7 +123,7 @@ const Home = (props:any) => {
       return(
         activeUser.credentials ? 
           (activeUser.credentials.map((credentialId:string,index:number)=>(
-            <NFTCard credentialId={credentialId} key={index}/>))
+            <NFTCard credentialId={credentialId} key={index}/>)).reverse()
           )
           : <Typography style={{color:'white'}}>You haven't added any NFTs yet</Typography>)
     }
@@ -204,8 +205,9 @@ const Home = (props:any) => {
                     variant="contained"
                     sx={{ mt: 3, mb: 2, width:'20%', backgroundColor:'#02F9A7', color:'black' }}
                     // disabled={loading}
+                    onClick={createNewPost}
                 >
-                    Post
+                    Create new Post
                 </Button>
                 {/* <Button
                     type="submit"
@@ -253,18 +255,6 @@ const Home = (props:any) => {
   );
 };
 
-const mapStateToProps = (state:any) => ({
-  credentials: state.credentials,
-  user: state.auth.user,
-  filters:state.filters,
-  allUsers: usersSelector(state.auth.allUsers , state.filters)
-})
-
-const mapDispatchToProps = (dispatch:any) => ({
-    searchByText:(text:string) => dispatch(searchByText(text)),
-    getUserById: (userId:string) => dispatch(getUserById(userId)),
-    followUser: (userId:string, followingId:string) => dispatch(followUser(userId,followingId))
-})
 
 
-export default connect(mapStateToProps,mapDispatchToProps)(Home);
+export default Home;

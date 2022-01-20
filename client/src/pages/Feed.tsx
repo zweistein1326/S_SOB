@@ -3,7 +3,6 @@ import { Box, Button, Input, Typography } from '@mui/material';
 import { Link } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import FeedCard from '../components/FeedCard';
-import Sidebar from '../components/Sidebar';
 import sortCredentials from '../redux/selectors/credentials';
 import { searchByText } from '../redux/actions/filters';
 import Header from '../components/Header';

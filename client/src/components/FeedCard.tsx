@@ -88,14 +88,14 @@ const FeedCard = (props:any) => {
     // )
     return(
         <Grid item key ={props.key} className="feedCard" style={{width:'80%', margin:'10px 20px', padding:'20px', position:'relative', backgroundColor:'#EEEEEE', display:'flex', flexDirection:'row', alignItems:'center', justifyContent:'space-between'}}>
-            <Box component="div" className='Left'>
+            <Box component="div" className='Left' style={{width:'100%', height:'100%'}}>
                 <Box component="div" className='UserInfo' style={{display:'flex', padding:'20px', flexDirection:'row', alignItems:'center', position:'absolute', top:0, left:0}}>
                     {credentialOwner?<img src={credentialOwner.profileImageUrl ? credentialOwner.profileImageUrl:''} style={{backgroundColor:'pink',objectFit:'cover', width:'50%', height:'50%'}} className = "cardImage"/>:
                     <Box component="div" style={{backgroundColor:'#E46A6A',objectFit:'cover', width:'50px', height:'50px', borderRadius:'50%'}}></Box>}
                     {credentialOwner?<Typography style={{color:'black', padding:'0px 10px'}}>@{credentialOwner.username}</Typography>:<Typography style={{color:'black', padding:'0px 10px'}}>@{credential.owner}</Typography>}
                     {/* <Typography style={{color:'black'}}>{credential.iat}</Typography> */}
                 </Box>
-                <Box component="div" className="PostInfo">
+                <Box onClick={()=>{navigate(`/credential/${credential.id}`)}} component="div" className="PostInfo" style={{width:'100%',height:'100%',display:'flex', alignItems:'flex-start', justifyContent:'center', flexDirection:'column'}}>
                     <Typography color="black">{props.credential.name} #{props.credential.token_id}</Typography>
                     {credential?<Typography style={{color:'black'}}>{credential.caption}</Typography>:null}
                 </Box>

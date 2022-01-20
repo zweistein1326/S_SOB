@@ -4,7 +4,6 @@ import { useState } from "react";
 import { connect } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { setCredentials } from "../redux/actions/credentials";
-import Sidebar from "../components/Sidebar";
 import { getNFT } from "../functions/axios";
 import '../styles/index.css'
 import Header from "../components/Header";
