@@ -47,7 +47,7 @@ const Register = (props:any) => {
           console.log(user.user);
           setLoading(false);
           dispatch(setUser(user.user));
-          navigate(`/${user.user.id}`)
+          navigate(`/feed`)
         }else{
           if(walletConnected){
             await accountChangeHandler(result[0],event.target.elements.username.value);
@@ -75,7 +75,7 @@ const Register = (props:any) => {
           if(!!user){
             setLoading(false);
             dispatch(setUser(user.user));
-            navigate(`/${user.user.id}`)
+            navigate(`/feed`)
           }else{
             if(walletConnected){
               console.log(event.target);
@@ -103,7 +103,7 @@ const Register = (props:any) => {
           if(!!user){
             setLoading(false);
             dispatch(setUser(user.user));
-            navigate(`/${user.user.id}`)
+            navigate(`/feed`)
           }else{
               setWalletConnected(true);
               setLoading(false);
