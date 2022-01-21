@@ -48,32 +48,50 @@ const Home = (props:any) => {
   const addNFT = async(event:React.FormEvent<HTMLFormElement>) => {
       event.preventDefault();
       const data = new FormData(event.currentTarget);
-      const credential = {
-      contract_address: data.get('contract_address'),
-      token_id: data.get('token_id'),
-      caption: data.get('caption'),
-      private: privacy === 1
+      if(data.get('contract_address')!=='' && data.get('token_id')!==''){
+        const credential = {
+            contract_address: data.get('contract_address'),
+            token_id: data.get('token_id'),
       }
-      const tokenData = await getNFT(credential, user.id); 
-      if(tokenData.name){
-          // props.setCredentials(tokenData);
-          setTokenData(tokenData);
-          if(tokenData.image.split('://')[0]=="ipfs"){
+        const tokenData = await getNFT(credential, user.id);
+        if(tokenData.name){
+            setTokenData(tokenData);
+            if(tokenData.image.split('://')[0]=="ipfs"){
               console.log(tokenData.image.split('://')[1]);
               setImageUrl(`https://gateway.ipfs.io/ipfs/${tokenData.image.split('://')[1]}`);
-          }
-          else{
+            }
+            else{
               setImageUrl(tokenData.image);
-          }
-      // navigate('/feed');
+            }
+            // navigate('/feed');
+        }else{
+          alert(tokenData.message);
+        }
       }
-      else{
-            alert(tokenData.message);
-      }
+      
+      // const tokenData = await getNFT(credential, user.id); 
+      // if(tokenData.name){
+      //     // props.setCredentials(tokenData);
+      //     setTokenData(tokenData);
+      //     if(tokenData.image.split('://')[0]=="ipfs"){
+      //         console.log(tokenData.image.split('://')[1]);
+      //         setImageUrl(`https://gateway.ipfs.io/ipfs/${tokenData.image.split('://')[1]}`);
+      //     }
+      //     else{
+      //         setImageUrl(tokenData.image);
+      //     }
+      // // navigate('/feed');
+      // }
+      // else{
+      //       alert(tokenData.message);
+      // }
   }
 
-  const createNewPost = () => {
-    dispatch(createPost(tokenData, user.id, caption, privacy))
+  const createNewPost = async(event:any) => {
+    event.preventDefault();
+    console.log('creating new post');
+    await dispatch(createPost(tokenData, user.id, caption, privacy));
+    navigate('/feed');
   }
 
   const handleChange = (event:any) => {
@@ -107,6 +125,7 @@ const Home = (props:any) => {
       }
       console.log(address?.toLowerCase(),user.id.toLowerCase());
       setActiveUser(user);
+      console.log(user.profileImageUrl);
       if(user.credentials){
          user.credentials.forEach(async(credentialId:string,index:number)=>{
           setActiveCredentials([...activeCredentials,credentialId].sort((a:any,b:any)=>b.iat-a.iat))
@@ -125,7 +144,7 @@ const Home = (props:any) => {
           (activeUser.credentials.map((credentialId:string,index:number)=>(
             <NFTCard credentialId={credentialId} key={index}/>)).reverse()
           )
-          : <Typography style={{color:'white'}}>You haven't added any NFTs yet</Typography>)
+          : <Typography style={{color:'white'}}>No NFTs added yet</Typography>)
     }
     else if(view===1){
       return (
@@ -137,7 +156,8 @@ const Home = (props:any) => {
     }
     else{
       return (
-        <Box component="form" style={{width:'100%', display:'flex', flexDirection:'column', alignItems:'center'}} noValidate sx={{ mt: 1 }} onSubmit={addNFT}>
+        <Box component="div" style={{display:'flex',flexDirection:'row', width:'100vw', padding:'40px'}}>
+          <Box component="form" style={{flex:1, display:'flex', flexDirection:'column', alignItems:'center'}} noValidate sx={{ mt: 1 }} onChange={addNFT} onSubmit={createNewPost}>
                 <TextField
                 style={{backgroundColor:'#EEEEEE', margin:10, width:'90%'}}
                 margin="normal"
@@ -174,10 +194,6 @@ const Home = (props:any) => {
                     <MenuItem value={0}>Public</MenuItem>
                     <MenuItem value={1}>Private</MenuItem>
                 </Select>
-                <Box component="div" style={{backgroundColor:'pink'}}>
-                    <Typography>{tokenData ? tokenData.name:''}</Typography>
-                    {tokenData ? <img style={{height:'400px', width:'400px'}} src={`${imageUrl}`} alt="token"/> : null}
-                </Box>
                 <TextField
                     style={{backgroundColor:'#EEEEEE', margin:10, width:'90%'}}
                     margin="normal"
@@ -197,16 +213,6 @@ const Home = (props:any) => {
                     sx={{ mt: 3, mb: 2, width:'20%', backgroundColor:'#02F9A7', color:'black' }}
                     // disabled={loading}
                 >
-                    Import
-                </Button>
-                <Button
-                    type="submit"
-                    fullWidth
-                    variant="contained"
-                    sx={{ mt: 3, mb: 2, width:'20%', backgroundColor:'#02F9A7', color:'black' }}
-                    // disabled={loading}
-                    onClick={createNewPost}
-                >
                     Create new Post
                 </Button>
                 {/* <Button
@@ -219,6 +225,11 @@ const Home = (props:any) => {
                     +Add
                 </Button> */}
             </Box>
+            <Box component="div" style={{backgroundColor:'pink', width:'400px', height:'400px'}}>
+                <Typography style={{width:'100%', textAlign:'center', color:'black', padding:'20px', fontWeight:'500', fontSize:'18px'}}>{tokenData ? `${tokenData.name} #${tokenData.token_id}`:''}</Typography>
+                {tokenData ? <img style={{height:'400px', width:'400px'}} src={`${imageUrl}`} alt="token"/> : null}
+            </Box>
+          </Box>
       );
     }
   }
@@ -238,6 +249,10 @@ const Home = (props:any) => {
             </Canvas>
         </Box> */}
       {/* <Box component="form" onSubmit={addNFT} noValidate sx={{ mt: 1 }}> */}
+      <Box component="div" style={{width:'30vw', height:'100%', display:'flex', flexDirection:'column', alignItems:'center', justifyContent:'center'}}>
+        {activeUser.profileImageUrl ? <img src={`${activeUser.profileImageUrl}`} style={{height:'200px', width:'200px', borderRadius:'50%'}}/>:<Box component="div" style={{width:'200px', height:'200px', borderRadius:'50%',backgroundColor:'pink'}}></Box>}
+        <Typography>@{activeUser.username}</Typography>
+      </Box>
         <Box component="div" style={{width:'100%', padding:'20px', alignItems:'center', display:'flex', flexDirection:'column', overflow:'auto', height:'83vh', overflowY:'auto'}}>
           {activeUser.id===user.id?<Box component="div" style={{width:'100%', backgroundColor:'#02F9A7', display:'flex', flexDirection:'row', alignItems:'center', justifyContent:'space-around', padding:'10px 0px'}}>
             <Button style={view==0?{backgroundColor:'darkGreen', color:'white'}:{}} onClick={()=>{setView(0)}}>All</Button>

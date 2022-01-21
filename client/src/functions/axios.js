@@ -2,7 +2,6 @@ import axios, { Axios } from 'axios';
 import { setUser, setAllUsers, setFollowing, setFavorite } from '../redux/actions/user';
 import { setCredentials } from '../redux/actions/credentials';
 import { baseURL } from './Constants';
-import { async } from '@firebase/util';
 
 axios.defaults.headers.post['Content-Type'] =
     'application/x-www-form-urlencoded';

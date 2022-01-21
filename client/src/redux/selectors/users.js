@@ -1,5 +1,4 @@
 export default (allUsers, { text = '' }) => {
-    console.log(allUsers);
     if (allUsers) {
         return allUsers.filter((user) => {
             if (user) {
