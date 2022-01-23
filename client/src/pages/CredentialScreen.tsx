@@ -106,7 +106,7 @@ const NFTScreen = (props:any) => {
                         <Box component="div" style={{display:'flex', flexDirection:'column', alignItems:'center'}}>
                             <img style={{height:'450px', width:'450px', borderRadius:'30px'}} src={imageUrl} alt="token"/> 
                         </Box>
-                        <Box component="div" style={{width:'40vw'}}>
+                        <Box component="div" style={{width:'40vw', display:'flex', flexDirection:'column', alignItems:'center', marginLeft:'2rem'}}>
                             <Box component="div" style={{display:'flex', flexDirection:'row', borderRadius:'10px', alignItems:'center'}}>
                                 <Button style={{border:'1px solid white', margin:'10px', borderRadius:'10px', padding:'10px'}} onClick = {()=>{}}><a target="_blank" href={`https://opensea.io/assets/${credential.contract_address}/${credential.token_id}`} style={{textDecoration:'none', color:'white'}}>View on OpenSea</a></Button>
                                 <Button onClick = {()=>{}} style={{border:'1px solid white', margin:'10px', borderRadius:'10px', padding:'10px'}}><a target="_blank" href={`https://etherscan.io/address/${credential.contract_address}`} style={{textDecoration:'none', color:'white'}}>View on EtherScan</a></Button>
