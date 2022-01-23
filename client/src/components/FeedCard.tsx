@@ -87,7 +87,7 @@ const FeedCard = (props:any) => {
     //     </Grid>
     // )
     return(
-        <Grid item key ={props.key} className="feedCard" style={{width:'80%', margin:'10px 20px', padding:'20px', position:'relative', backgroundColor:'#EEEEEE', display:'flex', flexDirection:'row', alignItems:'center', justifyContent:'space-between'}}>
+        <Grid item key ={props.key} className="feedCard" style={{width:'100%', margin:'0px 20px 20px 20px', padding:'20px', position:'relative', backgroundColor:'#EEEEEE', display:'flex', flexDirection:'row', alignItems:'center', justifyContent:'space-between'}}>
             <Box component="div" className='Left' style={{width:'100%', height:'100%'}}>
                 <Box component="div" className='UserInfo' style={{display:'flex', padding:'20px', flexDirection:'row', alignItems:'center', position:'absolute', top:0, left:0}}>
                     {credentialOwner?<img src={credentialOwner.profileImageUrl ? credentialOwner.profileImageUrl:''} style={{backgroundColor:'pink',objectFit:'cover', width:'50%', height:'50%'}} className = "cardImage"/>:
@@ -120,7 +120,7 @@ const FeedCard = (props:any) => {
             </Box>
             <Box component="div" className="Right">
                 <Box component="div" className="PostAssets">
-                    {credential && imageUrl ? <img onClick={()=>{navigate(`/credential/${credential.id}`)}} style={{height:'250px', width:'250px', borderRadius:'20px'}} src={imageUrl} alt="token"/> : <Box component="div" style={{backgroundColor:'#332E2E',objectFit:'cover', width:'250px', height:'250px', borderRadius:'20px'}}></Box>}
+                    {credential && imageUrl ? <img onClick={()=>{navigate(`/credential/${credential.id}`)}} style={{height:'400px', width:'400px', borderRadius:'20px'}} src={imageUrl} alt="token"/> : <Box component="div" style={{backgroundColor:'#332E2E',objectFit:'cover', width:'250px', height:'250px', borderRadius:'20px'}}></Box>}
                 </Box>
             </Box>
         </Grid>

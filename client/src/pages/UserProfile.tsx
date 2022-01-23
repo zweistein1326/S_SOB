@@ -119,6 +119,7 @@ const Home = (props:any) => {
       console.log(followingIds);
       if(followingIds){
         const resAddress= followingIds.find((id:any)=>id===address);
+        console.log(resAddress);
         setIsFollowing(!!resAddress);
       }else{
         setIsFollowing(false);
@@ -144,7 +145,8 @@ const Home = (props:any) => {
           (activeUser.credentials.map((credentialId:string,index:number)=>(
             <NFTCard credentialId={credentialId} key={index}/>)).reverse()
           )
-          : <Typography style={{color:'white'}}>No NFTs added yet</Typography>)
+          : (activeUser.id===user.id?<Button style={{backgroundColor:'#02F9A7',flex:1, color:'black', borderRadius:0, padding:'20px 0px', marginTop:'20px'}} onClick={()=>{setView(2)}}>+Add new nft</Button>:null)
+          )
     }
     else if(view===1){
       return (
@@ -152,7 +154,7 @@ const Home = (props:any) => {
           (activeUser.favorite.map((favoriteId:string,index:number)=>(
             <NFTCard credentialId={favoriteId} key={index}/>))
           )
-          : <Typography style={{color:'white'}}>No favorites added</Typography>)
+          : <Button style={{backgroundColor:'#02F9A7',flex:1, color:'black', borderRadius:0, padding:'20px 0px', marginTop:'20px'}} onClick={()=>{navigate('/feed')}}>Explore</Button>)
     }
     else{
       return (
@@ -210,7 +212,7 @@ const Home = (props:any) => {
                     type="submit"
                     fullWidth
                     variant="contained"
-                    sx={{ mt: 3, mb: 2, width:'20%', backgroundColor:'#02F9A7', color:'black' }}
+                    sx={{ mt: 3, mb: 2, width:'90%', backgroundColor:'#02F9A7', color:'black' }}
                     // disabled={loading}
                 >
                     Create new Post
@@ -225,9 +227,9 @@ const Home = (props:any) => {
                     +Add
                 </Button> */}
             </Box>
-            <Box component="div" style={{backgroundColor:'pink', width:'400px', height:'400px'}}>
-                <Typography style={{width:'100%', textAlign:'center', color:'black', padding:'20px', fontWeight:'500', fontSize:'18px'}}>{tokenData ? `${tokenData.name} #${tokenData.token_id}`:''}</Typography>
-                {tokenData ? <img style={{height:'400px', width:'400px'}} src={`${imageUrl}`} alt="token"/> : null}
+            <Box component="div" style={{backgroundColor:'#02F9A7', width:'28vw', height:'55vh', display:'flex', alignItems:'center', justifyContent:'center', flexDirection:'column' }}>
+                {tokenData ? <img style={{height:'100%', width:'100%'}} src={`${imageUrl}`} alt="token"/> : null}
+                <Typography style={{width:'90%', textAlign:'center', color:'black', fontWeight:'500', fontSize:'18px', padding:'10px'}}>{tokenData ? `${tokenData.name} #${tokenData.token_id}`:'Enter Contract Address and Token Id to view NFT'}</Typography>
             </Box>
           </Box>
       );
@@ -237,7 +239,7 @@ const Home = (props:any) => {
   const {ethereum} = window;
 
   return (
-    <Box component="div" style={{backgroundColor:'#332E2E', color:'white', padding:'0px 20px', display:'flex', flexDirection:'column', height:'100vh'}}>
+    <Box component="div" style={{backgroundColor:'#111111', color:'white', padding:'0px 20px', display:'flex', flexDirection:'column', height:'100vh'}}>
       <Header/>
       <Box component="div" style={{display:'flex', flexDirection:'row'}}>
         {/* <Box component="div" style={{height:'80vh', width:'20vw', backgroundColor:'red'}}>
@@ -249,16 +251,24 @@ const Home = (props:any) => {
             </Canvas>
         </Box> */}
       {/* <Box component="form" onSubmit={addNFT} noValidate sx={{ mt: 1 }}> */}
-      <Box component="div" style={{width:'30vw', height:'100%', display:'flex', flexDirection:'column', alignItems:'center', justifyContent:'center'}}>
-        {activeUser.profileImageUrl ? <img src={`${activeUser.profileImageUrl}`} style={{height:'200px', width:'200px', borderRadius:'50%'}}/>:<Box component="div" style={{width:'200px', height:'200px', borderRadius:'50%',backgroundColor:'pink'}}></Box>}
+      <Box component="div" style={{width:'30vw', height:'90%', display:'flex', flexDirection:'column', alignItems:'center', padding:'20px 0px'}}>
+        {activeUser.profileImageUrl ? <img src={`${activeUser.profileImageUrl}`} style={{ width:'300px', borderRadius:'50%'}}/>:<Box component="div" style={{width:'300px', height:'300px', borderRadius:'50%',backgroundColor:'pink'}}></Box>}
         <Typography>@{activeUser.username}</Typography>
       </Box>
         <Box component="div" style={{width:'100%', padding:'20px', alignItems:'center', display:'flex', flexDirection:'column', overflow:'auto', height:'83vh', overflowY:'auto'}}>
-          {activeUser.id===user.id?<Box component="div" style={{width:'100%', backgroundColor:'#02F9A7', display:'flex', flexDirection:'row', alignItems:'center', justifyContent:'space-around', padding:'10px 0px'}}>
-            <Button style={view==0?{backgroundColor:'darkGreen', color:'white'}:{}} onClick={()=>{setView(0)}}>All</Button>
-            <Button style={view==1?{backgroundColor:'darkGreen', color:'white'}:{}} onClick={()=>{setView(1)}}>Favorited</Button>
-            <Button style={view==2?{backgroundColor:'darkGreen', color:'white'}:{}} onClick={()=>{setView(2)}}>+Add new</Button>
-          </Box>:null}
+          {activeUser.id===user.id?<Box component="div" style={{width:'100%', display:'flex', flexDirection:'row', alignItems:'center', justifyContent:'space-around', padding:'10px 0px'}}>
+            <Button style={view==0?{ backgroundColor:'darkGreen',flex:1, color:'white', borderRadius:0, padding:'20px 0px'}:{backgroundColor:'white',flex:1, color:'darkGreen', borderRadius:0, padding:'20px 0px'}} onClick={()=>{setView(0)}}>All</Button>
+            <Button style={view==1?{backgroundColor:'darkGreen',flex:1, color:'white', borderRadius:0, padding:'20px 0px'}:{backgroundColor:'white',flex:1, color:'darkGreen', borderRadius:0, padding:'20px 0px'}} onClick={()=>{setView(1)}}>Favorited</Button>
+            <Button style={view==2?{backgroundColor:'darkGreen',flex:1, color:'white', borderRadius:0, padding:'20px 0px'}:{backgroundColor:'white',flex:1, color:'darkGreen', borderRadius:0, padding:'20px 0px'}} onClick={()=>{setView(2)}}>+Add new</Button>
+          </Box>:<Box component="div" style={{width:'100%', backgroundColor:'#02F9A7', display:'flex', flexDirection:'row', alignItems:'center', justifyContent:'space-around', padding:'10px 0px'}}>
+            {isFollowing?<Button style={view==0?{backgroundColor:'darkGreen', color:'white'}:{}} onClick={()=>{
+              setIsFollowing(!isFollowing);
+              dispatch(followUser(user.id,activeUser.id));
+            }}>Unfollow</Button>:<Button style={view==0?{backgroundColor:'darkGreen', color:'white'}:{}} onClick={()=>{
+              setIsFollowing(!isFollowing);
+              dispatch(followUser(user.id,activeUser.id));
+            }}>Follow</Button>}
+          </Box>}
           <Grid container columns={3} style={{justifyContent:'center'}}>
             {loading? <ThreeDots height="100" width="100" color="grey"/>:
               renderView(view)

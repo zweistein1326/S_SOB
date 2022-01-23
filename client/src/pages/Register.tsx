@@ -30,6 +30,7 @@ declare var window: any;
 const Register = (props:any) => {
   const navigate = useNavigate();
   const [message, setMessage] = useState<string>('');
+  const [username, setUsername] = useState<string>('');
   const [errorMessage, setErrorMessage] = useState<any>(null);
   const [loading, setLoading] = useState<boolean>(false);
   const [walletConnected, setWalletConnected] = useState<boolean>(false);
@@ -50,7 +51,7 @@ const Register = (props:any) => {
           navigate(`/feed`)
         }else{
           if(walletConnected){
-            await accountChangeHandler(result[0],event.target.elements.username.value);
+            await accountChangeHandler(result[0],username);
           }
           else{
             setWalletConnected(true);
@@ -79,7 +80,7 @@ const Register = (props:any) => {
           }else{
             if(walletConnected){
               console.log(event.target);
-            await accountChangeHandler(accounts[0],event.target.elements.username.value);
+              await accountChangeHandler(accounts[0],event.target.elements.username.value);
           }
           else{
             setWalletConnected(true);
@@ -90,8 +91,7 @@ const Register = (props:any) => {
     }
     else{
       await connector.createSession();
-    }
-    connector.on("connect", async (error, payload) => {
+      connector.on("connect", async (error, payload) => {
       if (error) {
           throw error
       }
@@ -99,18 +99,24 @@ const Register = (props:any) => {
       (async()=>{
           console.log(accounts[0]);
           const user:any = await dispatch(getUserById(accounts[0]));
-          console.log(user);
           if(!!user){
             setLoading(false);
             dispatch(setUser(user.user));
             navigate(`/feed`)
           }else{
-              setWalletConnected(true);
-              setLoading(false);
+            if(walletConnected){
+              console.log(event.target);
+              await accountChangeHandler(accounts[0],event.target.elements.username.value);
+          }
+          else{
+            setWalletConnected(true);
+            setLoading(false);
+          }
         }
         })();
     });
   }
+}
 
   connector.on("disconnect", (error:any, payload:any) => {
     window.localStorage.removeItem('walletconnect');
@@ -126,7 +132,7 @@ const Register = (props:any) => {
       // getUserBalance(newAccount);
       const user = await props.register({address,username});
       setLoading(false);
-      navigate(`/${user.id}`)
+      navigate(`/feed`)
     }else{
       setErrorMessage('Username cannot be empty');
     }
@@ -148,7 +154,7 @@ const Register = (props:any) => {
             {message}
           </Typography>
         )}
-        <Box component="form" onSubmit={walletConnect} noValidate sx={{ mt: 1, height:'100%',display:'flex', alignItems:'center', flexDirection:'column', justifyContent:'center' }}>
+        <Box component="form" noValidate sx={{ mt: 1, height:'100%',display:'flex', alignItems:'center', flexDirection:'column', justifyContent:'center' }}>
           {/* <TextField
             margin="normal"
             required
@@ -180,6 +186,7 @@ const Register = (props:any) => {
             type="text"
             id="username"
             autoComplete="username"
+            onChange={(event:any)=>{setUsername(event.target.value)}}
             sx={{ mt: 3, mb: 2, backgroundColor:'#333333', border:'1px solid #02F9A7', color:'#02F9A7' }}
           />:null}
           <Button
@@ -188,6 +195,17 @@ const Register = (props:any) => {
             variant="contained"
             sx={{ mt: 3, mb: 2, backgroundColor:'#333333', border:'1px solid #02F9A7', color:'#02F9A7' }}
             // disabled={loading}
+            onClick ={connectWalletHandler}
+          >
+            Sign in with Metamask
+          </Button>
+          <Button
+            type="submit"
+            fullWidth
+            variant="contained"
+            sx={{ mt: 3, mb: 2, backgroundColor:'#333333', border:'1px solid #02F9A7', color:'#02F9A7' }}
+            // disabled={loading}
+            onClick={walletConnect}
           >
             Connect Wallet
           </Button>
