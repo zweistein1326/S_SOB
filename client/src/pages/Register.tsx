@@ -197,7 +197,7 @@ const Register = (props:any) => {
             id="username"
             autoComplete="username"
             onChange={(event:any)=>{setUsername(event.target.value)}}
-            sx={{ mt: 3, mb: 2, backgroundColor:'#333333', border:'1px solid #02F9A7', color:'#02F9A7' }}
+            sx={{ mt: 3, mb: 2, backgroundColor:'#333333', border:'1px solid #02F9A7',color:'white', input:{color:'white'} }}
           />:null}
           {walletConnected?
           <Button

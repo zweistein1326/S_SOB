@@ -260,11 +260,11 @@ const Home = (props:any) => {
             <Button style={view==0?{ backgroundColor:'darkGreen',flex:1, color:'white', borderRadius:0, padding:'20px 0px'}:{backgroundColor:'white',flex:1, color:'darkGreen', borderRadius:0, padding:'20px 0px'}} onClick={()=>{setView(0)}}>All</Button>
             <Button style={view==1?{backgroundColor:'darkGreen',flex:1, color:'white', borderRadius:0, padding:'20px 0px'}:{backgroundColor:'white',flex:1, color:'darkGreen', borderRadius:0, padding:'20px 0px'}} onClick={()=>{setView(1)}}>Favorited</Button>
             <Button style={view==2?{backgroundColor:'darkGreen',flex:1, color:'white', borderRadius:0, padding:'20px 0px'}:{backgroundColor:'white',flex:1, color:'darkGreen', borderRadius:0, padding:'20px 0px'}} onClick={()=>{setView(2)}}>+Add new</Button>
-          </Box>:<Box component="div" style={{width:'100%', backgroundColor:'#02F9A7', display:'flex', flexDirection:'row', alignItems:'center', justifyContent:'space-around', padding:'10px 0px'}}>
-            {isFollowing?<Button style={view==0?{backgroundColor:'darkGreen', color:'white'}:{}} onClick={()=>{
+          </Box>:<Box component="div" style={{width:'100%', display:'flex', flexDirection:'row', alignItems:'center', justifyContent:'space-around', padding:'10px 0px'}}>
+            {isFollowing?<Button style={view==0?{backgroundColor:'darkGreen', color:'white', flex:1,padding:'20px 0px'}:{}} onClick={()=>{
               setIsFollowing(!isFollowing);
               dispatch(followUser(user.id,activeUser.id));
-            }}>Unfollow</Button>:<Button style={view==0?{backgroundColor:'darkGreen', color:'white'}:{}} onClick={()=>{
+            }}>Unfollow</Button>:<Button style={view==0?{backgroundColor:'darkGreen', color:'white', flex:1,padding:'20px 0px'}:{}} onClick={()=>{
               setIsFollowing(!isFollowing);
               dispatch(followUser(user.id,activeUser.id));
             }}>Follow</Button>}
