@@ -31,6 +31,7 @@ const Register = (props:any) => {
   const navigate = useNavigate();
   const [message, setMessage] = useState<string>('');
   const [username, setUsername] = useState<string>('');
+  const [account, setAccount] = useState<any>(null);
   const [errorMessage, setErrorMessage] = useState<any>(null);
   const [loading, setLoading] = useState<boolean>(false);
   const [walletConnected, setWalletConnected] = useState<boolean>(false);
@@ -40,9 +41,9 @@ const Register = (props:any) => {
   const connectWalletHandler = (event:any) => {
     event.preventDefault()
     setLoading(true);
-   
     if(window.ethereum){
       window.ethereum.request({method:'eth_requestAccounts'}).then(async (result:any[]) => {
+        setAccount(result[0]);
         const user:any = await dispatch(getUserById(result[0]));
         if(!!user){
           console.log(user.user);
@@ -51,7 +52,7 @@ const Register = (props:any) => {
           navigate(`/feed`)
         }else{
           if(walletConnected){
-            await accountChangeHandler(result[0],username);
+            await accountChangeHandler(account,username);
           }
           else{
             setWalletConnected(true);
@@ -70,17 +71,15 @@ const Register = (props:any) => {
     if(connector.connected){
       const {accounts,chainId}= connector;
       (async()=>{
-          console.log(accounts[0]);
+          setAccount(accounts[0]);
           const user:any = await dispatch(getUserById(accounts[0]));
-          console.log(user);
           if(!!user){
             setLoading(false);
             dispatch(setUser(user.user));
             navigate(`/feed`)
           }else{
             if(walletConnected){
-              console.log(event.target);
-              await accountChangeHandler(accounts[0],event.target.elements.username.value);
+              await accountChangeHandler(accounts[0],username);
           }
           else{
             setWalletConnected(true);
@@ -91,13 +90,16 @@ const Register = (props:any) => {
     }
     else{
       await connector.createSession();
-      connector.on("connect", async (error, payload) => {
+  }
+}
+
+  connector.on("connect", async (error, payload) => {
       if (error) {
           throw error
       }
       const { accounts, chainId } = payload.params[0];
       (async()=>{
-          console.log(accounts[0]);
+          setAccount(accounts[0])
           const user:any = await dispatch(getUserById(accounts[0]));
           if(!!user){
             setLoading(false);
@@ -105,8 +107,7 @@ const Register = (props:any) => {
             navigate(`/feed`)
           }else{
             if(walletConnected){
-              console.log(event.target);
-              await accountChangeHandler(accounts[0],event.target.elements.username.value);
+              await accountChangeHandler(account,username);
           }
           else{
             setWalletConnected(true);
@@ -115,8 +116,6 @@ const Register = (props:any) => {
         }
         })();
     });
-  }
-}
 
   connector.on("disconnect", (error:any, payload:any) => {
     window.localStorage.removeItem('walletconnect');
@@ -133,6 +132,17 @@ const Register = (props:any) => {
       const user = await props.register({address,username});
       setLoading(false);
       navigate(`/feed`)
+    }else{
+      setErrorMessage('Username cannot be empty');
+    }
+  }
+
+  const login = async(event:any) => {
+    event.preventDefault();
+    if(username!==''){
+      const user = await dispatch(register({address:account, username}));
+      setLoading(false)
+      navigate('/feed');
     }else{
       setErrorMessage('Username cannot be empty');
     }
@@ -189,26 +199,38 @@ const Register = (props:any) => {
             onChange={(event:any)=>{setUsername(event.target.value)}}
             sx={{ mt: 3, mb: 2, backgroundColor:'#333333', border:'1px solid #02F9A7', color:'#02F9A7' }}
           />:null}
+          {walletConnected?
           <Button
-            type="submit"
-            fullWidth
-            variant="contained"
-            sx={{ mt: 3, mb: 2, backgroundColor:'#333333', border:'1px solid #02F9A7', color:'#02F9A7' }}
-            // disabled={loading}
-            onClick ={connectWalletHandler}
-          >
-            Sign in with Metamask
-          </Button>
-          <Button
-            type="submit"
-            fullWidth
-            variant="contained"
-            sx={{ mt: 3, mb: 2, backgroundColor:'#333333', border:'1px solid #02F9A7', color:'#02F9A7' }}
-            // disabled={loading}
-            onClick={walletConnect}
-          >
-            Connect Wallet
-          </Button>
+              type="submit"
+              fullWidth
+              variant="contained"
+              sx={{ mt: 3, mb: 2, backgroundColor:'#333333', border:'1px solid #02F9A7', color:'#02F9A7' }}
+              // disabled={loading}
+              onClick ={login}
+            >
+              Continue
+            </Button>:<Box component="div">
+            <Button
+              type="submit"
+              fullWidth
+              variant="contained"
+              sx={{ mt: 3, mb: 2, backgroundColor:'#333333', border:'1px solid #02F9A7', color:'#02F9A7' }}
+              // disabled={loading}
+              onClick ={connectWalletHandler}
+            >
+              Sign in with Metamask
+            </Button>
+            <Button
+              type="submit"
+              fullWidth
+              variant="contained"
+              sx={{ mt: 3, mb: 2, backgroundColor:'#333333', border:'1px solid #02F9A7', color:'#02F9A7' }}
+              // disabled={loading}
+              onClick={walletConnect}
+            >
+              Connect Wallet
+            </Button>
+          </Box>}
           {/* <Grid container>
             <Grid item xs>
               <Link href="#" variant="body2">
