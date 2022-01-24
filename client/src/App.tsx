@@ -52,7 +52,7 @@ function App() {
           store.dispatch(getCredentials());
           const user:any = await store.dispatch(getUserById(userId))
           console.log(user);
-          if(!!user.user){
+          if(!!user){
             store.dispatch(setUser(user.user));
             setIsLoggedIn(true);
           }

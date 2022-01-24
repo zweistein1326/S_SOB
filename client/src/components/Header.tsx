@@ -4,7 +4,7 @@ import { Box } from '@mui/system';
 import { useDispatch, useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
 import { useNavigate } from 'react-router-dom';
-import playgroundLogo from '../assets/playground_logo.png'
+import playgroundLogo from '../assets/logos/playground_logo.png'
 import { searchByText } from '../redux/actions/filters';
 import selectUsers from '../redux/selectors/users'; 
 

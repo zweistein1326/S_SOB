@@ -99,7 +99,7 @@ const NFTScreen = (props:any) => {
             {credential ?
                     <Box component="div" className="tokenInfo" style={{display:'flex', flexDirection:'row', position:'relative', padding:'20px 0px', margin:'auto', alignItems:'center', justifyContent:'center', width:'80vw'}}>
                         <Box component="div" style={{display:'flex', flexDirection:'column', alignItems:'center'}}>
-                            <img style={{height:'450px', width:'450px', borderRadius:'30px'}} src={imageUrl} alt="token"/> 
+                            <img style={{height:'450px', width:'450px', borderRadius:'30px', backgroundColor:'white'}} src={imageUrl} alt="token"/> 
                         </Box>
                         <Box component="div" style={{width:'40vw', display:'flex', flexDirection:'column', alignItems:'center', marginLeft:'2rem'}}>
                             <Box component="div" style={{display:'flex', flexDirection:'row', borderRadius:'10px', alignItems:'center'}}>

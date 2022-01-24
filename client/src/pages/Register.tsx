@@ -24,6 +24,8 @@ import { ThreeDots } from 'react-loader-spinner';
 import WalletConnect from '@walletconnect/client';
 import QRCodeModal from '@walletconnect/qrcode-modal';
 import { connector } from '../functions/walletConnector';
+import metamask_logo from '../assets/logos/metamask-fox.svg';
+import wallet_connect_logo from '../assets/logos/walletconnect-circle-white.svg';
 
 declare var window: any;
 
@@ -218,21 +220,25 @@ const Register = (props:any) => {
               type="submit"
               fullWidth
               variant="contained"
-              sx={{ mt: 3, mb: 2, backgroundColor:'#333333', border:'1px solid #02F9A7', color:'#02F9A7' }}
+              sx={{ mt: 3, mb: 2, backgroundColor:'#333333', color:'#02F9A7', borderRadius:'30px', position:'relative', padding:'20px' }}
               // disabled={loading}
               onClick ={connectWalletHandler}
             >
               Sign in with Metamask
+              <img src={metamask_logo} style={{height:'40px', width:'40px', padding:'5px 20px', position:'absolute', left:0}}/>
             </Button>
             <Button
               type="submit"
               fullWidth
               variant="contained"
-              sx={{ mt: 3, mb: 2, backgroundColor:'#333333', border:'1px solid #02F9A7', color:'#02F9A7' }}
+              sx={{ mt: 3, mb: 2, backgroundColor:'#333333', color:'#02F9A7', borderRadius:'30px', position:'relative', padding:'20px' }}
               // disabled={loading}
               onClick={walletConnect}
             >
-              Connect Wallet
+              <Typography>
+                Sign in with WalletConnect
+              </Typography>
+              <img src={wallet_connect_logo} style={{height:'40px', width:'40px', padding:'5px 20px', position:'absolute', left:0}}/>
             </Button>
           </Box>}
           {/* <Grid container>
