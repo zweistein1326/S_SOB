@@ -15,12 +15,8 @@ const NFTScreen = (props:any) => {
     const [imageUrl,setImageUrl]= useState<any>(null);
     const [loading,setLoading]= useState<any>(false);
     const {credentialId} = useParams();
-    const credentials = useSelector((state:any)=>state.credentials)
     const navigate = useNavigate();
     const [isFavorite, setIsFavorite] = useState<boolean>(false);
-    const favoriteIds = useSelector((state:any)=> state.auth.favorite);
-    const user = useSelector((state:any)=> state.auth.user);
-    const allUsers = useSelector((state:any)=> state.auth.allUsers);
     const dispatch = useDispatch();
     const [isLiked, setLiked] = useState(false);
     const [comment,setComment] = useState<string>('');
@@ -29,7 +25,11 @@ const NFTScreen = (props:any) => {
     const [bidAmount, setBidAmount]= useState<number>(0);
     const [minPrice, setMinPrice]= useState<number>(0);
     const [credentialOwner, setCredentialOwner] = useState<any>(null);
-
+    const allUsers = useSelector((state:any)=> state.auth.allUsers);
+    const credentials = useSelector((state:any)=>state.credentials)
+    const favoriteIds = useSelector((state:any)=> state.auth.favorite);
+    const user = useSelector((state:any)=> state.auth.user);
+    
     const setFavorite = () => {
         setIsFavorite(!isFavorite);
         dispatch(favorite(credential.id));
@@ -38,16 +38,10 @@ const NFTScreen = (props:any) => {
     useEffect(()=>{
         setLoading(true);
         const cred = credentials.get(credentialId);
-        if(user.id.toLowerCase()=== user.id.toLowerCase()){
-            setIsEdit(true);
-        }
-        setPrivacy(cred.private?1:0);
-        setMinPrice(cred.minPrice);
         setCredential(cred);
-        // const owner = allUsers.get(cred.owner);
-        // setCredentialOwner(owner);
-        console.log(favoriteIds);
-        if (!!favoriteIds && credential){
+    
+        if(user){
+            if (!!favoriteIds && credential){
             if(favoriteIds.find((id:string)=>id.toLowerCase()==credential.id.toLowerCase())){
                 console.log(true);
                 setIsFavorite(true);
@@ -61,15 +55,16 @@ const NFTScreen = (props:any) => {
                 setLiked(false);
             }
         }
-        if(cred.image.split('://')[0]=="ipfs"){
-            setImageUrl(`https://gateway.ipfs.io/ipfs/${cred.image.split('://')[1]}`);
-        }
-        else{
-            setImageUrl(cred.image);
-        }
-        setLoading(false);
+            if(cred.image.split('://')[0]=="ipfs"){
+                setImageUrl(`https://gateway.ipfs.io/ipfs/${cred.image.split('://')[1]}`);
+            }
+            else{
+                setImageUrl(cred.image);
+            }
+            setLoading(false);
+        }        
     },[
-        credentialId, credentials
+        credentialId, credentials, user
     ]);
 
     const setLike = async() => {
@@ -99,7 +94,7 @@ const NFTScreen = (props:any) => {
     }
 
     return(
-        <Box component="div" style={{backgroundColor:'#111111', height:'100vh', color:'white',padding:'0px 20px', maxHeight:'100vh', display:'flex', flexDirection:'column', overflowY:'scroll'}}>
+        user ? <Box component="div" style={{backgroundColor:'#111111', height:'100vh', color:'white',padding:'0px 20px', maxHeight:'100vh', display:'flex', flexDirection:'column', overflowY:'scroll'}}>
             <Header/>
             {credential ?
                     <Box component="div" className="tokenInfo" style={{display:'flex', flexDirection:'row', position:'relative', padding:'20px 0px', margin:'auto', alignItems:'center', justifyContent:'center', width:'80vw'}}>
@@ -126,8 +121,8 @@ const NFTScreen = (props:any) => {
                             <Grid container columns={3} style={{height:'100%', margin:'0px 20px', borderRadius:'20px',padding:'1rem', justifyContent:'center', alignItems:'center', overflowY:'scroll', backgroundColor:'black'}}>
                                 {credential.attributes?credential.attributes.map(({trait_type,value}:any)=>{return(
                                     <Grid item style={{border:'1px solid #000000', backgroundColor:'#E46A6A', padding:'0.3rem', minWidth:'10rem', margin:'0.5rem', textAlign:'center'}}>
-                                        <Typography style={{fontSize:'18px', fontWeight:'bold', color:'#FFFFFF'}}>{trait_type}</Typography>
-                                        <Typography style={{fontSize:'14px', fontWeight:'500', color:'#FFFFFF'}}>{value}</Typography>
+                                        <Typography style={{fontSize:'18px', fontWeight:'bold', color:'#FFFFFF', textTransform:'capitalize'}}>{trait_type}</Typography>
+                                        <Typography style={{fontSize:'14px', fontWeight:'500', color:'#FFFFFF', textTransform:'capitalize'}}>{value}</Typography>
                                     </Grid>
                                 )}):<Grid item style={{border:'1px solid #000000', backgroundColor:'#E46A6A', padding:'0.3rem', minWidth:'10rem', margin:'0.5rem', textAlign:'center'}}>
                                         <Typography style={{fontSize:'18px', fontWeight:'bold', color:'#FFFFFF'}}>Attributes not available</Typography>
@@ -168,7 +163,7 @@ const NFTScreen = (props:any) => {
                     </Box>
                 </Box>
             </Box>:null}
-        </Box>
+        </Box> : null
     );
 }
 

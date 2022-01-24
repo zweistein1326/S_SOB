@@ -5,7 +5,7 @@ import credentialReducer from '../reducers/credentials';
 import filterReducer from '../reducers/filters';
 import {composeWithDevTools} from 'redux-devtools-extension';
 
-const composeEnhancers = compose(applyMiddleware(thunk));
+const composeEnhancers = compose(applyMiddleware(thunk), composeWithDevTools());
 
 export default () => {
     const store = createStore(

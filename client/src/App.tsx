@@ -1,7 +1,7 @@
 import { BrowserRouter as Router, Routes, Route, useNavigate } from 'react-router-dom';
 import Home from './pages/UserProfile';
 import Register from './pages/Register';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import AddCredential from './pages/AddCredential';
 import { Provider } from 'react-redux';
 import configureStore from './redux/store/configureStore';
@@ -9,13 +9,13 @@ import Header from './components/Header';
 import './styles/index.css';
 import Feed from './pages/Feed';
 import NFTScreen from './pages/CredentialScreen';
-import { getAllUsers, getCredentials } from './functions/axios';
+import { getAllUsers, getCredentials, getUserById, register } from './functions/axios';
 import SettingsScreen from './pages/SettingsScreen';
 import {uploadBytes} from 'firebase/storage';
 import WalletConnect from '@walletconnect/client';
 import QRCodeModal from '@walletconnect/qrcode-modal';
 import { connector } from './functions/walletConnector';
-import TestScreen from './pages/TestScreen';
+import { setUser } from './redux/actions/user';
 
 declare var window: any;
 
@@ -35,25 +35,42 @@ export const store = configureStore();
   
 function App() {  
 
+  const [isLoggedIn, setIsLoggedIn] = useState<boolean>(false);
+  const [isLoading, setIsLoading] = useState<boolean>(false);
+
   useEffect(()=>{
     // connectWalletHandler();
-    store.dispatch(getCredentials());
-    store.dispatch(getAllUsers());
+    var userId:any;
+    try{
+      userId = window.localStorage.getItem('userId')
+    }
+    catch(e){
+      console.log(e);
+    }
+    (async()=>{
+          store.dispatch(getAllUsers());
+          store.dispatch(getCredentials());
+          const user:any = await store.dispatch(getUserById(userId))
+          console.log(user);
+          if(!!user.user){
+            store.dispatch(setUser(user.user));
+            setIsLoggedIn(true);
+          }
+        })()
   },[])
 
   return (
       <Provider store={store}>
-      <Router>
-        <Routes>
-          <Route path="/" element={<Register />} />
-          <Route path="/:address" element={<Home />} />
-          <Route path="/settings" element={<SettingsScreen />} />
-          <Route path="/feed" element={<Feed />} />
-          <Route path="/credential/:credentialId" element={<NFTScreen />} />
-          <Route path="/addCredential" element={<AddCredential />} />
-          <Route path="/test" element={<TestScreen />} />
-        </Routes>
-      </Router>
+        <Router>
+          <Routes>
+            <Route path="/" element={isLoggedIn ? <Feed/>:<Register/>} />
+            <Route path="/:address" element={<Home />} />
+            <Route path="/settings" element={<SettingsScreen />} />
+            <Route path="/feed" element={<Feed />} />
+            <Route path="/credential/:credentialId" element={<NFTScreen />} />
+            <Route path="/addCredential" element={<AddCredential />} />
+          </Routes>
+        </Router>
       </Provider>
   );
 }

@@ -46,6 +46,7 @@ const Register = (props:any) => {
         setAccount(result[0]);
         const user:any = await dispatch(getUserById(result[0]));
         if(!!user){
+          window.localStorage.setItem('userId',result[0]);
           setLoading(false);
           dispatch(setUser(user.user));
           navigate(`/feed`)
@@ -73,6 +74,7 @@ const Register = (props:any) => {
           setAccount(accounts[0]);
           const user:any = await dispatch(getUserById(accounts[0]));
           if(!!user){
+            window.localStorage.setItem('userId',accounts[0]);
             setLoading(false);
             dispatch(setUser(user.user));
             navigate(`/feed`)
@@ -141,6 +143,7 @@ const Register = (props:any) => {
     if(username!==''){
       const user:any = await dispatch(register({address:account, username}));
       if(!!user){
+            window.localStorage.setItem('userId',account);
             setLoading(false)
             navigate('/feed');
       }

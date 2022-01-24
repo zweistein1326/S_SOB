@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { Box, Button, Input, Typography } from '@mui/material';
 import { Link, useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
@@ -6,35 +6,39 @@ import FeedCard from '../components/FeedCard';
 import sortCredentials from '../redux/selectors/credentials';
 import { searchByText } from '../redux/actions/filters';
 import Header from '../components/Header';
-import { followUser } from '../functions/axios';
+import { followUser, getAllUsers, getCredentials } from '../functions/axios';
 
 const Feed = () => {
 
     const credentials = useSelector((state:any)=> sortCredentials(state.credentials));
-    const sortedCredentials = credentials.sort((a:any, b:any) => b.iat - a.iat)
     const user = useSelector((state:any)=>state.auth.user);
     const allUsers = useSelector((state:any)=>state.auth.allUsers);
     const filters = useSelector((state:any)=>state.filters);
     const dispatch = useDispatch();
     const navigate = useNavigate();
+
+    useEffect(()=>{
+        dispatch(getCredentials());
+        dispatch(getAllUsers());
+    },[])
     
     return(
-        <Box component="div" style={{backgroundColor:'#111111', color:'white',padding:'0px 20px', minHeight:'90vh', display:'flex', flexDirection:'column'}}>
+        allUsers && user ? <Box component="div" style={{backgroundColor:'#111111', color:'white',padding:'0px 20px', minHeight:'90vh', display:'flex', flexDirection:'column'}}>
             <Header/>
             <Box component="div" style={{backgroundColor:'#111111', color:'white', padding:'20px', minHeight:'90vh', display:'flex', flexDirection:'row'}}>
             <Box component="div" style={{backgroundColor:'#111111', color:'white', width:'100%', minHeight:'90vh', display:'flex', flexDirection:'row', alignItems:'center' }}>
                 {/* <Box style={{width:'80%'}}>
                 <Typography style={{backgroundColor:'#02F9A7', color:'black', margin:20, padding:'10px 30px', borderRadius:'20px'}}>Username, Address</Typography>
                 </Box> */}
-                <Box component="div" style={{backgroundColor:'#111111', color:'white', padding:'0px 20px', maxHeight:'100vh', display:'flex', flexDirection:'column', alignItems:'center', overflowY:'auto', scrollbarWidth: 'none',width:'100%'}}>
+                {<Box component="div" style={{backgroundColor:'#111111', color:'white', padding:'0px 20px', maxHeight:'100vh', display:'flex', flexDirection:'column', alignItems:'center', overflowY:'auto', scrollbarWidth: 'none',width:'100%'}}>
                     {credentials.map((credential:any,index:number)=>(
                         <FeedCard credential={credential} key={index}/>)
                         )}
-                </Box>
+                </Box>}
                 <Box component="div" style={{zIndex:'999999', height:'100vh', backgroundColor:'#333333', minWidth:'20vw', display:'flex', flexDirection:'column', alignItems:'center', justifyContent:'flex-start', padding:'0px 20px'}}>
                     <Typography style={{color:'white', fontSize:'20px', fontWeight:'bold', padding:'20px'}}>Recommended for you</Typography>
                     {/* <Typography style={{color:'white', fontSize:'14px', fontWeight:'bold',textAlign:'right', width:'100%', padding:'0px 20px'}}>View more</Typography> */}
-                    {allUsers.map((recommendUser:any)=>{
+                    { allUsers.map((recommendUser:any)=>{
                         return(
                         recommendUser.id!==user.id?<Box component="div" style={{display:'flex', flexDirection:'row', alignItems:'center', justifyContent:'flex-start', width:'100%', margin:'10px',}}>
                             <Box component="div" style={{display:'flex', flexDirection:'row', flex:1, alignItems:'center'}} onClick ={()=>{navigate(`/${recommendUser.id}`)}}>
@@ -49,7 +53,7 @@ const Feed = () => {
             </Box>
             {/* <Sidebar user={user}/> */}
             </Box>
-        </Box>
+        </Box> : null
     )
 }
 

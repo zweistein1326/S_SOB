@@ -245,7 +245,7 @@ const Home = (props:any) => {
   const {ethereum} = window;
 
   return (
-    <Box component="div" style={{backgroundColor:'#111111', color:'white', padding:'0px 20px', display:'flex', flexDirection:'column', height:'100vh'}}>
+    user ? <Box component="div" style={{backgroundColor:'#111111', color:'white', padding:'0px 20px', display:'flex', flexDirection:'column', height:'100vh'}}>
       <Header/>
       <Box component="div" style={{display:'flex', flexDirection:'row'}}>
         {/* <Box component="div" style={{height:'80vh', width:'20vw', backgroundColor:'red'}}>
@@ -282,7 +282,7 @@ const Home = (props:any) => {
           </Grid>
           </Box>
         </Box>
-    </Box>
+    </Box> : null
   );
 };
 

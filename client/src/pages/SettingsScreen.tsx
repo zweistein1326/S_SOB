@@ -16,17 +16,13 @@ const SettingsScreen = (props:any) => {
 
     const navigate = useNavigate();
     const user = useSelector((state:any)=>state.auth.user);
-    const[imageUrl, setImageUrl]= useState<string|null>(null);
-    let imagesRef:any = null;
     const dispatch = useDispatch();
 
     useEffect(()=>{
-        imagesRef = ref(storage, `images/${user.id}`);
-        getDownloadURL(imagesRef).then((url)=>{setImageUrl(url)})
     })
 
     return(
-        <Box component="div" style={{backgroundColor:'#111111', color:'white', padding:'0px 20px', minHeight:'100vh', display:'flex', flexDirection:'column'}}>
+        user ? <Box component="div" style={{backgroundColor:'#111111', color:'white', padding:'0px 20px', minHeight:'100vh', display:'flex', flexDirection:'column'}}>
             <Header />
             <Box component="div"  style={{ height:'100%', width:'100%', marginTop:'100px', borderRadius:'30px', display:'flex', flexDirection:'column', alignItems:'center', }}>
                 {user.profileImageUrl?
@@ -44,7 +40,7 @@ const SettingsScreen = (props:any) => {
                 }} 
                     style={{padding:'20px 10px', borderRadius:'30px', margin:'20px 0px', backgroundColor:'#000000', color:'#02F9A7', width:'60%', display:'flex', justifyContent:'center'}}>Logout</Button>
             </Box>
-        </Box>
+        </Box> : null
     )
 }
 

@@ -37,9 +37,11 @@ export const createPost = (credential, userId, caption, privacy) => {
 }
 
 export const register = (user) => {
+    console.log(user);
     return async (dispatch) => {
         try {
             const { data } = await instance.post('/register', user);
+            console.log(data);
             if (data.user) {
                 await dispatch(setUser(data.user));
                 await dispatch(getAllUsers());
