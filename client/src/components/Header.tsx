@@ -30,14 +30,18 @@ const Header = (props:any) => {
             {/* <img src={playgroundLogo} style={{height:'10vh', width:'20vw'}}/> */}
             <Typography onClick={()=>{navigate('/feed')}} style={{color:'#02F9A7', fontSize:'22px', fontWeight:'bold', cursor:'pointer'}}>Playground</Typography>
             <Box component="div" style={{width:'100%', position:'relative', padding:'0px 20px', display:'flex', flexDirection:'row'}}>
-                <Box component="div" style={{width:'100%', backgroundColor:'transparent', display:'flex', justifyContent:'center', alignItems:'center', zIndex:9999}}>
+                <Box component="div" style={{width:'100%', backgroundColor:'transparent', display:'flex', justifyContent:'center', alignItems:'center', zIndex:9999, flexDirection:'column', position:'relative'}}>
                     <Input name="search_text" placeholder="Search by Username, Address" value={filters.text} onChange={(event)=>{dispatch(searchByText(event.target.value))}} disableUnderline={true} style={{ width:'100%',backgroundColor:'rgba(2, 249, 167,1)', color:'black', margin:'10px 0px', padding:'15px 20px', borderRadius:'5px'}}/>
-                </Box>
-                {filters.text ==='' ? null :
-                    <Box component="div" style={{ width:'10%', height:'100%', overflowY:'scroll'}}>
-                        {allUsers.map((user:any)=><Link to={`/${user.id}`} onClick={()=>{dispatch(searchByText(''))}}><Typography style={{color:'white'}}>{user.username}</Typography></Link>)}
+                    {filters.text ==='' ? null :
+                    <Box component="div" style={{ width:'100%', height:'20vh', overflowY:'scroll', backgroundColor:'rgba(2, 249, 167,1)', position:'absolute', bottom:'-18vh'}}>
+                        {allUsers.map((user:any)=>
+                        <Box component="div" style={{display:'flex', flexDirection:'row', alignItems:'center', padding:'0px 20px' }}>
+                            {user.profileImageUrl ? <img src={`${user.profileImageUrl}`} style={{ width:'40px', height:'40px', borderRadius:'50%'}}/>:<Box component="div" style={{width:'40px', height:'40px', borderRadius:'50%',backgroundColor:'pink'}}></Box>}
+                            <Link to={`/${user.id}`} onClick={()=>{dispatch(searchByText(''))}}><Typography style={{color:'black', padding:'20px'}}>{user.username}</Typography></Link>
+                        </Box>)}
                     </Box>
                 }
+                </Box>
             </Box>
             <Link to='/feed' style={{padding:'20px 10px',borderRadius:'30px', margin:'20px 10px', backgroundColor:'#000000', width:'10%', display:'flex', justifyContent:'center',textDecoration:'none', color:'#02F9A7', fontFamily:'sans-serif'}}>
                 Home
