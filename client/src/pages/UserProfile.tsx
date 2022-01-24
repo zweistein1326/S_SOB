@@ -7,7 +7,7 @@ import Card from '../components/Card';
 import CredentialTile from '../components/CredentialTile';
 import Header from '../components/Header';
 import NFTCard from '../components/NFTCard';
-import { getCredentialById, getNFT, getUserById, followUser, createPost} from '../functions/axios';
+import { getCredentialById, getNFT, getUserById, followUser, createPost, updateCredential} from '../functions/axios';
 import { User } from '../models/User';
 import '../styles/Home.css'
 import {searchByText} from '../redux/actions/filters';
@@ -54,16 +54,22 @@ const Home = (props:any) => {
             token_id: data.get('token_id'),
       }
         const tokenData = await getNFT(credential, user.id);
+        console.log(tokenData);
         if(tokenData.name){
+          if(tokenData.name==="CRYPTOPUNKS"){
+            setTokenData(tokenData);
+            setImageUrl(tokenData.image);
+          }
+          else{
             setTokenData(tokenData);
             if(tokenData.image.split('://')[0]=="ipfs"){
-              console.log(tokenData.image.split('://')[1]);
               setImageUrl(`https://gateway.ipfs.io/ipfs/${tokenData.image.split('://')[1]}`);
             }
             else{
               setImageUrl(tokenData.image);
             }
             // navigate('/feed');
+          }
         }else{
           alert(tokenData.message);
         }

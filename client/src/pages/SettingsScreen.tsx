@@ -24,16 +24,6 @@ const SettingsScreen = (props:any) => {
         imagesRef = ref(storage, `images/${user.id}`);
         getDownloadURL(imagesRef).then((url)=>{setImageUrl(url)})
     })
-    const onFileChange = (event:any) => {
-        imagesRef = ref(storage, `images/${user.id}`);
-        const file = event.target.files[0];
-        console.log(file);
-        uploadBytes(imagesRef,file).then((snapshot)=>{ 
-            getDownloadURL(imagesRef).then((url)=>{
-                setImageUrl(url);
-                dispatch(updateUser({id:user.id, profileImageUrl: url}))})
-    })
-    }
 
     return(
         <Box component="div" style={{backgroundColor:'#111111', color:'white', padding:'0px 20px', minHeight:'100vh', display:'flex', flexDirection:'column'}}>
@@ -45,8 +35,7 @@ const SettingsScreen = (props:any) => {
                     </Box>
                 :<Box component="div"  style={{ height:'200px', width:'200px', borderRadius:'50%', display:'flex', alignItems:'center', justifyContent:'center', backgroundColor:'pink'}}>
                     </Box>}
-                {/* <Input type="file" name="profile_image" onChange={onFileChange} placeholder='Profile Image'/> */}
-                {/* <Typography style={{color:'#000000', fontSize:'20px'}}>@{user.username}</Typography> */}
+                <Typography style={{color:'#FFFFFF', fontSize:'20px'}}>@{user.username}</Typography>
                 <Button onClick = {()=>{navigate('/addCredential')}} style={{padding:'20px 10px',borderRadius:'30px', margin:'20px 0px', backgroundColor:'#02F9A7', color:'#000000', width:'60%', display:'flex', justifyContent:'center'}}>+ Add NFT</Button>
                 <Button onClick = {async()=>{
                     window.localStorage.removeItem('walletconnect');

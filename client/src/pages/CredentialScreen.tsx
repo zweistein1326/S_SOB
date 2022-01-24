@@ -124,12 +124,14 @@ const NFTScreen = (props:any) => {
                             {credential.token_id ? <Typography style={{fontSize:'24px', fontWeight:'500', color:'white', padding:'10px', textAlign:'center'}} color="black">Token: #{credential.token_id}</Typography> : null}
                             <Typography style={{fontSize:'20px', fontWeight:'bold', color:'white', width:'100%', textAlign:'center', padding:'10px'}}>Attributes</Typography>
                             <Grid container columns={3} style={{height:'100%', margin:'0px 20px', borderRadius:'20px',padding:'1rem', justifyContent:'center', alignItems:'center', overflowY:'scroll', backgroundColor:'black'}}>
-                                {credential.attributes.map(({trait_type,value}:any)=>{return(
+                                {credential.attributes?credential.attributes.map(({trait_type,value}:any)=>{return(
                                     <Grid item style={{border:'1px solid #000000', backgroundColor:'#E46A6A', padding:'0.3rem', minWidth:'10rem', margin:'0.5rem', textAlign:'center'}}>
                                         <Typography style={{fontSize:'18px', fontWeight:'bold', color:'#FFFFFF'}}>{trait_type}</Typography>
                                         <Typography style={{fontSize:'14px', fontWeight:'500', color:'#FFFFFF'}}>{value}</Typography>
                                     </Grid>
-                                )})}
+                                )}):<Grid item style={{border:'1px solid #000000', backgroundColor:'#E46A6A', padding:'0.3rem', minWidth:'10rem', margin:'0.5rem', textAlign:'center'}}>
+                                        <Typography style={{fontSize:'18px', fontWeight:'bold', color:'#FFFFFF'}}>Attributes not available</Typography>
+                                    </Grid>}
                             </Grid>
                         </Box>
                         {/* <Typography>NFT: opensea.io//{props.credential.contract_address}/{props.credential.token_id}</Typography> */}

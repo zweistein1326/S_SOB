@@ -15,6 +15,7 @@ import {uploadBytes} from 'firebase/storage';
 import WalletConnect from '@walletconnect/client';
 import QRCodeModal from '@walletconnect/qrcode-modal';
 import { connector } from './functions/walletConnector';
+import TestScreen from './pages/TestScreen';
 
 declare var window: any;
 
@@ -50,6 +51,7 @@ function App() {
           <Route path="/feed" element={<Feed />} />
           <Route path="/credential/:credentialId" element={<NFTScreen />} />
           <Route path="/addCredential" element={<AddCredential />} />
+          <Route path="/test" element={<TestScreen />} />
         </Routes>
       </Router>
       </Provider>

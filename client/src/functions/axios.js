@@ -13,6 +13,7 @@ export const getNFT = async (credential, address) => {
     // save contract address and nft id linked to user id if sender is the owner of the fetched nft otherwise send error
     try {
         const { data } = await instance.post('/getCredential', { ...credential, userId: address });
+        console.log(data);
         if (data) {
             return data;
         }
@@ -37,19 +38,37 @@ export const createPost = (credential, userId, caption, privacy) => {
 
 export const register = (user) => {
     return async (dispatch) => {
-        const { data } = await instance.post('/register', user);
-        await dispatch(setUser(data.user));
-        await dispatch(getAllUsers());
-        if (data.user.credentials) {
-            data.user.credentials.forEach(async (credential) => { await dispatch(getCredentialById(credential)) })
+        try {
+            const { data } = await instance.post('/register', user);
+            if (data.user) {
+                await dispatch(setUser(data.user));
+                await dispatch(getAllUsers());
+                if (data.user.credentials) {
+                    data.user.credentials.forEach(async (credential) => { await dispatch(getCredentialById(credential)) })
+                }
+                return data.user;
+            }
+            else {
+                alert(data.message);
+            }
+        } catch (e) {
+            console.log(e);
+            // alert(e.message);
         }
-        return data.user;
+
     }
 }
 
 export const getCredentialById = (credentialId) => {
     return async (dispatch) => {
         const { data } = await instance.get(`/credential/${credentialId}`);
+        return dispatch(setCredentials(data));
+    }
+}
+
+export const updateCredential = (credential) => {
+    return async (dispatch) => {
+        const { data } = await instance.post(`/updateCredential`, credential);
         return dispatch(setCredentials(data));
     }
 }

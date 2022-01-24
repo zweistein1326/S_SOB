@@ -46,7 +46,6 @@ const Register = (props:any) => {
         setAccount(result[0]);
         const user:any = await dispatch(getUserById(result[0]));
         if(!!user){
-          console.log(user.user);
           setLoading(false);
           dispatch(setUser(user.user));
           navigate(`/feed`)
@@ -140,9 +139,11 @@ const Register = (props:any) => {
   const login = async(event:any) => {
     event.preventDefault();
     if(username!==''){
-      const user = await dispatch(register({address:account, username}));
-      setLoading(false)
-      navigate('/feed');
+      const user:any = await dispatch(register({address:account, username}));
+      if(!!user){
+            setLoading(false)
+            navigate('/feed');
+      }
     }else{
       setErrorMessage('Username cannot be empty');
     }
