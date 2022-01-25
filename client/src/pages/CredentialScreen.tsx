@@ -8,12 +8,15 @@ import { favorite, like, comment as postComment, changePrivacy, submitBid, submi
 import CommentTile from '../components/CommentTile';
 import {BiDownArrow, BiUpArrow} from 'react-icons/bi';
 import Header from '../components/Header';
+import Modal from 'react-modal';
+import styles from './CredentialScreen.module.css';
 
 const NFTScreen = (props:any) => {
 
     const [credential,setCredential]= useState<any>(null);
     const [imageUrl,setImageUrl]= useState<any>(null);
     const [loading,setLoading]= useState<any>(false);
+    const [isModalOpen,setModalIsOpen]= useState<boolean>(false);
     const {credentialId} = useParams();
     const navigate = useNavigate();
     const [isFavorite, setIsFavorite] = useState<boolean>(false);
@@ -93,22 +96,55 @@ const NFTScreen = (props:any) => {
         dispatch(submitMinPrice(credential.id, minPrice))
     }
 
+    const closeModal = ()=>{
+        setModalIsOpen(false);
+    }
+
+    const afterOpenModal = () => {
+        console.log('modal open')
+    }
+
     return(
-        user ? <Box component="div" style={{backgroundColor:'#111111', height:'100vh', color:'white',padding:'0px 20px', maxHeight:'100vh', display:'flex', flexDirection:'column', overflowY:'scroll'}}>
+        user ? <Box component="div" className={styles.container}>
             <Header/>
+            <Modal
+            isOpen = {isModalOpen}
+            onAfterOpen = {afterOpenModal}
+            onRequestClose = {closeModal}
+            contentLabel = "Example Label"
+            style={{
+                overlay:{
+                    zIndex:9999,
+                },
+                content:{
+                    backgroundColor:'#02F9A7'
+                }
+            }}
+            >
+                <Typography component="h2">Hello</Typography>
+                <Button onClick={closeModal}>Close</Button>
+                <Box component="div">I am a modal</Box>
+                <form>
+                    <input />
+                    <button>tab navigation</button>
+                    <button>stays</button>
+                    <button>inside</button>
+                    <button>the modal</button>
+                </form>
+            </Modal>
             {credential ?
-                    <Box component="div" className="tokenInfo" style={{display:'flex', flexDirection:'row', position:'relative', padding:'20px 0px', margin:'auto', alignItems:'center', justifyContent:'center', width:'80vw'}}>
-                        <Box component="div" style={{display:'flex', flexDirection:'column', alignItems:'center'}}>
-                            <img style={{height:'450px', width:'450px', borderRadius:'30px', backgroundColor:'white'}} src={imageUrl} alt="token"/> 
+                    <Box component="div" className={styles.tokenInfo}>
+                        <Box component="div" className={styles.imgContainer}>
+                            <img className={styles.credentialImg} src={imageUrl} alt="token"/> 
                         </Box>
-                        <Box component="div" style={{width:'40vw', display:'flex', flexDirection:'column', alignItems:'center', marginLeft:'2rem'}}>
-                            <Box component="div" style={{display:'flex', flexDirection:'row', borderRadius:'10px', alignItems:'center'}}>
-                                <Button style={{border:'1px solid white', margin:'10px', borderRadius:'10px', padding:'10px'}} onClick = {()=>{}}><a target="_blank" href={`https://opensea.io/assets/${credential.contract_address}/${credential.token_id}`} style={{textDecoration:'none', color:'white'}}>View on OpenSea</a></Button>
-                                <Button onClick = {()=>{}} style={{border:'1px solid white', margin:'10px', borderRadius:'10px', padding:'10px'}}><a target="_blank" href={`https://etherscan.io/address/${credential.contract_address}`} style={{textDecoration:'none', color:'white'}}>View on EtherScan</a></Button>
-                                <Box component="div" onClick = {setFavorite} style={{display:'flex', flexDirection:'row', borderRadius:'10px', border:'1px solid white', alignItems:'center', padding:'10px 10px', margin:'5px'}}>
+                        <Box component="div" className={styles.infoContainer}>
+                            <Box component="div" className={styles.actionContainer}>
+                                <Button className={styles.actionButton} style={{border: '1px solid white',margin: '10px' ,borderRadius:'10px',padding:'10px '}}><a target="_blank" href={`https://opensea.io/assets/${credential.contract_address}/${credential.token_id}`}>View on OpenSea</a></Button>
+                                <Button style={{border:'1px solid white'}} className={styles.actionButton}><a target="_blank" href={`https://etherscan.io/address/${credential.contract_address}`}>View on EtherScan</a></Button>
+                                <Button onClick = {setFavorite} className={styles.actionButton} style={{display:'flex', flexDirection:'row'}}>
                                     {isFavorite? <FavoriteIcon style={{color:'red'}} />: <FavoriteIcon style={{color:'grey'}}/>}
                                     <Typography style={{color:'white'}}>{isFavorite?`Add to Favorites`:`Add to Favorites`}</Typography>
-                                </Box>
+                                </Button>
                                 {credential.owner===user.id ? <Button onClick = {()=>{
                                     dispatch(updateUser({id:user.id, profileImageUrl: imageUrl}))
                                 }} style={{border:'1px solid white', margin:'10px', borderRadius:'10px', padding:'10px', color:'white'}}>Use as profile image</Button>
@@ -128,6 +164,7 @@ const NFTScreen = (props:any) => {
                                         <Typography style={{fontSize:'18px', fontWeight:'bold', color:'#FFFFFF'}}>Attributes not available</Typography>
                                     </Grid>}
                             </Grid>
+                            {/* <Button onClick={()=>{setModalIsOpen(true)}} style={{ backgroundColor:'#02F9A7', padding:'10px', color:'black', width:'100%', margin:'10px'}}>Purchase</Button> */}
                         </Box>
                         {/* <Typography>NFT: opensea.io//{props.credential.contract_address}/{props.credential.token_id}</Typography> */}
                     </Box>

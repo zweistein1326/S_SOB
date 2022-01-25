@@ -50,11 +50,13 @@ function App() {
     (async()=>{
           store.dispatch(getAllUsers());
           store.dispatch(getCredentials());
-          const user:any = await store.dispatch(getUserById(userId))
-          console.log(user);
-          if(!!user){
-            store.dispatch(setUser(user.user));
-            setIsLoggedIn(true);
+          if(userId){
+            const user:any = await store.dispatch(getUserById(userId))
+            console.log(user);
+            if(!!user){
+              store.dispatch(setUser(user.user));
+              setIsLoggedIn(true);
+            }
           }
         })()
   },[])

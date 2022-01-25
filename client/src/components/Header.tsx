@@ -30,7 +30,7 @@ const Header = (props:any) => {
             {/* <img src={playgroundLogo} style={{height:'10vh', width:'20vw'}}/> */}
             <Typography onClick={()=>{navigate('/feed')}} style={{color:'#02F9A7', fontSize:'22px', fontWeight:'bold', cursor:'pointer'}}>Playground</Typography>
             <Box component="div" style={{width:'100%', position:'relative', padding:'0px 20px', display:'flex', flexDirection:'row'}}>
-                <Box component="div" style={{width:'100%', backgroundColor:'transparent', display:'flex', justifyContent:'center', alignItems:'center', zIndex:9999, flexDirection:'column', position:'relative'}}>
+                <Box component="div" style={{width:'100%', backgroundColor:'transparent', display:'flex', justifyContent:'center', alignItems:'center', zIndex:10, flexDirection:'column', position:'relative'}}>
                     <Input name="search_text" placeholder="Search by Username, Address" value={filters.text} onChange={(event)=>{dispatch(searchByText(event.target.value))}} disableUnderline={true} style={{ width:'100%',backgroundColor:'rgba(2, 249, 167,1)', color:'black', margin:'10px 0px', padding:'15px 20px', borderRadius:'5px'}}/>
                     {filters.text ==='' ? null :
                     <Box component="div" style={{ width:'100%', height:'20vh', overflowY:'scroll', backgroundColor:'rgba(2, 249, 167,1)', position:'absolute', bottom:'-18vh'}}>
@@ -46,15 +46,15 @@ const Header = (props:any) => {
             <Link to='/feed' style={{padding:'20px 10px',borderRadius:'30px', margin:'20px 10px', backgroundColor:'#000000', width:'10%', display:'flex', justifyContent:'center',textDecoration:'none', color:'#02F9A7', fontFamily:'sans-serif'}}>
                 Home
             </Link>
-            {/* <Box style={{padding:'25px 10px', margin:'10px 0px',backgroundColor:'#777777', width:'90%', display:'flex', justifyContent:'center'}}>
-                <Link to='/addCredential' style={{textDecoration:'none', color:'white'}}>Add NFT</Link>
-            </Box> */}
             <Link to={`/${user.id}`} style={{padding:'20px 10px',borderRadius:'30px', margin:'20px 10px', backgroundColor:'#000000', width:'10%', display:'flex', justifyContent:'center',textDecoration:'none', color:'#02F9A7', fontFamily:'sans-serif'}}>
                 Profile
             </Link>
             <Link to='/settings' style={{padding:'20px 10px',borderRadius:'30px', margin:'20px 10px', backgroundColor:'#000000', width:'10%', display:'flex', justifyContent:'center',textDecoration:'none', color:'#02F9A7', fontFamily:'sans-serif'}}>
                 Settings
             </Link>
+            {/* <Link to='/settings' style={{padding:'20px 10px',borderRadius:'30px', margin:'20px 10px', backgroundColor:'#000000', width:'10%', display:'flex', justifyContent:'center',textDecoration:'none', color:'#02F9A7', fontFamily:'sans-serif'}}>
+                20JUMP
+            </Link> */}
         </Box>
         )
 }

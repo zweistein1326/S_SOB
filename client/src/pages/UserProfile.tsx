@@ -271,7 +271,7 @@ const Home = (props:any) => {
         <Box component="div" style={{width:'100%', padding:'20px', alignItems:'center', display:'flex', flexDirection:'column', overflow:'auto', height:'83vh', overflowY:'auto'}}>
           {activeUser.id===user.id?<Box component="div" style={{width:'100%', display:'flex', flexDirection:'row', alignItems:'center', justifyContent:'space-around', padding:'10px 0px'}}>
             <Button style={view==0?{ backgroundColor:'darkGreen',flex:1, color:'white', borderRadius:0, padding:'20px 0px'}:{backgroundColor:'white',flex:1, color:'darkGreen', borderRadius:0, padding:'20px 0px'}} onClick={()=>{setView(0)}}>All</Button>
-            <Button style={view==1?{backgroundColor:'darkGreen',flex:1, color:'white', borderRadius:0, padding:'20px 0px'}:{backgroundColor:'white',flex:1, color:'darkGreen', borderRadius:0, padding:'20px 0px'}} onClick={()=>{setView(1)}}>Favorited</Button>
+            <Button style={view==1?{backgroundColor:'darkGreen',flex:1, color:'white', borderRadius:0, padding:'20px 0px'}:{backgroundColor:'white',flex:1, color:'darkGreen', borderRadius:0, padding:'20px 0px'}} onClick={()=>{setView(1)}}>Favorites</Button>
             <Button style={view==2?{backgroundColor:'darkGreen',flex:1, color:'white', borderRadius:0, padding:'20px 0px'}:{backgroundColor:'white',flex:1, color:'darkGreen', borderRadius:0, padding:'20px 0px'}} onClick={()=>{setView(2)}}>+Add new</Button>
           </Box>:<Box component="div" style={{width:'100%', display:'flex', flexDirection:'row', alignItems:'center', justifyContent:'space-around', padding:'10px 0px'}}>
           </Box>}

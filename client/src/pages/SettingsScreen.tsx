@@ -35,8 +35,7 @@ const SettingsScreen = (props:any) => {
                 <Button onClick = {()=>{navigate('/addCredential')}} style={{padding:'20px 10px',borderRadius:'30px', margin:'20px 0px', backgroundColor:'#02F9A7', color:'#000000', width:'60%', display:'flex', justifyContent:'center'}}>+ Add NFT</Button>
                 <Button onClick = {async()=>{
                     window.localStorage.removeItem('userId');
-                    // window.localStorage.removeItem('walletconnect');
-                    dispatch(setUser({}));
+                    dispatch(setUser(null));
                     navigate('/');
                 }} 
                     style={{padding:'20px 10px', borderRadius:'30px', margin:'20px 0px', backgroundColor:'#000000', color:'#02F9A7', width:'60%', display:'flex', justifyContent:'center'}}>Logout</Button>
