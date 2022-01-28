@@ -151,7 +151,10 @@ const Home = (props:any) => {
           (activeUser.credentials.map((credentialId:string,index:number)=>(
             <NFTCard credentialId={credentialId} key={index}/>)).reverse()
           )
-          : (activeUser.id===user.id?<Button style={{backgroundColor:'#02F9A7',flex:1, color:'black', borderRadius:0, padding:'20px 0px', marginTop:'20px'}} onClick={()=>{setView(2)}}>+Add new nft</Button>:null)
+          : (activeUser.id===user.id?<Box component="div" style={{width:'100%', height:'100%', display:'flex', flexDirection:'column', alignItems:'center', padding:'40px'}}>
+            <Typography style={{color:'black'}}>No NFTs added yet</Typography>
+            <Button style={{backgroundColor:'#02F9A7',color:'black', borderRadius:0, padding:'20px', marginTop:'20px', width:'100%'}} onClick={()=>{setView(2)}}>+Add new nft</Button>
+            </Box>:null)
           )
     }
     else if(view===1){
@@ -245,7 +248,7 @@ const Home = (props:any) => {
   const {ethereum} = window;
 
   return (
-    user ? <Box component="div" style={{backgroundColor:'#111111', color:'white', padding:'0px 20px', display:'flex', flexDirection:'column', height:'100vh'}}>
+    user ? <Box component="div" style={{backgroundColor:'#FFFFFF', color:'white', padding:'0px 20px', display:'flex', flexDirection:'column', height:'100vh'}}>
       <Header/>
       <Box component="div" style={{display:'flex', flexDirection:'row'}}>
         {/* <Box component="div" style={{height:'80vh', width:'20vw', backgroundColor:'red'}}>
@@ -259,7 +262,7 @@ const Home = (props:any) => {
       {/* <Box component="form" onSubmit={addNFT} noValidate sx={{ mt: 1 }}> */}
       <Box component="div" style={{width:'30vw', height:'90%', display:'flex', flexDirection:'column', alignItems:'center', padding:'20px 0px'}}>
         {activeUser.profileImageUrl ? <img src={`${activeUser.profileImageUrl}`} style={{ width:'300px', borderRadius:'50%'}}/>:<Box component="div" style={{width:'300px', height:'300px', borderRadius:'50%',backgroundColor:'pink'}}></Box>}
-        <Typography>@{activeUser.username}</Typography>
+        <Typography style={{color:'black'}}>@{activeUser.username}</Typography>
         {isFollowing?<Button style={activeUser.id !== user.id ? {backgroundColor:'darkGreen', color:'white', padding:'20px 0px', height:'10%',width:'100%', margin:'10px'}:{display:'none'}} onClick={()=>{
               setIsFollowing(!isFollowing);
               dispatch(followUser(user.id,activeUser.id));
@@ -269,12 +272,12 @@ const Home = (props:any) => {
             }}>Follow</Button>}
       </Box>
         <Box component="div" style={{width:'100%', padding:'20px', alignItems:'center', display:'flex', flexDirection:'column', overflow:'auto', height:'83vh', overflowY:'auto'}}>
-          {activeUser.id===user.id?<Box component="div" style={{width:'100%', display:'flex', flexDirection:'row', alignItems:'center', justifyContent:'space-around', padding:'10px 0px'}}>
+          {/* {activeUser.id===user.id?<Box component="div" style={{width:'100%', display:'flex', flexDirection:'row', alignItems:'center', justifyContent:'space-around', padding:'10px 0px'}}>
             <Button style={view==0?{ backgroundColor:'darkGreen',flex:1, color:'white', borderRadius:0, padding:'20px 0px'}:{backgroundColor:'white',flex:1, color:'darkGreen', borderRadius:0, padding:'20px 0px'}} onClick={()=>{setView(0)}}>All</Button>
             <Button style={view==1?{backgroundColor:'darkGreen',flex:1, color:'white', borderRadius:0, padding:'20px 0px'}:{backgroundColor:'white',flex:1, color:'darkGreen', borderRadius:0, padding:'20px 0px'}} onClick={()=>{setView(1)}}>Favorites</Button>
             <Button style={view==2?{backgroundColor:'darkGreen',flex:1, color:'white', borderRadius:0, padding:'20px 0px'}:{backgroundColor:'white',flex:1, color:'darkGreen', borderRadius:0, padding:'20px 0px'}} onClick={()=>{setView(2)}}>+Add new</Button>
           </Box>:<Box component="div" style={{width:'100%', display:'flex', flexDirection:'row', alignItems:'center', justifyContent:'space-around', padding:'10px 0px'}}>
-          </Box>}
+          </Box>} */}
           <Grid container columns={3} style={{justifyContent:'center'}}>
             {loading? <ThreeDots height="100" width="100" color="grey"/>:
               renderView(view)
