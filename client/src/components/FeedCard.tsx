@@ -88,33 +88,33 @@ const FeedCard = (props:any) => {
     //     </Grid>
     // )
     return(
-        <Grid item key ={props.key} className="feedCard" style={{width:'80%', margin:'0px 20px 20px 20px', padding:'20px', position:'relative', backgroundColor:'#CDCDCD', display:'flex', flexDirection:'row', alignItems:'center', justifyContent:'center'}}>
-            <Box component="div" className="Right" style={{display:'flex'}}>
-                <Box component="div" className="PostAssets">
-                    {credential && imageUrl ? <img onClick={()=>{navigate(`/credential/${credential.id}`)}} style={{height:'100%', width:'400px', borderRadius:'20px',}} src={imageUrl} alt="token"/> : <Box component="div" style={{backgroundColor:'#332E2E',objectFit:'cover', width:'250px', height:'250px', borderRadius:'20px'}}></Box>}
+        <Grid item key ={props.key} className="feedCard" style={{width:'40%', margin:'0px 20px 20px 20px', padding:'20px', position:'relative', backgroundColor:'#CDCDCD', display:'flex', flexDirection:'column', alignItems:'center', justifyContent:'center', borderRadius:'20px', height:'60vh'}}>
+            <Box component="div" className="Right" style={{display:'flex',width:'100%', height:'100%', backgroundColor:'transparent'}}>
+                <Box component="div" className="PostAssets" style={{width:'100%'}}>
+                    {credential && imageUrl ? <img onClick={()=>{navigate(`/credential/${credential.id}`)}} style={{height:'100%', width:'100%',objectFit:'cover', borderRadius:'20px',}} src={imageUrl} alt="token"/> : <Box component="div" style={{backgroundColor:'#332E2E',objectFit:'contain', width:'100%', height:'100%', borderRadius:'20px'}}></Box>}
                 </Box>
             </Box>
-            <Box component="div" className='Left' style={{width:'100%', height:'100%'}}>
-                <Box component="div" className='UserInfo' style={{display:'flex', padding:'20px', flexDirection:'row', alignItems:'center', position:'absolute', top:0, left:0}}>
+            <Box component="div" className='Left' style={{width:'100%', height:'100%',}}>
+                <Box component="div" className='UserInfo' style={{display:'flex', padding:'10px', flexDirection:'row', alignItems:'center', position:'absolute', bottom:0, left:0}}>
                     {credentialOwner?<img src={credentialOwner.profileImageUrl ? credentialOwner.profileImageUrl:''} style={{backgroundColor:'pink',objectFit:'cover', width:'50%', height:'50%'}} className = "cardImage"/>:
                     <Box component="div" style={{backgroundColor:'#E46A6A',objectFit:'cover', width:'40px', height:'40px', margin:'10px', borderRadius:'50%'}}></Box>}
-                    {/* {credentialOwner?<Typography style={{color:'black', padding:'0px 10px'}}>@{credentialOwner.username}</Typography>:<Typography style={{color:'black', padding:'0px 10px'}}>@{credential.owner}</Typography>} */}
+                    {credentialOwner?<Typography style={{color:'black', padding:'0px 10px'}}>@{credentialOwner.username}</Typography>:<Typography style={{color:'black', padding:'0px 10px'}}>{null}</Typography>}
                 </Box>
                 <Box onClick={()=>{navigate(`/credential/${credential.id}`)}} component="div" className="PostInfo" style={{width:'100%',height:'100%',display:'flex', alignItems:'center', justifyContent:'center', flexDirection:'column'}}>
-                    <Typography color="black">{props.credential.name} #{props.credential.token_id}</Typography>
+                    {/* <Typography color="black">{props.credential.name} #{props.credential.token_id}</Typography> */}
                     {credential?<Typography style={{color:'black'}}>{credential.caption}</Typography>:null}
                 </Box>
                 <Box component="div" className="PostActions" style={{display:'flex', flexDirection:'row', position:'absolute', bottom:0, right:0, padding:'20px'}}>
                     {credential? 
                     <Box component="div" style={{zIndex:99999, display:'flex', flexDirection:'row', alignItems:'center'}}>
-                        <BiUpArrow size={22} color={isLiked ? '#02F9A7':'red'} onClick={setLike}/>
+                        <BiUpArrow size={18} color={isLiked ? '#02F9A7':'red'} onClick={setLike}/>
                         {<Typography style={{padding:'0px 10px', fontSize:'21px', color:'black'}}>{credential.likes ? credential.likes.length : 0}</Typography>}
                     </Box> 
                     : 
                     null}
                     {credential? 
                     <Box component="div" style={{zIndex:99999, display:'flex', flexDirection:'row', alignItems:'center'}}>
-                        <FaRegComment size={22} color={'#02F9A7'} onClick={()=>{navigate(`/credential/${credential.id}`)}}/>
+                        <FaRegComment size={18} color={'#02F9A7'} onClick={()=>{navigate(`/credential/${credential.id}`)}}/>
                         {<Typography style={{padding:'0px 10px', fontSize:'21px', color:'black'}}>{credential.comments ? credential.comments.length : 0}</Typography>}
                     </Box> 
                     : 

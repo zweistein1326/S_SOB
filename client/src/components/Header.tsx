@@ -43,13 +43,13 @@ const Header = (props:any) => {
                 }
                 </Box>
             </Box>
-            <Link to='/feed' style={{padding:'10px',borderRadius:'30px', margin:'20px 10px', backgroundColor:'transparent', width:'10%', display:'flex', justifyContent:'center',textDecoration:'none', color:'#02F9A7', fontFamily:'sans-serif'}}>
+            <Link to='/feed' style={{padding:'10px',borderRadius:'30px', margin:'20px 10px', backgroundColor:'transparent', width:'10%', display:'flex', justifyContent:'center',textDecoration:'none', color:'#000000', fontFamily:'sans-serif'}}>
                 Home
             </Link>
-            <Link to={`/${user.id}`} style={{padding:'10px',borderRadius:'30px', margin:'20px 10px', backgroundColor:'transparent', width:'10%', display:'flex', justifyContent:'center',textDecoration:'none', color:'#02F9A7', fontFamily:'sans-serif'}}>
+            <Link to={`/${user.id}`} style={{padding:'10px',borderRadius:'30px', margin:'20px 10px', backgroundColor:'transparent', width:'10%', display:'flex', justifyContent:'center',textDecoration:'none', color:'#000000', fontFamily:'sans-serif'}}>
                 Profile
             </Link>
-            <Link to='/settings' style={{padding:'10px',borderRadius:'30px', margin:'20px 10px', backgroundColor:'transparent', width:'10%', display:'flex', justifyContent:'center',textDecoration:'none', color:'#02F9A7', fontFamily:'sans-serif'}}>
+            <Link to='/settings' style={{padding:'10px',borderRadius:'30px', margin:'20px 10px', backgroundColor:'transparent', width:'10%', display:'flex', justifyContent:'center',textDecoration:'none', color:'#000000', fontFamily:'sans-serif'}}>
                 Settings
             </Link>
             {/* <Link to='/settings' style={{padding:'20px 10px',borderRadius:'30px', margin:'20px 10px', backgroundColor:'#000000', width:'10%', display:'flex', justifyContent:'center',textDecoration:'none', color:'#02F9A7', fontFamily:'sans-serif'}}>

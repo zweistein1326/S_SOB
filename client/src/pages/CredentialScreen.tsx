@@ -169,14 +169,14 @@ const NFTScreen = (props:any) => {
                         {/* <Typography>NFT: opensea.io//{props.credential.contract_address}/{props.credential.token_id}</Typography> */}
                     </Box>
                 : null}
-            {credential?
+            {credential ?
             <Box component="div" style={{display:'flex',position:'relative', alignItems:'center', justifyContent:'space-between', backgroundColor:'#EEEEEE', margin:'20px 40px 40px 40px'}}>
                 <Box component="div" className='UserInfo' style={{display:'flex', padding:'20px', flexDirection:'row', alignItems:'center', justifyContent:'space-between', position:'absolute', top:0, left:0, width:'50%'}}>
                     <Box component="div" style={{display:'flex', flexDirection:'row', alignItems:'center', position:'absolute', top:0, left:0, padding:'20px'}}>
                             {credentialOwner?<img src={credentialOwner.profileImageUrl ? credentialOwner.profileImageUrl:''} style={{backgroundColor:'pink',objectFit:'cover', width:'50%', height:'50%'}} className = "cardImage"/>:
                             <Box component="div" style={{backgroundColor:'#E46A6A',objectFit:'cover', width:'50px', height:'50px', borderRadius:'50%'}}></Box>}
                             {credentialOwner?<Typography style={{color:'black', padding:'0px 10px'}}>@{credentialOwner.username}</Typography>:<Typography style={{color:'black', padding:'0px 10px'}}>@{credential.owner}</Typography>}
-                            {/* <Typography style={{color:'black'}}>{credential.iat}</Typography> */}
+                            {/* <Typography style={{color:'black'}} >{credential.iat}</Typography> */}
                     </Box>
                 </Box>
                 <Box component="div" style={{flex:1}}>

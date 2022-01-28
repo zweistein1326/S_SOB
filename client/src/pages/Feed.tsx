@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import { Box, Button, Input, Typography } from '@mui/material';
+import { Box, Button, Grid, Input, Typography } from '@mui/material';
 import { Link, useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import FeedCard from '../components/FeedCard';
@@ -30,11 +30,13 @@ const Feed = () => {
                 {/* <Box style={{width:'80%'}}>
                 <Typography style={{backgroundColor:'#02F9A7', color:'black', margin:20, padding:'10px 30px', borderRadius:'20px'}}>Username, Address</Typography>
                 </Box> */}
-                {<Box component="div" style={{backgroundColor:'#FFFFFF', color:'white', padding:'0px 20px', maxHeight:'100vh', display:'flex', flexDirection:'column', alignItems:'center', overflowY:'auto', scrollbarWidth: 'none',width:'100%'}}>
-                    {credentials.map((credential:any,index:number)=>(
-                        <FeedCard credential={credential} key={index}/>)
-                        )}
-                </Box>}
+                <Box component="div" style={{width:'100%', justifyContent:'center', display:'flex', flexDirection:'row', alignItems:'center'}}>
+                    {<Grid container columns={3} style={{backgroundColor:'#FFFFFF', color:'white', padding:'0px 20px', maxHeight:'100vh', overflowY:'scroll', width:'100%'}}>
+                        {credentials.map((credential:any,index:number)=>(
+                            <FeedCard credential={credential} key={index}/>)
+                            )}
+                    </Grid>}
+                </Box>
                 <Box component="div" style={{zIndex:'999999', height:'100vh', backgroundColor:'#333333', minWidth:'20vw', display:'flex', flexDirection:'column', alignItems:'center', justifyContent:'flex-start', padding:'0px 20px'}}>
                     <Typography style={{color:'white', fontSize:'20px', fontWeight:'bold', padding:'20px'}}>Recommended for you</Typography>
                     {/* <Typography style={{color:'white', fontSize:'14px', fontWeight:'bold',textAlign:'right', width:'100%', padding:'0px 20px'}}>View more</Typography> */}
