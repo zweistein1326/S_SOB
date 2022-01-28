@@ -88,21 +88,21 @@ const FeedCard = (props:any) => {
     //     </Grid>
     // )
     return(
-        <Grid item key ={props.key} className="feedCard" style={{width:'40%', margin:'0px 20px 20px 20px', padding:'20px', position:'relative', backgroundColor:'#CDCDCD', display:'flex', flexDirection:'column', alignItems:'center', justifyContent:'center', borderRadius:'20px', height:'60vh'}}>
-            <Box component="div" className="Right" style={{display:'flex',width:'100%', height:'100%', backgroundColor:'transparent'}}>
+        <Grid item key ={props.key} className="feedCard" style={{width:'45%', margin:'0px 20px 50px 20px',  position:'relative', backgroundColor:'#CDCDCD', display:'flex', flexDirection:'column', alignItems:'center', justifyContent:'center', borderRadius:'20px', height:'70vh'}}>
+            <Box component="div" className="Right" style={{display:'flex',width:'100%', height:'90%', backgroundColor:'transparent'}}>
                 <Box component="div" className="PostAssets" style={{width:'100%'}}>
-                    {credential && imageUrl ? <img onClick={()=>{navigate(`/credential/${credential.id}`)}} style={{height:'100%', width:'100%',objectFit:'cover', borderRadius:'20px',}} src={imageUrl} alt="token"/> : <Box component="div" style={{backgroundColor:'#332E2E',objectFit:'contain', width:'100%', height:'100%', borderRadius:'20px'}}></Box>}
+                    {credential && imageUrl ? <img onClick={()=>{navigate(`/credential/${credential.id}`)}} style={{height:'100%', width:'100%',objectFit:'cover', borderRadius:'20px', borderBottomLeftRadius:'0px',borderBottomRightRadius:'0px'}} src={imageUrl} alt="token"/> : <Box component="div" style={{backgroundColor:'#332E2E',objectFit:'contain', width:'100%', height:'100%', borderRadius:'20px'}}></Box>}
                 </Box>
             </Box>
-            <Box component="div" className='Left' style={{width:'100%', height:'100%',}}>
-                <Box component="div" className='UserInfo' style={{display:'flex', padding:'10px', flexDirection:'row', alignItems:'center', position:'absolute', bottom:0, left:0}}>
+            <Box component="div" className='Left' style={{width:'100%', flex:1, padding:'20px 0px'}}>
+                <Box component="div" className='UserInfo' style={{display:'flex', padding:'20px', flexDirection:'row', alignItems:'center', position:'absolute', bottom:0, left:0}}>
                     {credentialOwner?<img src={credentialOwner.profileImageUrl ? credentialOwner.profileImageUrl:''} style={{backgroundColor:'pink',objectFit:'cover', width:'50%', height:'50%'}} className = "cardImage"/>:
-                    <Box component="div" style={{backgroundColor:'#E46A6A',objectFit:'cover', width:'40px', height:'40px', margin:'10px', borderRadius:'50%'}}></Box>}
+                    <Box component="div" style={{backgroundColor:'#E46A6A',objectFit:'cover', width:'40px', height:'40px', borderRadius:'50%'}}></Box>}
                     {credentialOwner?<Typography style={{color:'black', padding:'0px 10px'}}>@{credentialOwner.username}</Typography>:<Typography style={{color:'black', padding:'0px 10px'}}>{null}</Typography>}
                 </Box>
-                <Box onClick={()=>{navigate(`/credential/${credential.id}`)}} component="div" className="PostInfo" style={{width:'100%',height:'100%',display:'flex', alignItems:'center', justifyContent:'center', flexDirection:'column'}}>
+                <Box onClick={()=>{navigate(`/credential/${credential.id}`)}} component="div" className="PostInfo" style={{width:'100%',height:'50%',display:'flex', alignItems:'center', justifyContent:'center', flexDirection:'column', margin:'10px 0px', }}>
                     {/* <Typography color="black">{props.credential.name} #{props.credential.token_id}</Typography> */}
-                    {credential?<Typography style={{color:'black'}}>{credential.caption}</Typography>:null}
+                    {credential?<Typography style={{color:'black', textTransform:'capitalize'}}>{credential.caption!=='' ? credential.caption:'hello'}</Typography>:<Typography style={{color:'black', textTransform:'capitalize'}}>hello</Typography>}
                 </Box>
                 <Box component="div" className="PostActions" style={{display:'flex', flexDirection:'row', position:'absolute', bottom:0, right:0, padding:'20px'}}>
                     {credential? 

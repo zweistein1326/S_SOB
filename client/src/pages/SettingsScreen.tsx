@@ -22,7 +22,7 @@ const SettingsScreen = (props:any) => {
     })
 
     return(
-        user ? <Box component="div" style={{backgroundColor:'#111111', color:'white', padding:'0px 20px', minHeight:'100vh', display:'flex', flexDirection:'column'}}>
+        user ? <Box component="div" style={{backgroundColor:'#FFFFFF', color:'black', padding:'0px 20px', minHeight:'100vh', display:'flex', flexDirection:'column'}}>
             <Header />
             <Box component="div"  style={{ height:'100%', width:'100%', marginTop:'100px', borderRadius:'30px', display:'flex', flexDirection:'column', alignItems:'center', }}>
                 {user.profileImageUrl?
@@ -31,7 +31,7 @@ const SettingsScreen = (props:any) => {
                     </Box>
                 :<Box component="div"  style={{ height:'200px', width:'200px', borderRadius:'50%', display:'flex', alignItems:'center', justifyContent:'center', backgroundColor:'pink'}}>
                     </Box>}
-                <Typography style={{color:'#FFFFFF', fontSize:'20px'}}>@{user.username}</Typography>
+                <Typography style={{color:'#000000', fontSize:'20px'}}>@{user.username}</Typography>
                 <Button onClick = {()=>{navigate('/addCredential')}} style={{padding:'20px 10px',borderRadius:'30px', margin:'20px 0px', backgroundColor:'#02F9A7', color:'#000000', width:'60%', display:'flex', justifyContent:'center'}}>+ Add NFT</Button>
                 <Button onClick = {async()=>{
                     window.localStorage.removeItem('userId');
