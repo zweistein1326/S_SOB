@@ -39,6 +39,7 @@
     "react-loader-spinner": "^5.0.6",
     "react-modal": "^3.14.4",
     "react-native-hash": "^2.0.0",
+    "react-onesignal": "^2.0.2",
     "react-redux": "^7.2.6",
     "react-router-dom": "^6.0.2",
     "react-scripts": "4.0.3",

@@ -96,8 +96,13 @@ const Home = (props:any) => {
   const createNewPost = async(event:any) => {
     event.preventDefault();
     console.log('creating new post');
-    await dispatch(createPost(tokenData, user.id, caption, privacy));
-    navigate('/feed');
+    const result:any = await dispatch(createPost(tokenData, user.id, caption, privacy));
+    if(!result.message){
+      navigate('/feed');
+    }
+    else{
+      alert(result.message);
+    }
   }
 
   const handleChange = (event:any) => {
@@ -148,9 +153,11 @@ const Home = (props:any) => {
     if(view==0){
       return(
         activeUser.credentials ? 
-          (activeUser.credentials.map((credentialId:string,index:number)=>(
-            <NFTCard credentialId={credentialId} key={index}/>)).reverse()
-          )
+        <Box component="div" style={{width:'100%', display:'flex', flexDirection:'column', alignItems:'center'}}>
+          <Grid container columns={3} style={{justifyContent:'center'}}>
+            {activeUser.credentials.map((credentialId:string,index:number)=>(<NFTCard credentialId={credentialId} key={index}/>)).reverse()}
+          </Grid>
+        </Box>
           : (activeUser.id===user.id?<Box component="div" style={{width:'100%', height:'100%', display:'flex', flexDirection:'column', alignItems:'center', padding:'40px'}}>
             <Typography style={{color:'black'}}>No NFTs added yet</Typography>
             <Button style={{backgroundColor:'#02F9A7',color:'black', borderRadius:0, padding:'20px', marginTop:'20px', width:'100%'}} onClick={()=>{setView(2)}}>+Add new nft</Button>
@@ -160,9 +167,7 @@ const Home = (props:any) => {
     else if(view===1){
       return (
         activeUser.favorite ? 
-          (activeUser.favorite.map((favoriteId:string,index:number)=>(
-            <NFTCard credentialId={favoriteId} key={index}/>))
-          )
+          (activeUser.favorite.map((favoriteId:string,index:number)=>(<NFTCard credentialId={favoriteId} key={index}/>)))
           : <Button style={{backgroundColor:'#02F9A7',flex:1, color:'black', borderRadius:0, padding:'20px 0px', marginTop:'20px'}} onClick={()=>{navigate('/feed')}}>Explore</Button>)
     }
     else{
@@ -224,7 +229,7 @@ const Home = (props:any) => {
                     sx={{ mt: 3, mb: 2, width:'90%', backgroundColor:'#02F9A7', color:'black' }}
                     // disabled={loading}
                 >
-                    Create new Post
+                    Add to collection
                 </Button>
                 {/* <Button
                     type="submit"
@@ -236,9 +241,9 @@ const Home = (props:any) => {
                     +Add
                 </Button> */}
             </Box>
-            <Box component="div" style={{backgroundColor:'#02F9A7', width:'28vw', height:'55vh', display:'flex', alignItems:'center', justifyContent:'center', flexDirection:'column' }}>
+            <Box component="div" style={{backgroundColor:'#02F9A7', borderRadius:'30px', width:'28vw', height:'55vh', display:'flex', alignItems:'center', justifyContent:'center', flexDirection:'column' }}>
                 {tokenData ? <img style={{height:'100%', width:'100%'}} src={`${imageUrl}`} alt="token"/> : null}
-                <Typography style={{width:'90%', textAlign:'center', color:'black', fontWeight:'500', fontSize:'18px', padding:'10px'}}>{tokenData ? `${tokenData.name} #${tokenData.token_id}`:'Enter Contract Address and Token Id to view NFT'}</Typography>
+                {/* <Typography style={{width:'90%', textAlign:'center', color:'black', fontWeight:'500', fontSize:'18px', padding:'10px'}}>{tokenData ? `${tokenData.name} #${tokenData.token_id}`:'Enter Contract Address and Token Id to view NFT'}</Typography> */}
             </Box>
           </Box>
       );
@@ -248,7 +253,7 @@ const Home = (props:any) => {
   const {ethereum} = window;
 
   return (
-    user ? <Box component="div" style={{backgroundColor:'#FFFFFF', color:'white', padding:'0px 20px', display:'flex', flexDirection:'column', height:'100vh'}}>
+    user?<Box component="div" style={{backgroundColor:'#FFFFFF', color:'white', padding:'0px 20px', display:'flex', flexDirection:'column', height:'100vh'}}>
       <Header/>
       <Box component="div" style={{display:'flex', flexDirection:'row'}}>
         {/* <Box component="div" style={{height:'80vh', width:'20vw', backgroundColor:'red'}}>
@@ -260,13 +265,16 @@ const Home = (props:any) => {
             </Canvas>
         </Box> */}
       {/* <Box component="form" onSubmit={addNFT} noValidate sx={{ mt: 1 }}> */}
-      <Box component="div" style={{width:'30vw', height:'90%', display:'flex', flexDirection:'column', alignItems:'center', padding:'20px 0px'}}>
+      <Box component="div" style={{width:'30vw', height:'90%', display:'flex', flexDirection:'column', alignItems:'center', padding:'20px 0px', justifyContent:'center'}}>
         {activeUser.profileImageUrl ? <img src={`${activeUser.profileImageUrl}`} style={{ width:'300px', borderRadius:'50%'}}/>:<Box component="div" style={{width:'300px', height:'300px', borderRadius:'50%',backgroundColor:'pink'}}></Box>}
         <Typography style={{color:'black'}}>@{activeUser.username}</Typography>
+        {user && user.id == activeUser.id?<Link to='/settings' style={{padding:'20px',borderRadius:'30px', margin:'20px 10px', backgroundColor:'black', width:'30%', display:'flex', justifyContent:'center',textDecoration:'none', color:'#02F9A7', fontFamily:'sans-serif'}}>
+                Settings
+        </Link>:null}
         {isFollowing?<Button style={activeUser.id !== user.id ? {backgroundColor:'darkGreen', color:'white', padding:'20px 0px', height:'10%',width:'100%', margin:'10px'}:{display:'none'}} onClick={()=>{
               setIsFollowing(!isFollowing);
               dispatch(followUser(user.id,activeUser.id));
-            }}>Unfollow</Button>:<Button style={activeUser.id !== user.id ?{backgroundColor:'darkGreen', color:'white', padding:'20px 0px', height:'10%', width:'100%', margin:'10px'}:{display:'none'}} onClick={()=>{
+            }}>Following</Button>:<Button style={activeUser.id !== user.id ?{backgroundColor:'darkGreen', color:'white', padding:'20px 0px', height:'10%', width:'100%', margin:'10px'}:{display:'none'}} onClick={()=>{
               setIsFollowing(!isFollowing);
               dispatch(followUser(user.id,activeUser.id));
             }}>Follow</Button>}
@@ -279,13 +287,13 @@ const Home = (props:any) => {
           </Box>:<Box component="div" style={{width:'100%', display:'flex', flexDirection:'row', alignItems:'center', justifyContent:'space-around', padding:'10px 0px'}}>
           </Box>} */}
           <Grid container columns={3} style={{justifyContent:'center'}}>
-            {loading? <ThreeDots height="100" width="100" color="grey"/>:
+            {loading? <ThreeDots height="100" width="100" color="grey"/> :
               renderView(view)
             }
           </Grid>
           </Box>
         </Box>
-    </Box> : null
+    </Box> :null
   );
 };
 

@@ -16,6 +16,7 @@ import WalletConnect from '@walletconnect/client';
 import QRCodeModal from '@walletconnect/qrcode-modal';
 import { connector } from './functions/walletConnector';
 import { setUser } from './redux/actions/user';
+import OneSignal from 'react-onesignal';
 
 declare var window: any;
 
@@ -41,6 +42,10 @@ function App() {
   useEffect(()=>{
     // connectWalletHandler();
     var userId:any;
+    OneSignal.init({
+      appId:'05818ac4-208c-4b31-a230-554bcb70c786'
+    })
+
     try{
       userId = window.localStorage.getItem('userId')
     }

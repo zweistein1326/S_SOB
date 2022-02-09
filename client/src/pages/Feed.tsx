@@ -37,16 +37,18 @@ const Feed = () => {
                             )}
                     </Grid>}
                 </Box>
-                <Box component="div" style={{zIndex:'999999', height:'100vh', backgroundColor:'#333333', minWidth:'20vw', display:'flex', flexDirection:'column', alignItems:'center', justifyContent:'flex-start', padding:'0px 20px'}}>
+                <Box component="div" style={{zIndex:'999999', height:'100vh', backgroundColor:'#333333', maxWidth:'25vw', display:'flex', flexDirection:'column', alignItems:'center', justifyContent:'flex-start', padding:'20px 20px', overflowY:'scroll'}}>
                     <Typography style={{color:'white', fontSize:'20px', fontWeight:'bold', padding:'20px'}}>Recommended for you</Typography>
                     {/* <Typography style={{color:'white', fontSize:'14px', fontWeight:'bold',textAlign:'right', width:'100%', padding:'0px 20px'}}>View more</Typography> */}
                     { allUsers.map((recommendUser:any)=>{
                         return(
                         recommendUser.id!==user.id?<Box component="div" style={{display:'flex', flexDirection:'row', alignItems:'center', justifyContent:'flex-start', width:'100%', margin:'10px',}}>
-                            <Box component="div" style={{display:'flex', flexDirection:'row', flex:1, alignItems:'center'}} onClick ={()=>{navigate(`/${recommendUser.id}`)}}>
+                            <Box component="div" style={{display:'flex', flexDirection:'row', width:'100%', alignItems:'center'}} onClick ={()=>{navigate(`/${recommendUser.id}`)}}>
                                 {recommendUser.profileImageUrl? <img src={recommendUser.profileImageUrl} style={{width:'50px', height:'50px',backgroundColor:'pink', borderRadius:'50%'}}/>:<Box component="div" style={{width:'50px', height:'50px', backgroundColor:'pink', borderRadius:'50%'}}></Box>}
-                                <Typography style={{flex:1, paddingLeft:'10px'}}>{recommendUser.username}</Typography>
-                                <Button onClick={()=>{dispatch(followUser(user.id,recommendUser.id))}}>+ Follow</Button>
+                                <Box component="div" style={{width:'60%', overflow:'hidden', paddingLeft:'10px'}}>
+                                    <Typography>{recommendUser.username}</Typography>
+                                </Box>
+                                <Button style={{ width:'28%' }} onClick={()=>{dispatch(followUser(user.id,recommendUser.id))}}>+ Follow</Button>
                             </Box>
                         </Box>:null
                         )})

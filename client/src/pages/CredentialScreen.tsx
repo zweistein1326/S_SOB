@@ -1,4 +1,4 @@
-import { Box, Button, Grid, Icon, Input, MenuItem, Select, Typography } from '@mui/material';
+import { Autocomplete, Box, Button, Grid, Icon, Input, MenuItem, Select, TextField, Typography } from '@mui/material';
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Link, useNavigate } from 'react-router-dom';
@@ -15,16 +15,13 @@ const NFTScreen = (props:any) => {
 
     const [credential,setCredential]= useState<any>(null);
     const [imageUrl,setImageUrl]= useState<any>(null);
-    const [loading,setLoading]= useState<any>(false);
     const [isModalOpen,setModalIsOpen]= useState<boolean>(false);
     const {credentialId} = useParams();
-    const navigate = useNavigate();
     const [isFavorite, setIsFavorite] = useState<boolean>(false);
+    const [isTag, setIsTag] = useState<boolean>(false);
     const dispatch = useDispatch();
     const [isLiked, setLiked] = useState(false);
     const [comment,setComment] = useState<string>('');
-    const [isEdit, setIsEdit]= useState<boolean>(false);
-    const [isPrivate, setPrivacy]= useState<number>(0);
     const [bidAmount, setBidAmount]= useState<number>(0);
     const [minPrice, setMinPrice]= useState<number>(0);
     const [credentialOwner, setCredentialOwner] = useState<any>(null);
@@ -39,7 +36,6 @@ const NFTScreen = (props:any) => {
     }
 
     useEffect(()=>{
-        setLoading(true);
         const cred = credentials.get(credentialId);
         setCredential(cred);
     
@@ -64,11 +60,21 @@ const NFTScreen = (props:any) => {
             else{
                 setImageUrl(cred.image);
             }
-            setLoading(false);
         }        
     },[
         credentialId, credentials, user
     ]);
+
+    const handleChange = (comment:any) => {
+        console.log(comment);
+        setComment(comment);
+        if(comment[comment.length-1]=="@"){
+            setIsTag(true);
+        }
+        if(comment[comment.length-1]===" "){
+            setIsTag(false);
+        }
+    }   
 
     const setLike = async() => {
         setLiked(!isLiked);
@@ -82,26 +88,16 @@ const NFTScreen = (props:any) => {
         setCredential(newCredential.data);
     }
 
-    const handlePrivacyChange = async(event:any)=>{
-        setPrivacy(event.target.value)
-        const newCredential: any = await dispatch(changePrivacy(credential.id,event.target.value));
-        setCredential(newCredential);
-    }
-
-    const submitNewBid = async() => {
-        dispatch(submitBid(credential.id, bidAmount));
-    }
-
-    const submitNewMinPrice = async () => {
-        dispatch(submitMinPrice(credential.id, minPrice))
-    }
-
     const closeModal = ()=>{
         setModalIsOpen(false);
     }
 
     const afterOpenModal = () => {
         console.log('modal open')
+    }
+
+    const tagUser = () => {
+
     }
 
     return(
@@ -190,10 +186,11 @@ const NFTScreen = (props:any) => {
                     <Box component="div" style={{padding:'0px 40px', margin:'10px 0px'}}>
                         <Typography style={{fontSize:'24px', color:'black'}}>Comments</Typography>
                         {credential ?(credential.comments ? credential.comments.map((comment:any)=>{return (<CommentTile comment={comment}/>)}) : null):null}
-                        <Box component="div" style={{width:'100%', display:'flex', flexDirection:'row', padding:'5px'}}>
+                        <Box component="div" style={{width:'100%', display:'flex', flexDirection:'row', padding:'5px', alignItems:'center'}}>
                             {user.profileImageUrl? <img src={user.profileImageUrl} style={{height:'40px', width:'40px', borderRadius:'50%', backgroundColor:'#E46A6A'}}/> : <Box component="div" style={{backgroundColor:'#E46A6A',objectFit:'cover', width:'40px', height:'40px', margin:'10px', borderRadius:'50%'}}></Box> }
+                            <Typography style={{padding:'0px 10px', color:'black'}}>{user.username}</Typography>
                             <Box component="div" style={{flex:1, padding:'0px 10px'}}>
-                                <Input style={{width:'100%'}} name="comment" value={comment} onChange={(event:any)=>{setComment(event.target.value)}} placeholder="Add Comment" id="comment"/>
+                                {!isTag ? <TextField autoFocus inputProps={{type:'Search'}} style={{width:'100%'}} name="comment" value={comment} onChange={(event:any)=>{handleChange(event.target.value)}} placeholder="Add Comment" id="comment"/> : <Autocomplete value={comment} freeSolo options={allUsers.map((user:any)=>user.username)} renderInput={(params)=><TextField {...params} autoFocus inputProps={{...params.inputProps,type:'Search'}} style={{width:'100%'}} name="comment" value={comment} onChange={(event:any)=>{handleChange(event.target.value)}} placeholder="Add Comment" id="comment"/>}/>}
                             </Box>
                             <Button onClick = {submitComment}>Submit</Button>
                         </Box>

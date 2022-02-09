@@ -87,11 +87,16 @@ const FeedCard = (props:any) => {
     //         </Box>
     //     </Grid>
     // )
+
+    const colors = ["pink", "lightblue","lighgreen", "yellow","orange"]
+    const index = (Math.floor(Math.random()*10)) % 5
+    console.log(index)
+    const backgroundColor = colors[index]
     return(
-        <Grid item key ={props.key} className="feedCard" style={{width:'45%', margin:'0px 20px 50px 20px',  position:'relative', backgroundColor:'#CDCDCD', display:'flex', flexDirection:'column', alignItems:'center', justifyContent:'center', borderRadius:'20px', height:'70vh'}}>
+        <Grid item key ={props.key} className="feedCard" style={{width:'45%', margin:'0px 20px 50px 20px',  position:'relative', backgroundColor:'#434343', display:'flex', flexDirection:'column', alignItems:'center', justifyContent:'center', borderRadius:'20px', height:'70vh'}}>
             <Box component="div" className="Right" style={{display:'flex',width:'100%', height:'90%', backgroundColor:'transparent'}}>
                 <Box component="div" className="PostAssets" style={{width:'100%'}}>
-                    {credential && imageUrl ? <img onClick={()=>{navigate(`/credential/${credential.id}`)}} style={{height:'100%', width:'100%',objectFit:'cover', borderRadius:'20px', borderBottomLeftRadius:'0px',borderBottomRightRadius:'0px'}} src={imageUrl} alt="token"/> : <Box component="div" style={{backgroundColor:'#332E2E',objectFit:'contain', width:'100%', height:'100%', borderRadius:'20px'}}></Box>}
+                    {credential && imageUrl ? <img onClick={()=>{navigate(`/credential/${credential.id}`)}} style={{height:'100%', width:'100%',objectFit:'cover', borderRadius:'20px', borderBottomLeftRadius:'0px',borderBottomRightRadius:'0px', backgroundColor:backgroundColor}} src={imageUrl} alt="token"/> : <Box component="div" style={{backgroundColor:'#332E2E',objectFit:'contain', width:'100%', height:'100%', borderRadius:'20px'}}></Box>}
                 </Box>
             </Box>
             <Box component="div" className='Left' style={{width:'100%', flex:1, padding:'20px 0px'}}>
@@ -102,20 +107,20 @@ const FeedCard = (props:any) => {
                 </Box>
                 <Box onClick={()=>{navigate(`/credential/${credential.id}`)}} component="div" className="PostInfo" style={{width:'100%',height:'50%',display:'flex', alignItems:'center', justifyContent:'center', flexDirection:'column', margin:'10px 0px', }}>
                     {/* <Typography color="black">{props.credential.name} #{props.credential.token_id}</Typography> */}
-                    {credential?<Typography style={{color:'black', textTransform:'capitalize'}}>{credential.caption!=='' ? credential.caption:'hello'}</Typography>:<Typography style={{color:'black', textTransform:'capitalize'}}>hello</Typography>}
+                    {credential?<Typography style={{color:'white'}}>{credential.caption!=='' ? credential.caption:'hello'}</Typography>:<Typography style={{color:'black'}}>hello</Typography>}
                 </Box>
-                <Box component="div" className="PostActions" style={{display:'flex', flexDirection:'row', position:'absolute', bottom:0, right:0, padding:'20px'}}>
+                <Box component="div" className="PostActions" style={{display:'flex', flexDirection:'row', position:'absolute', bottom:0, right:0, padding:'10px'}}>
                     {credential? 
                     <Box component="div" style={{zIndex:99999, display:'flex', flexDirection:'row', alignItems:'center'}}>
                         <BiUpArrow size={18} color={isLiked ? '#02F9A7':'red'} onClick={setLike}/>
-                        {<Typography style={{padding:'0px 10px', fontSize:'21px', color:'black'}}>{credential.likes ? credential.likes.length : 0}</Typography>}
+                        {<Typography style={{padding:'0px 10px', fontSize:'21px', color:'white'}}>{credential.likes ? credential.likes.length : 0}</Typography>}
                     </Box> 
                     : 
                     null}
                     {credential? 
                     <Box component="div" style={{zIndex:99999, display:'flex', flexDirection:'row', alignItems:'center'}}>
                         <FaRegComment size={18} color={'#02F9A7'} onClick={()=>{navigate(`/credential/${credential.id}`)}}/>
-                        {<Typography style={{padding:'0px 10px', fontSize:'21px', color:'black'}}>{credential.comments ? credential.comments.length : 0}</Typography>}
+                        {<Typography style={{padding:'0px 10px', fontSize:'21px', color:'white'}}>{credential.comments ? credential.comments.length : 0}</Typography>}
                     </Box> 
                     : 
                     null}
