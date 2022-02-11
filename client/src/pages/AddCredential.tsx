@@ -71,14 +71,14 @@ const AddCredential = (props:any) => {
     }
 
     return (
-        <Box component="div" className="Container" style={{backgroundColor:'#FFFFFF', color:'white', padding:'0px 20px', minHeight:'100vh', display:'flex', flexDirection:'column'}}>
+        <Box component="div" className="Container" style={{backgroundColor:'#FFFFFF', color:'white', padding:'0px 0px', minHeight:'100vh', display:'flex', flexDirection:'column'}}>
             <Header/>
-            <Box component="div" style={{display:'flex', alignItems:'center', justifyContent:'center', backgroundColor:'#02F9A7', marginBottom:'20px'}}>
+            <Box component="div" style={{display:'flex', alignItems:'center', justifyContent:'center', backgroundColor:'#02F9A7', margin:'20px'}}>
                 <Button sx={createType==1?{flex:1,backgroundColor:'#02F9A7', color:'black', p:2}:{flex:1, backgroundColor:'black', color:'white',p:2}} onClick={()=>{setCreateType(0)}}>Upload Existing</Button>
                 <Button sx={createType==0?{flex:1, backgroundColor:'#02F9A7', color:'black',p:2}:{flex:1, backgroundColor:'black', color:'white',p:2}} onClick={()=>{setCreateType(1)}}>Create new</Button>
             </Box>
 {createType===0?
-            <Box component="div" style={{display:'flex', flexDirection:'row', alignItems:'center'}}>
+            <Box component="div" style={{display:'flex', flexDirection:'row', alignItems:'center', padding:'0px 20px'}}>
                 <Box component="form" style={{width:'100%', display:'flex', flexDirection:'column', alignItems:'center'}} noValidate sx={{ mt: 1 }} onChange={addNFT} onSubmit={createNewPost}>
                     <TextField
                     style={{backgroundColor:'#EEEEEE', margin:10, width:'90%'}}
@@ -102,6 +102,19 @@ const AddCredential = (props:any) => {
                         id="token_id"
                         autoComplete="token_id"
                     />
+                    <Select
+                        style={{backgroundColor:'#EEEEEE', margin:10, width:'90%'}}
+                        required
+                        fullWidth
+                        value={privacy}
+                        name="chain"
+                        labelId="Chain"
+                        type="text"
+                        id="chain"
+                        onChange = {handleChange}
+                    >
+                        <MenuItem value={0}>Ethereum</MenuItem>
+                    </Select>
                     <Select
                         style={{backgroundColor:'#EEEEEE', margin:10, width:'90%'}}
                         required
@@ -143,6 +156,7 @@ const AddCredential = (props:any) => {
                     {tokenData ? <img style={{height:'400px', width:'400px'}} src={`${imageUrl}`} alt="token"/> : null}
                 </Box>
             </Box>:
+            <Box component="div" style={{display:'flex', flexDirection:'row', alignItems:'center', padding:'0px 20px'}}>
             <Box component="form" style={{width:'100%', display:'flex', flexDirection:'column', alignItems:'center'}} noValidate sx={{ mt: 1 }} onSubmit={addNFT}>
                 <TextField
                 style={{backgroundColor:'#EEEEEE', margin:10, width:'90%'}}
@@ -183,6 +197,19 @@ const AddCredential = (props:any) => {
                     required
                     fullWidth
                     value={privacy}
+                    name="chain"
+                    labelId="Chain"
+                    type="text"
+                    id="chain"
+                    onChange = {handleChange}
+                    >
+                        <MenuItem value={0}>Ethereum</MenuItem>
+                    </Select>
+                <Select
+                    style={{backgroundColor:'#EEEEEE', margin:10, width:'90%'}}
+                    required
+                    fullWidth
+                    value={privacy}
                     name="token_id"
                     labelId="Token Id"
                     type="text"
@@ -192,10 +219,6 @@ const AddCredential = (props:any) => {
                     <MenuItem value={0}>Public</MenuItem>
                     <MenuItem value={1}>Private</MenuItem>
                 </Select>
-                <Box component="div" style={{backgroundColor:'pink'}}>
-                    <Typography>{tokenData ? tokenData.name:''}</Typography>
-                    {tokenData ? <img style={{height:'400px', width:'400px'}} src={`${imageUrl}`} alt="token"/> : null}
-                </Box>
                 <Button
                     type="submit"
                     fullWidth
@@ -205,6 +228,11 @@ const AddCredential = (props:any) => {
                 >
                     Generate
                 </Button>
+                </Box>
+                <Box component="div" style={{backgroundColor:'#02F9A7', height:'400px', width:'400px', display:'flex', alignItems:'center', justifyContent:'center', textAlign:'center'}}>
+                    <Typography style={{padding:'0px', color:'#000000'}}>{tokenData ? null:'Upload file to see preview'}</Typography>
+                    {tokenData ? <img style={{height:'400px', width:'400px'}} src={`${imageUrl}`} alt="token"/> : null}
+                </Box>
             </Box>}
         </Box>
     )
