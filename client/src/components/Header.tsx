@@ -26,7 +26,7 @@ const Header = (props:any) => {
     };
 
     return(
-        <Box component="div" style={{backgroundColor:'transparent', display:'flex', flexDirection:'row', alignItems:'center', justifyContent:'center', height:'8vh', padding:'10px'}}>
+        <Box component="div" style={{backgroundColor:'transparent', display:'flex', flexDirection:'row', alignItems:'center', justifyContent:'center', height:'8vh', padding:'10px 20px'}}>
             {/* <img src={playgroundLogo} style={{height:'10vh', width:'20vw'}}/> */}
             <Typography onClick={()=>{navigate('/feed')}} style={{color:'#02F9A7', fontSize:'22px', fontWeight:'bold', cursor:'pointer'}}>Playground</Typography>
             <Box component="div" style={{width:'100%', position:'relative', padding:'0px 20px', display:'flex', flexDirection:'row'}}>

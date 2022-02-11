@@ -248,7 +248,7 @@ const Home = (props:any) => {
   const {ethereum} = window;
 
   return (
-    user ? <Box component="div" style={{backgroundColor:'#FFFFFF', color:'white', padding:'0px 20px', display:'flex', flexDirection:'column', height:'100vh'}}>
+    user ? <Box component="div" style={{backgroundColor:'#FFFFFF', color:'white', padding:'0px 0px', display:'flex', flexDirection:'column', height:'100vh'}}>
       <Header/>
       <Box component="div" style={{display:'flex', flexDirection:'row'}}>
         {/* <Box component="div" style={{height:'80vh', width:'20vw', backgroundColor:'red'}}>

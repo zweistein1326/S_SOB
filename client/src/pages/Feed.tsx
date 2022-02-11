@@ -23,9 +23,9 @@ const Feed = () => {
     },[])
     
     return(
-        allUsers && user ? <Box component="div" style={{backgroundColor:'#FFFFFF', color:'white',padding:'0px 0px', maxHeight:'90vh', display:'flex', flexDirection:'column'}}>
+        allUsers && user ? <Box component="div" style={{backgroundColor:'#FFFFFF', color:'white',padding:'0px 0px', maxHeight:'100vh', display:'flex', flexDirection:'column', overflowY:'scroll'}}>
             <Header/>
-            <Box component="div" style={{backgroundColor:'#FFFFFF', color:'white', padding:'20px 10px', minHeight:'90vh', display:'flex', flexDirection:'row'}}>
+            <Box component="div" style={{backgroundColor:'#FFFFFF', color:'white', padding:'10px 10px', minHeight:'80vh', display:'flex', flexDirection:'row'}}>
             <Box component="div" style={{backgroundColor:'#FFFFFF', color:'white', width:'100%', minHeight:'90vh', display:'flex', flexDirection:'row', alignItems:'center' }}>
                 {/* <Box style={{width:'80%'}}>
                 <Typography style={{backgroundColor:'#02F9A7', color:'black', margin:20, padding:'10px 30px', borderRadius:'20px'}}>Username, Address</Typography>
@@ -46,18 +46,18 @@ const Feed = () => {
                         }
                 </Box>
                 <Box component="div" style={{display:'flex', flexDirection:'column', alignItems:'center'}}>
-                    <Button
+                    <Box component="div" style={{width:'60vw', display:'flex', alignItems:'center', flexDirection:'column', height:'90vh', overflowY:'scroll'}}>
+                        {/* {<Grid container columns={3} style={{backgroundColor:'#FFFFFF', color:'white', padding:'0px 20px', maxHeight:'100vh', overflowY:'scroll', width:'100%'}}> */}
+                        <Button
                         type="submit"
                         fullWidth
                         variant="contained"
-                        sx={{ mt: 3, mb: 2, width:'90%', backgroundColor:'#02F9A7', color:'black' }}
+                        sx={{ mb: 2, width:'90%', backgroundColor:'#02F9A7', color:'black', borderRadius:'50px', p:1 }}
                         // disabled={loading}
                         onClick={()=>{navigate('/addCredential')}}
                     >
                         Create 
                     </Button>
-                    <Box component="div" style={{width:'60vw', display:'flex', alignItems:'center', flexDirection:'column', height:'90vh', overflowY:'scroll'}}>
-                        {/* {<Grid container columns={3} style={{backgroundColor:'#FFFFFF', color:'white', padding:'0px 20px', maxHeight:'100vh', overflowY:'scroll', width:'100%'}}> */}
                             {credentials.map((credential:any,index:number)=>(
                                 <FeedCard credential={credential} key={index}/>)
                                 )}

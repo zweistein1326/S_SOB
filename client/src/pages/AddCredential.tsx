@@ -73,9 +73,9 @@ const AddCredential = (props:any) => {
     return (
         <Box component="div" className="Container" style={{backgroundColor:'#FFFFFF', color:'white', padding:'0px 20px', minHeight:'100vh', display:'flex', flexDirection:'column'}}>
             <Header/>
-            <Box component="div" style={{width:'100%', display:'flex', alignItems:'center', justifyContent:'center'}}>
-                <Button onClick={()=>{setCreateType(0)}}>Upload Existing</Button>
-                <Button onClick={()=>{setCreateType(1)}}>Create new</Button>
+            <Box component="div" style={{display:'flex', alignItems:'center', justifyContent:'center', backgroundColor:'#02F9A7', marginBottom:'20px'}}>
+                <Button sx={createType==1?{flex:1,backgroundColor:'#02F9A7', color:'black', p:2}:{flex:1, backgroundColor:'black', color:'white',p:2}} onClick={()=>{setCreateType(0)}}>Upload Existing</Button>
+                <Button sx={createType==0?{flex:1, backgroundColor:'#02F9A7', color:'black',p:2}:{flex:1, backgroundColor:'black', color:'white',p:2}} onClick={()=>{setCreateType(1)}}>Create new</Button>
             </Box>
 {createType===0?
             <Box component="div" style={{display:'flex', flexDirection:'row', alignItems:'center'}}>
