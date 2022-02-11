@@ -56,7 +56,7 @@ const AddCredential = (props:any) => {
     }
 
     return (
-        <Box component="div" className="Container" style={{backgroundColor:'#332E2E', color:'white', padding:'0px 20px', minHeight:'100vh', display:'flex', flexDirection:'column'}}>
+        <Box component="div" className="Container" style={{backgroundColor:'#FFFFFF', color:'white', padding:'0px 20px', minHeight:'100vh', display:'flex', flexDirection:'column'}}>
             <Header/>
             <Box component="form" style={{width:'100%', display:'flex', flexDirection:'column', alignItems:'center'}} noValidate sx={{ mt: 1 }} onSubmit={addNFT}>
                 <TextField

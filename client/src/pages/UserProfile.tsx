@@ -263,6 +263,9 @@ const Home = (props:any) => {
       <Box component="div" style={{width:'30vw', height:'90%', display:'flex', flexDirection:'column', alignItems:'center', padding:'20px 0px'}}>
         {activeUser.profileImageUrl ? <img src={`${activeUser.profileImageUrl}`} style={{ width:'300px', borderRadius:'50%'}}/>:<Box component="div" style={{width:'300px', height:'300px', borderRadius:'50%',backgroundColor:'pink'}}></Box>}
         <Typography style={{color:'black'}}>@{activeUser.username}</Typography>
+        <Link to='/settings' style={{padding:'10px',borderRadius:'30px', margin:'20px 10px', backgroundColor:'black', width:'60%', display:'flex', justifyContent:'center',textDecoration:'none', color:'#02F9A7', fontFamily:'sans-serif'}}>
+                Settings
+        </Link>
         {isFollowing?<Button style={activeUser.id !== user.id ? {backgroundColor:'darkGreen', color:'white', padding:'20px 0px', height:'10%',width:'100%', margin:'10px'}:{display:'none'}} onClick={()=>{
               setIsFollowing(!isFollowing);
               dispatch(followUser(user.id,activeUser.id));
