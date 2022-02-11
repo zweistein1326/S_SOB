@@ -96,7 +96,7 @@ const Home = (props:any) => {
   const createNewPost = async(event:any) => {
     event.preventDefault();
     console.log('creating new post');
-    await dispatch(createPost(tokenData, user.id, caption, privacy));
+    await dispatch(createPost(tokenData, user.id, privacy));
     navigate('/feed');
   }
 

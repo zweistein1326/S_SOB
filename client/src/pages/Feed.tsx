@@ -54,7 +54,7 @@ const Feed = () => {
                         // disabled={loading}
                         onClick={()=>{navigate('/addCredential')}}
                     >
-                        +Create 
+                        Create 
                     </Button>
                     <Box component="div" style={{width:'60vw', display:'flex', alignItems:'center', flexDirection:'column', height:'90vh', overflowY:'scroll'}}>
                         {/* {<Grid container columns={3} style={{backgroundColor:'#FFFFFF', color:'white', padding:'0px 20px', maxHeight:'100vh', overflowY:'scroll', width:'100%'}}> */}

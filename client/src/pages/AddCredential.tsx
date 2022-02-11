@@ -1,10 +1,10 @@
 import { useMutation } from "@apollo/client";
 import { Box, Button, FormControl, FormHelperText, Input, InputLabel, MenuItem, Select, TextField, Typography } from "@mui/material";
 import { useState } from "react";
-import { connect } from "react-redux";
+import { connect, useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { setCredentials } from "../redux/actions/credentials";
-import { getNFT } from "../functions/axios";
+import { createPost, getNFT } from "../functions/axios";
 import '../styles/index.css'
 import Header from "../components/Header";
 
@@ -21,30 +21,45 @@ const AddCredential = (props:any) => {
     const [imageUrl, setImageUrl] = useState<any>(null);
     const [privacy, setPrivacy] = useState(0);
     const [caption, setCaption] = useState<string>('');
+    const [createType, setCreateType] = useState<number>(0);
+    const user = useSelector((state:any)=>state.auth.user);
+    const dispatch = useDispatch();
 
-    const addNFT = async(event:React.FormEvent<HTMLFormElement>) => {
-        event.preventDefault();
-        const data = new FormData(event.currentTarget);
+   const addNFT = async(event:React.FormEvent<HTMLFormElement>) => {
+      event.preventDefault();
+      const data = new FormData(event.currentTarget);
+      if(data.get('contract_address')!=='' && data.get('token_id')!==''){
         const credential = {
-        contract_address: data.get('contract_address'),
-        token_id: data.get('token_id'),
-        caption: data.get('caption'),
-        private: privacy === 1
-        }
-        const tokenData = await getNFT(credential, props.user.id); 
-        if(tokenData.id){
-            props.setCredentials(tokenData);
+            contract_address: data.get('contract_address'),
+            token_id: data.get('token_id'),
+      }
+        const tokenData = await getNFT(credential, user.id);
+        console.log(tokenData);
+        if(tokenData.name){
+          if(tokenData.name==="CRYPTOPUNKS"){
+            setTokenData(tokenData);
+            setImageUrl(tokenData.image);
+          }
+          else{
             setTokenData(tokenData);
             if(tokenData.image.split('://')[0]=="ipfs"){
-                console.log(tokenData.image.split('://')[1]);
-                setImageUrl(`https://gateway.ipfs.io/ipfs/${tokenData.image.split('://')[1]}`);
+              setImageUrl(`https://gateway.ipfs.io/ipfs/${tokenData.image.split('://')[1]}`);
             }
             else{
-                setImageUrl(tokenData.image);
+              setImageUrl(tokenData.image);
             }
+            // navigate('/feed');
+          }
         }else{
-            alert(tokenData.message);
+          alert(tokenData.message);
         }
+      }
+  }
+
+    const createNewPost = async(event:any) => {
+        event.preventDefault();
+        await dispatch(createPost(tokenData, user.id, privacy));
+        navigate('/feed');
     }
 
     const handleChange = (event:any) => {
@@ -58,28 +73,110 @@ const AddCredential = (props:any) => {
     return (
         <Box component="div" className="Container" style={{backgroundColor:'#FFFFFF', color:'white', padding:'0px 20px', minHeight:'100vh', display:'flex', flexDirection:'column'}}>
             <Header/>
+            <Box component="div" style={{width:'100%', display:'flex', alignItems:'center', justifyContent:'center'}}>
+                <Button onClick={()=>{setCreateType(0)}}>Upload Existing</Button>
+                <Button onClick={()=>{setCreateType(1)}}>Create new</Button>
+            </Box>
+{createType===0?
+            <Box component="div" style={{display:'flex', flexDirection:'row', alignItems:'center'}}>
+                <Box component="form" style={{width:'100%', display:'flex', flexDirection:'column', alignItems:'center'}} noValidate sx={{ mt: 1 }} onChange={addNFT} onSubmit={createNewPost}>
+                    <TextField
+                    style={{backgroundColor:'#EEEEEE', margin:10, width:'90%'}}
+                    margin="normal"
+                    required
+                    fullWidth
+                    name="contract_address"
+                    label="Contract Address"
+                    type="text"
+                    id="contract_address"
+                    autoComplete="contract_address"
+                    />
+                    <TextField
+                        style={{backgroundColor:'#EEEEEE', margin:10, width:'90%'}}
+                        margin="normal"
+                        required
+                        fullWidth
+                        name="token_id"
+                        label="Token Id"
+                        type="text"
+                        id="token_id"
+                        autoComplete="token_id"
+                    />
+                    <Select
+                        style={{backgroundColor:'#EEEEEE', margin:10, width:'90%'}}
+                        required
+                        fullWidth
+                        value={privacy}
+                        name="token_id"
+                        labelId="Token Id"
+                        type="text"
+                        id="token_id"
+                        onChange = {handleChange}
+                    >
+                        <MenuItem value={0}>Public</MenuItem>
+                        <MenuItem value={1}>Private</MenuItem>
+                    </Select>
+                    {/* <TextField
+                        style={{backgroundColor:'#EEEEEE', margin:10, width:'90%'}}
+                        margin="normal"
+                        fullWidth
+                        value={caption}
+                        name="caption"
+                        label="Caption"
+                        type="text"
+                        id="caption"
+                        autoComplete="caption"
+                        onChange={handleCaptionChange}
+                    /> */}
+                    <Button
+                        type="submit"
+                        fullWidth
+                        variant="contained"
+                        sx={{ mt: 3, mb: 2, width:'20%', backgroundColor:'#02F9A7', color:'black' }}
+                        // disabled={loading}
+                    >
+                        Import NFT
+                    </Button>
+                </Box>
+                <Box component="div" style={{backgroundColor:'#02F9A7', height:'400px', width:'400px', display:'flex', alignItems:'center', justifyContent:'center', textAlign:'center'}}>
+                    <Typography style={{padding:'0px', color:'#000000'}}>{tokenData ? null:'Enter Contract Address and Token Id to import NFT'}</Typography>
+                    {tokenData ? <img style={{height:'400px', width:'400px'}} src={`${imageUrl}`} alt="token"/> : null}
+                </Box>
+            </Box>:
             <Box component="form" style={{width:'100%', display:'flex', flexDirection:'column', alignItems:'center'}} noValidate sx={{ mt: 1 }} onSubmit={addNFT}>
                 <TextField
                 style={{backgroundColor:'#EEEEEE', margin:10, width:'90%'}}
                 margin="normal"
                 required
                 fullWidth
-                name="contract_address"
-                label="Contract Address"
-                type="text"
-                id="contract_address"
-                autoComplete="contract_address"
+                name="file"
+                type="file"
+                id="file"
+                autoComplete="file"
                 />
                 <TextField
                     style={{backgroundColor:'#EEEEEE', margin:10, width:'90%'}}
                     margin="normal"
                     required
                     fullWidth
-                    name="token_id"
-                    label="Token Id"
+                    name="name"
+                    label="Name"
                     type="text"
-                    id="token_id"
-                    autoComplete="token_id"
+                    id="name"
+                    helperText="eg: Redeemable T-shirt with logo"
+                    autoComplete="name"
+                />
+                <TextField
+                    style={{backgroundColor:'#EEEEEE', margin:10, width:'90%'}}
+                    margin="normal"
+                    required
+                    fullWidth
+                    name="description"
+                    label="Description"
+                    type="text"
+                    helperText="eg: After purchasing a real t-shirt will be sent to you"
+                    id="description"
+                    autoComplete="description"
                 />
                 <Select
                     style={{backgroundColor:'#EEEEEE', margin:10, width:'90%'}}
@@ -99,18 +196,6 @@ const AddCredential = (props:any) => {
                     <Typography>{tokenData ? tokenData.name:''}</Typography>
                     {tokenData ? <img style={{height:'400px', width:'400px'}} src={`${imageUrl}`} alt="token"/> : null}
                 </Box>
-                <TextField
-                    style={{backgroundColor:'#EEEEEE', margin:10, width:'90%'}}
-                    margin="normal"
-                    fullWidth
-                    value={caption}
-                    name="caption"
-                    label="Caption"
-                    type="text"
-                    id="caption"
-                    autoComplete="caption"
-                    onChange={handleCaptionChange}
-                />
                 <Button
                     type="submit"
                     fullWidth
@@ -118,27 +203,9 @@ const AddCredential = (props:any) => {
                     sx={{ mt: 3, mb: 2, width:'20%', backgroundColor:'#02F9A7', color:'black' }}
                     // disabled={loading}
                 >
-                    Import NFT
+                    Generate
                 </Button>
-                {/* <Button
-                    type="submit"
-                    fullWidth
-                    variant="contained"
-                    sx={{ mt: 3, mb: 2, width:'20%', backgroundColor:'#02F9A7', color:'black' }}
-                    // disabled={loading}
-                >
-                    Generate NFT
-                </Button> */}
-                {/* <Button
-                    type="submit"
-                    fullWidth
-                    variant="contained"
-                    sx={{ mt: 3, mb: 2, width:'20%', backgroundColor:'#02F9A7', color:'black' }}
-                    // disabled={loading}
-                >
-                    +Add
-                </Button> */}
-            </Box>
+            </Box>}
         </Box>
     )
 }
