@@ -1,15 +1,10 @@
-# Core feature
+# Instructions to run dapp
 
-1. Generate a public and private key for user.
-2. Connect SSO to test website.
-
-# Improvement feature
-
-1. Do not let user use same email address and username twice to create a new account.
-2. Asynchronously add user to database and retrive information when trying to login.
-
-## Client
-
-Client is the user interface for user to login to SSOB
+0. Navigate to client folder
+1. Delete artifacts folder (if any)
+2. $npx hardhat compile
+3. $npx hardhat node
+4. $npx hardhat run scripts/deploy.js --network localhost
+5. $yarn start
 
 See more on how to start the client in a local development environment [here](./client/README.md)
