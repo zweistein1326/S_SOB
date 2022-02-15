@@ -26,6 +26,7 @@ import WalletConnect from '@walletconnect/client';
 import QRCodeModal from '@walletconnect/qrcode-modal';
 import { connector } from './functions/walletConnector';
 import { setUser } from './redux/actions/user';
+// import './assets/main.css';
 
 // import * as firebase from 'firebase/app';
 // import { firebaseConfig } from './firebase/firebase';
