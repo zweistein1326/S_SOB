@@ -1,11 +1,15 @@
-# SSOB Client
+# Basic Sample Hardhat Project
 
-In terminal: 
+This project demonstrates a basic Hardhat use case. It comes with a sample contract, a test for that contract, a sample script that deploys that contract, and an example of a task implementation, which simply lists the available accounts.
+
+Try running some of the following tasks:
+
+```shell
+npx hardhat accounts
+npx hardhat compile
+npx hardhat clean
+npx hardhat test
+npx hardhat node
+node scripts/sample-script.js
+npx hardhat help
 ```
-cd client
-node -v
-npm -v
-yarn -v
-yarn start
-``` 
-
