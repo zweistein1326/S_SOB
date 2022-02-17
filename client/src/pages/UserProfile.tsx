@@ -13,8 +13,12 @@ import '../styles/Home.css'
 import {searchByText} from '../redux/actions/filters';
 import usersSelector from '../redux/selectors/users';
 import { ThreeDots } from 'react-loader-spinner';
-import { useGLTF } from '@react-three/drei';
-import {Canvas} from '@react-three/fiber';
+import {ethers} from 'ethers';
+import Web3Modal from 'web3modal';
+import {nftAddress, NFTMarketAddress} from '../../config';
+import NFT from '../../artifacts/contracts/NFT.sol/NFT.json'
+import Market from '../../artifacts/contracts/Market.sol/NFTMarket.json'
+import axios from 'axios';
 
 declare var window:any;
 
@@ -38,8 +42,41 @@ const Home = (props:any) => {
   const [privacy, setPrivacy] = useState(0);
   const [caption, setCaption] = useState<string>('');
   const [tokenData, setTokenData] = useState<any>(null);
-  const dispatch = useDispatch();
-  
+  const [nfts, setNFTs] = useState<any>([]);
+  const dispatch = useDispatch();  
+
+  const loadNFTs = async(address:any) => {
+        const web3Modal = new Web3Modal();
+        const connection = await web3Modal.connect()
+        const provider = new ethers.providers.Web3Provider(connection)
+        const signer = provider.getSigner()
+          
+        const marketContract = new ethers.Contract(NFTMarketAddress, Market.abi, signer)
+        const tokenContract = new ethers.Contract(nftAddress, NFT.abi, provider)
+
+        console.log(address);
+        const data = await marketContract.fetchNFTsByUser(address);
+        console.log(data);
+        
+        const items = await Promise.all(data.map(async (i:any) => {
+          const tokenUri = await tokenContract.tokenURI(i.tokenId)
+          const meta = await axios.get(tokenUri)
+          let price = ethers.utils.formatUnits(i.price.toString(), 'ether')
+          let item = {
+            price,
+              tokenId: i.tokenId.toNumber(),
+              seller: i.seller,
+              owner: i.owner,
+              image: meta.data.image,
+              name: meta.data.name,
+              description: meta.data.description
+          }
+          return item
+        }))
+        setNFTs(items)
+        setLoading(false) 
+    }
+
   const handleLogout = () => {
     localStorage.removeItem('token');
     setLoggedIn(false);
@@ -110,19 +147,14 @@ const Home = (props:any) => {
 
   const {address} = useParams();
 
-  const Model = () => {
-    const {scene} = useGLTF('3Davatar.glb');
-    return(<primitive style={{height:'20vh', width:'20vw'}} object={scene}/>)
-  }
-
   useEffect(()=>{
-    console.log('changing');
+  
     setLoading(true);
     (async ()=>{
       setActiveCredentials([]);
       const {user}:any = await dispatch(getUserById(address));
       setIsUserProfile(address?.toLowerCase()===user.id.toLowerCase());
-      console.log(followingIds);
+      
       if(followingIds){
         const resAddress= followingIds.find((id:any)=>id===address);
         console.log(resAddress);
@@ -131,8 +163,8 @@ const Home = (props:any) => {
         setIsFollowing(false);
       }
       console.log(address?.toLowerCase(),user.id.toLowerCase());
-      setActiveUser(user);
-      console.log(user.profileImageUrl);
+      setActiveUser(address);
+      loadNFTs(user.id);
       if(user.credentials){
          user.credentials.forEach(async(credentialId:string,index:number)=>{
           setActiveCredentials([...activeCredentials,credentialId].sort((a:any,b:any)=>b.iat-a.iat))
@@ -141,15 +173,24 @@ const Home = (props:any) => {
   })();
   setLoading(false);
   },[
-    address,
+    // address,
   ])
 
   const renderView=(view:number)=>{
     if(view==0){
       return(
-        activeUser.credentials ? 
-          (activeUser.credentials.map((credentialId:string,index:number)=>(
-            <NFTCard credentialId={credentialId} key={index}/>)).reverse()
+        nfts?
+          (nfts.map((nft:any,index:number)=>(
+            <Box component="div" key={index} style={{border:'1px solid black', boxShadow:'10px 10px', borderRadius:'10px', overflow:'hidden' }} >
+                <img width="400px" src={nft.image}/>
+                <Box component="div" style={{padding:'20px'}}>
+                    <Typography style={{fontSize:'20px',fontWeight:'semi-bold', color:'black'}}>{nft.name}</Typography>
+                    <Box component="div" style={{overflow:'hidden'}}>
+                        <Typography style={{color:'gray'}}>{nft.description}</Typography>
+                    </Box>
+                </Box>
+            </Box>          
+            )).reverse()
           )
           : (activeUser.id===user.id?<Box component="div" style={{width:'100%', height:'100%', display:'flex', flexDirection:'column', alignItems:'center', padding:'40px'}}>
             <Typography style={{color:'black'}}>No NFTs added yet</Typography>
@@ -247,8 +288,14 @@ const Home = (props:any) => {
   
   const {ethereum} = window;
 
+  if(loading  && !nfts.length) {
+    return (
+    <Typography component="h1">
+      No NFTs purchased
+    </Typography>)
+  }
   return (
-    user ? <Box component="div" style={{backgroundColor:'#FFFFFF', color:'white', padding:'0px 0px', display:'flex', flexDirection:'column', height:'100vh'}}>
+    user && activeUser ? <Box component="div" style={{backgroundColor:'#FFFFFF', color:'white', padding:'0px 0px', display:'flex', flexDirection:'column', height:'100vh'}}>
       <Header/>
       <Box component="div" style={{display:'flex', flexDirection:'row'}}>
         {/* <Box component="div" style={{height:'80vh', width:'20vw', backgroundColor:'red'}}>

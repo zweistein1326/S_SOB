@@ -11,13 +11,13 @@ import Header from '../components/Header';
 import Modal from 'react-modal';
 import styles from './CredentialScreen.module.css';
 
-const NFTScreen = (props:any) => {
+const NFTScreen = (state:any) => {
 
     const [credential,setCredential]= useState<any>(null);
     const [imageUrl,setImageUrl]= useState<any>(null);
     const [loading,setLoading]= useState<any>(false);
     const [isModalOpen,setModalIsOpen]= useState<boolean>(false);
-    const {credentialId} = useParams();
+    const {nftContract, tokenId} = useParams();
     const navigate = useNavigate();
     const [isFavorite, setIsFavorite] = useState<boolean>(false);
     const dispatch = useDispatch();
@@ -40,7 +40,8 @@ const NFTScreen = (props:any) => {
 
     useEffect(()=>{
         setLoading(true);
-        const cred = credentials.get(credentialId);
+        console.log(credentials);
+        const cred = credentials.get(nftContract);
         setCredential(cred);
     
         if(user){
@@ -67,7 +68,7 @@ const NFTScreen = (props:any) => {
             setLoading(false);
         }        
     },[
-        credentialId, credentials, user
+        nftContract, credentials, user
     ]);
 
     const setLike = async() => {

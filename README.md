@@ -4,6 +4,7 @@
 1. Delete artifacts folder (if any)
 2. $npx hardhat compile
 3. $npx hardhat node
+## Open new terminal
 4. $npx hardhat run scripts/deploy.js --network localhost
 5. $yarn start
 
