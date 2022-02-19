@@ -26,6 +26,14 @@ import QRCodeModal from '@walletconnect/qrcode-modal';
 import { connector } from '../functions/walletConnector';
 import metamask_logo from '../assets/logos/metamask-fox.svg';
 import wallet_connect_logo from '../assets/logos/walletconnect-circle-white.svg';
+import Web3Modal from 'web3modal';
+import {nftAddress, NFTMarketAddress} from '../../config';
+import NFT from '../../artifacts/contracts/NFT.sol/NFT.json'
+import Market from '../../artifacts/contracts/Market.sol/NFTMarket.json'
+import {create as ipfsHttpClient } from 'ipfs-http-client'
+import Web3 from 'web3';
+import WalletConnectProvider from "@walletconnect/web3-provider";
+import Authereum from "authereum";
 
 declare var window: any;
 
@@ -40,94 +48,81 @@ const Register = (props:any) => {
   const dispatch = useDispatch();
 
 
-  const connectWalletHandler = (event:any) => {
-    event.preventDefault()
-    setLoading(true);
-    if(window.ethereum){
-      window.ethereum.request({method:'eth_requestAccounts'}).then(async (result:any[]) => {
-        setAccount(result[0]);
-        const user:any = await dispatch(getUserById(result[0]));
-        if(!!user){
-          window.localStorage.setItem('userId',result[0]);
-          setLoading(false);
-          dispatch(setUser(user.user));
-          navigate(`/feed`)
-        }else{
-          if(walletConnected){
-            await accountChangeHandler(account,username);
-          }
-          else{
-            setWalletConnected(true);
-            setLoading(false);
-          }
-        }
-      })
-    }
-    else{
-      setErrorMessage('Install Metamask');
-    }
-  }
+  const connectWalletHandler = async (event:any) => {
+    try{
+        event.preventDefault();
+        let web3Modal:any;
+        let connection:any;
+        let provider:any;
+        // const signer = provider.getSigner();
+        let web3:any;
+        let providerOptions:any;
+        providerOptions = {
+            metamask: {
+              id: "injected",
+              name: "Metamask", 
+              type: "injected",
+              check: "isMetaMask",
+            },
+          walletconnect: {
+          package: WalletConnectProvider, // required
+          options: {
+            infuraId: "23pWFcRt7vce0drcQcwyGhIhpyI", // Required
+            network: "IPFS",
+            qrcodeModalOptions: {
+              mobileLinks: [
+                "rainbow",
+                "metamask",
+                "argent",
+                "trust",
+                "imtoken",
+                "pillar"
+                ]
+              }
+            } 
+          },
+          authereum: {
+            package: Authereum // required
+          },
+        };
 
-  const walletConnect=async(event:any)=>{
-    event.preventDefault();
-    if(connector.connected){
-      const {accounts,chainId}= connector;
-      (async()=>{
-          setAccount(accounts[0]);
-          const user:any = await dispatch(getUserById(accounts[0]));
-          if(!!user){
-            window.localStorage.setItem('userId',accounts[0]);
-            setLoading(false);
-            dispatch(setUser(user.user));
-            navigate(`/feed`)
-          }else{
-            if(walletConnected){
-              await accountChangeHandler(accounts[0],username);
-          }
-          else{
-            setWalletConnected(true);
-            setLoading(false);
-          }
-        }
-        })();
-    }
-    else{
-      await connector.createSession();
-  }
-}
+        web3Modal = new Web3Modal({
+          providerOptions
+        });
+        provider = await web3Modal.connect();
+        provider.on('error', (e:any)=> console.error("WS Error", e));
+        provider.on('end', (e:any) => console.error("WS End", e));
 
-  connector.on("connect", async (error, payload) => {
-      if (error) {
-          throw error
-      }
-      const { accounts, chainId } = payload.params[0];
-      (async()=>{
-          setAccount(accounts[0])
-          const user:any = await dispatch(getUserById(accounts[0]));
-          if(!!user){
-            setLoading(false);
-            dispatch(setUser(user.user));
-            navigate(`/feed`)
-          }else{
-            if(walletConnected){
-              await accountChangeHandler(account,username);
+        provider.on("disconnect", (error: { code: number; message: string }) => {
+        console.log(error);
+        });
+        provider.on("connect", (info: { chainId: number }) => {
+        console.log(info);
+        });
+        web3 = new Web3(provider);
+        setLoading(false);
+        await web3.eth.getAccounts().then(async(result:any)=>{
+          try{
+            const user:any = await dispatch(getUserById(result[0]));
+            console.log(user);
+            if(user.user){
+                setAccount(user.user.id);
+                dispatch(setUser(user.user));
+                navigate('/feed')
+            }
+            else{
+                setWalletConnected(true);
+                setAccount(result[0]);
+            }
+          }catch(e:any){
+            console.log(e);
           }
-          else{
-            setWalletConnected(true);
-            setLoading(false);
-          }
-        }
-        })();
     });
-
-  connector.on("disconnect", (error:any, payload:any) => {
-    window.localStorage.removeItem('walletconnect');
-    navigate('/');
-    dispatch(setUser({}));
-    if (error) {
-        throw error;
     }
-  })
+    catch(error:any){
+      console.log(error);
+    }
+  }
 
   const accountChangeHandler = async(address:any,username:string) => {
     if(username!==''){
@@ -170,7 +165,7 @@ const Register = (props:any) => {
             {message}
           </Typography>
         )}
-        <Box component="form" noValidate sx={{ mt: 1, height:'100%',display:'flex', alignItems:'center', flexDirection:'column', justifyContent:'center' }}>
+        <Box component="form" noValidate sx={{ mt: 1, height:'100%', width:'100%', display:'flex', alignItems:'center', flexDirection:'column', justifyContent:'center' }}>
           {/* <TextField
             margin="normal"
             required
@@ -220,30 +215,17 @@ const Register = (props:any) => {
               onClick ={login}
             >
               Continue
-            </Button>:<Box component="div">
+            </Button>:<Box component="div" style={{width:'100%', display:'flex', alignItems:'center', justifyContent:'center'}}>
             <Button
               type="submit"
               fullWidth
               variant="contained"
-              sx={{ mt: 3, mb: 2, backgroundColor:'#333333', color:'#02F9A7', borderRadius:'30px', position:'relative', padding:'20px' }}
+              sx={{ mt: 3, mb: 2, backgroundColor:'#333333', color:'#02F9A7', borderRadius:'30px', position:'relative', padding:'20px', width:'60%' }}
               // disabled={loading}
               onClick ={connectWalletHandler}
             >
-              Sign in with Metamask
-              <img src={metamask_logo} style={{height:'40px', width:'40px', padding:'5px 20px', position:'absolute', left:0}}/>
-            </Button>
-            <Button
-              type="submit"
-              fullWidth
-              variant="contained"
-              sx={{ mt: 3, mb: 2, backgroundColor:'#333333', color:'#02F9A7', borderRadius:'30px', position:'relative', padding:'20px' }}
-              // disabled={loading}
-              onClick={walletConnect}
-            >
-              <Typography>
-                Sign in with WalletConnect
-              </Typography>
-              <img src={wallet_connect_logo} style={{height:'40px', width:'40px', padding:'5px 20px', position:'absolute', left:0}}/>
+              Connect Wallet
+              {/* <img src={metamask_logo} style={{height:'40px', width:'40px', padding:'5px 20px', position:'absolute', left:0}}/> */}
             </Button>
           </Box>}
         </Box>

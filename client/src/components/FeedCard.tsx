@@ -96,9 +96,9 @@ const FeedCard = (props:any) => {
                 </Box>
             </Box>
             <Box component="div" className='Left' style={{width:'100%', flex:1, padding:'10px 0px'}}>
-                <Box component="div" className='UserInfo' style={{display:'flex', padding:'10px', flexDirection:'row', alignItems:'center'}}>
-                    {/* {nftOwner ? <img src={nftOwner.profileImageUrl ? nftOwner.profileImageUrl:''} style={{backgroundColor:'pink',objectFit:'cover', width:'50%', height:'50%'}} className = "cardImage"/>:
-                    <Box component="div" style={{backgroundColor:'#E46A6A',objectFit:'cover', width:'40px', height:'40px', borderRadius:'50%'}}></Box>} */}
+                <Box component="div" className='UserInfo' style={{display:'flex', padding:'10px', flexDirection:'row', alignItems:'center'}} onClick={()=>{navigate(`/${nftOwner}`)}}>
+                    {nftOwner ? <img src={nftOwner.profileImageUrl ? nftOwner.profileImageUrl:''} style={{backgroundColor:'pink',objectFit:'cover', width:'50%', height:'50%'}} className = "cardImage"/>:
+                    <Box component="div" style={{backgroundColor:'#E46A6A',objectFit:'cover', width:'40px', height:'40px', borderRadius:'50%'}}></Box>}
                     <Typography style={{color:'black', padding:'0px 10px'}}>@{nftOwner}</Typography>
                 </Box>
                 <Box onClick={()=>{navigate(`/credential/${nft.nftContract}/${nft.tokenId}`)}} component="div" className="PostInfo" style={{width:'100%', padding:'10px', height:'50%',display:'flex', justifyContent:'center', flexDirection:'column', margin:'10px 0px', }}>

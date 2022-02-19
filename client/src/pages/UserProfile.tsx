@@ -154,7 +154,6 @@ const Home = (props:any) => {
       setActiveCredentials([]);
       const {user}:any = await dispatch(getUserById(address));
       setIsUserProfile(address?.toLowerCase()===user.id.toLowerCase());
-      
       if(followingIds){
         const resAddress= followingIds.find((id:any)=>id===address);
         console.log(resAddress);
@@ -162,8 +161,8 @@ const Home = (props:any) => {
       }else{
         setIsFollowing(false);
       }
-      console.log(address?.toLowerCase(),user.id.toLowerCase());
-      setActiveUser(address);
+      const activeUser:any = await dispatch(getUserById(address));
+      setActiveUser(activeUser.user);
       loadNFTs(user.id);
       if(user.credentials){
          user.credentials.forEach(async(credentialId:string,index:number)=>{
@@ -322,12 +321,11 @@ const Home = (props:any) => {
             }}>Follow</Button>}
       </Box>
         <Box component="div" style={{width:'100%', padding:'20px', alignItems:'center', display:'flex', flexDirection:'column', overflow:'auto', height:'83vh', overflowY:'auto'}}>
-          {/* {activeUser.id===user.id?<Box component="div" style={{width:'100%', display:'flex', flexDirection:'row', alignItems:'center', justifyContent:'space-around', padding:'10px 0px'}}>
-            <Button style={view==0?{ backgroundColor:'darkGreen',flex:1, color:'white', borderRadius:0, padding:'20px 0px'}:{backgroundColor:'white',flex:1, color:'darkGreen', borderRadius:0, padding:'20px 0px'}} onClick={()=>{setView(0)}}>All</Button>
-            <Button style={view==1?{backgroundColor:'darkGreen',flex:1, color:'white', borderRadius:0, padding:'20px 0px'}:{backgroundColor:'white',flex:1, color:'darkGreen', borderRadius:0, padding:'20px 0px'}} onClick={()=>{setView(1)}}>Favorites</Button>
-            <Button style={view==2?{backgroundColor:'darkGreen',flex:1, color:'white', borderRadius:0, padding:'20px 0px'}:{backgroundColor:'white',flex:1, color:'darkGreen', borderRadius:0, padding:'20px 0px'}} onClick={()=>{setView(2)}}>+Add new</Button>
-          </Box>:<Box component="div" style={{width:'100%', display:'flex', flexDirection:'row', alignItems:'center', justifyContent:'space-around', padding:'10px 0px'}}>
-          </Box>} */}
+          <Box component="div" style={{width:'100%', display:'flex', flexDirection:'row', alignItems:'center', justifyContent:'space-around', padding:'10px 0px'}}>
+            <Button style={view==0?{ backgroundColor:'darkGreen',flex:1, color:'white', borderRadius:0, padding:'20px 0px'}:{backgroundColor:'white',flex:1, color:'darkGreen', borderRadius:0, padding:'20px 0px'}} onClick={()=>{setView(0)}}>My NFTs</Button>
+            <Button style={view==1?{backgroundColor:'darkGreen',flex:1, color:'white', borderRadius:0, padding:'20px 0px'}:{backgroundColor:'white',flex:1, color:'darkGreen', borderRadius:0, padding:'20px 0px'}} onClick={()=>{setView(1)}}>Creator Dashboard</Button>
+            {/* <Button style={view==2?{backgroundColor:'darkGreen',flex:1, color:'white', borderRadius:0, padding:'20px 0px'}:{backgroundColor:'white',flex:1, color:'darkGreen', borderRadius:0, padding:'20px 0px'}} onClick={()=>{setView(2)}}>+Add new</Button> */}
+          </Box>
           <Grid container columns={3} style={{justifyContent:'center'}}>
             {loading? <ThreeDots height="100" width="100" color="grey"/>:
               renderView(view)

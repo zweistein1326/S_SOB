@@ -73,7 +73,6 @@ const AddCredential = (props:any) => {
         let transaction = await contract.createToken(url)
         let tx = await transaction.wait();
 
-        console.log(tx);
         let event = tx.events[0];
         let value = event.args[2];
         let tokenId = value.toNumber()
@@ -91,42 +90,42 @@ const AddCredential = (props:any) => {
         navigate('/feed');
     }
 
-//    const addNFT = async(event:React.FormEvent<HTMLFormElement>) => {
-//       event.preventDefault();
-//       const data = new FormData(event.currentTarget);
-//       if(data.get('contract_address')!=='' && data.get('token_id')!==''){
-//         const credential = {
-//             contract_address: data.get('contract_address'),
-//             token_id: data.get('token_id'),
-//       }
-//         const tokenData = await getNFT(credential, user.id);
-//         console.log(tokenData);
-//         if(tokenData.name){
-//           if(tokenData.name==="CRYPTOPUNKS"){
-//             setTokenData(tokenData);
-//             setImageUrl(tokenData.image);
-//           }
-//           else{
-//             setTokenData(tokenData);
-//             if(tokenData.image.split('://')[0]=="ipfs"){
-//               setImageUrl(`https://gateway.ipfs.io/ipfs/${tokenData.image.split('://')[1]}`);
-//             }
-//             else{
-//               setImageUrl(tokenData.image);
-//             }
-//             // navigate('/feed');
-//           }
-//         }else{
-//           alert(tokenData.message);
-//         }
-//       }
-//   }
+   const addNFT = async(event:React.FormEvent<HTMLFormElement>) => {
+      event.preventDefault();
+      const data = new FormData(event.currentTarget);
+      if(data.get('contract_address')!=='' && data.get('token_id')!==''){
+        const credential = {
+            contract_address: data.get('contract_address'),
+            token_id: data.get('token_id'),
+      }
+        const tokenData = await getNFT(credential, user.id);
+        console.log(tokenData);
+        if(tokenData.name){
+          if(tokenData.name==="CRYPTOPUNKS"){
+            setTokenData(tokenData);
+            setImageUrl(tokenData.image);
+          }
+          else{
+            setTokenData(tokenData);
+            if(tokenData.image.split('://')[0]=="ipfs"){
+              setImageUrl(`https://gateway.ipfs.io/ipfs/${tokenData.image.split('://')[1]}`);
+            }
+            else{
+              setImageUrl(tokenData.image);
+            }
+            // navigate('/feed');
+          }
+        }else{
+          alert(tokenData.message);
+        }
+      }
+  }
 
-    // const createNewPost = async(event:any) => {
-    //     event.preventDefault();
-    //     await dispatch(createPost(tokenData, user.id, privacy));
-    //     navigate('/feed');
-    // }
+    const createNewPost = async(event:any) => {
+        event.preventDefault();
+        await dispatch(createPost(tokenData, user.id, privacy));
+        navigate('/feed');
+    }
 
     const handleChange = (event:any) => {
         setPrivacy(event.target.value);
@@ -145,7 +144,7 @@ const AddCredential = (props:any) => {
             </Box>
 {createType===0?
             <Box component="div" style={{display:'flex', flexDirection:'row', alignItems:'center', padding:'0px 20px'}}>
-                <Box component="form" style={{width:'100%', display:'flex', flexDirection:'column', alignItems:'center'}} noValidate sx={{ mt: 1 }} onChange={()=>{}} onSubmit={()=>{}}>
+                <Box component="form" style={{width:'100%', display:'flex', flexDirection:'column', alignItems:'center'}} noValidate sx={{ mt: 1 }} onChange={addNFT} onSubmit={createNewPost}>
                     <TextField
                     style={{backgroundColor:'#EEEEEE', margin:10, width:'90%'}}
                     margin="normal"
@@ -209,15 +208,15 @@ const AddCredential = (props:any) => {
                         type="submit"
                         fullWidth
                         variant="contained"
-                        sx={{ mt: 3, mb: 2, width:'20%', backgroundColor:'#02F9A7', color:'black' }}
+                        sx={{ mt: 3, mb: 2, p:2, width:'90%', backgroundColor:'#02F9A7', color:'black' }}
                         // disabled={loading}
                     >
-                        Import NFT
+                        Add to collection
                     </Button>
                 </Box>
-                <Box component="div" style={{backgroundColor:'#02F9A7', height:'400px', width:'400px', display:'flex', alignItems:'center', justifyContent:'center', textAlign:'center'}}>
-                    <Typography style={{padding:'0px', color:'#000000'}}>{tokenData ? null:'Enter Contract Address and Token Id to import NFT'}</Typography>
-                    {tokenData ? <img style={{height:'400px', width:'400px'}} src={`${imageUrl}`} alt="token"/> : null}
+                <Box component="div" style={{backgroundColor:'#FFFFFF',border:'1px solid black', borderRadius:'20px', height:'450px', width:'400px', display:'flex', flexDirection:'column', alignItems:'center', justifyContent:'space-between', textAlign:'center'}}>
+                    {tokenData ? <img style={{height:'400px',borderTopRightRadius:'20px',borderTopLeftRadius:'20px', width:'400px'}} src={`${imageUrl}`} alt="token"/> : null}
+                    <Typography style={{padding:'10px', color:'#000000', fontWeight:'bold', fontSize:'16px'}}>{tokenData ? `${tokenData.name} #${tokenData.token_id}` :'Enter Contract Address and Token Id to import NFT'}</Typography>
                 </Box>
             </Box>:
             <Box component="div" style={{display:'flex', flexDirection:'row', alignItems:'center', padding:'0px 20px'}}>
@@ -301,7 +300,7 @@ const AddCredential = (props:any) => {
                     type="submit"
                     fullWidth
                     variant="contained"
-                    sx={{ mt: 3, mb: 2, width:'20%', backgroundColor:'#02F9A7', color:'black' }}
+                    sx={{ mt: 3, mb: 2, p:2, width:'90%', backgroundColor:'#02F9A7', color:'black' }}
                     // disabled={loading}
                     onClick = {createMarket}
                 >
