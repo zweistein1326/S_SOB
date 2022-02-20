@@ -257,8 +257,8 @@ const Home = (props:any) => {
         </Box> */}
       {/* <Box component="form" onSubmit={addNFT} noValidate sx={{ mt: 1 }}> */}
       <Box component="div" style={{width:'30vw', height:'90%', display:'flex', flexDirection:'column', alignItems:'center', padding:'20px 0px'}}>
-        {activeUser.profileImageUrl ? <img src={`${activeUser.profileImageUrl}`} style={{ width:'300px', borderRadius:'50%'}}/>:<Box component="div" style={{width:'300px', height:'300px', borderRadius:'50%',backgroundColor:'#E46A6A'}}></Box>}
-        <Typography style={{color:'black', padding:'20px 0px'}}>@{activeUser.username}</Typography>
+        {activeUser.profileImageUrl ? <img src={`${activeUser.profileImageUrl}`} style={{ width:'300px', borderRadius:'50%', border:'3px solid #02F9A7'}}/>:<Box component="div" style={{width:'300px', height:'300px', borderRadius:'50%',backgroundColor:'#E46A6A'}}></Box>}
+        <Typography style={{color:'black', padding:'20px 0px', fontSize:'20px'}}>@{activeUser.username}</Typography>
         {activeUser.id === user.id? <Link to='/settings' style={{padding:'20px', borderRadius:'30px', margin:'20px 10px', backgroundColor:'black', width:'60%', display:'flex', justifyContent:'center',textDecoration:'none', color:'#02F9A7', fontFamily:'sans-serif'}}>
                 Settings
         </Link>: null }
