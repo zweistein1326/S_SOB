@@ -42,10 +42,23 @@ const NFTCard = (props:Props) => {
                 }
             }
         if(credential.image.split('://')[0]=="ipfs"){
-            setImageUrl(`https://gateway.ipfs.io/ipfs/${credential.image.split('://')[1]}`);
+            if (credential.image.split('://')[0].split('/')[0] === "ipfs") {
+                setImageUrl(`https://gateway.ipfs.io/${credential.image.split('://')[1]}`);
+            }
+            else {
+                    setImageUrl(`https://gateway.ipfs.io/ipfs/${credential.image.split('://')[1]}`);
+            }
         }
         else{
             setImageUrl(credential.image);
+        }
+        if(credential.gif){
+            if(credential.image.split('://')[0]=="ipfs"){
+                setImageUrl(`https://gateway.ipfs.io/ipfs/${credential.gif.split('://')[1]}`);
+            }
+            else{
+                setImageUrl(credential.gif);
+            }
         }
         }
     },[props.credentialId])

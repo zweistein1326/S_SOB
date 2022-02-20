@@ -98,6 +98,7 @@ const AddCredential = (props:any) => {
             contract_address: data.get('contract_address'),
             token_id: data.get('token_id'),
       }
+
         const tokenData = await getNFT(credential, user.id);
         if(tokenData.name){
           if(tokenData.name==="CRYPTOPUNKS"){
@@ -106,8 +107,15 @@ const AddCredential = (props:any) => {
           }
           else{
             setTokenData(tokenData);
+            console.log(tokenData);
             if(tokenData.image.split('://')[0]=="ipfs"){
-              setImageUrl(`https://gateway.ipfs.io/ipfs/${tokenData.image.split('://')[1]}`);
+                if (tokenData.image.split('://')[1].split('/')[0] === "ipfs") {
+                    setImageUrl(`https://gateway.ipfs.io/${tokenData.image.split('://')[1]}`);
+                }
+                else {
+                    setImageUrl(`https://gateway.ipfs.io/ipfs/${tokenData.image.split('://')[1]}`);
+                }
+              
             }
             else{
               setImageUrl(tokenData.image);

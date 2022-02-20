@@ -61,8 +61,13 @@ const NFTScreen = (state:any) => {
             }
         }
             if(cred.image.split('://')[0]=="ipfs"){
-                setImageUrl(`https://gateway.ipfs.io/ipfs/${cred.image.split('://')[1]}`);
+            if (cred.image.split('://')[0].split('/')[0] === "ipfs") {
+                setImageUrl(`https://gateway.ipfs.io/${cred.image.split('://')[1]}`);
             }
+            else {
+                    setImageUrl(`https://gateway.ipfs.io/ipfs/${cred.image.split('://')[1]}`);
+            }
+        }
             else{
                 setImageUrl(cred.image);
             }
@@ -161,6 +166,7 @@ const NFTScreen = (state:any) => {
                        
                         <Box component="div" className={styles.infoContainer}>
                             {credential.name ? <Typography style={{fontSize:'24px', fontWeight:'bold', color:'black', padding:'10px', textAlign:'center'}} color="black">{credential.name} #{credential.token_id}  {isFavorite? <FavoriteIcon style={{color:'red'}} />: <FavoriteIcon style={{color:'grey'}}/>}</Typography> : null}
+                            {credential.description ? <Typography style={{fontSize:'24px', fontWeight:'bold', color:'black', padding:'10px', textAlign:'center'}} color="black">{credential.description} </Typography> : null}
                             {/* {credential.token_id ? <Typography style={{fontSize:'24px', fontWeight:'500', color:'black', padding:'10px', textAlign:'center'}} color="black">Token: </Typography> : null} */}
                              <Grid container columns={3} style={{ margin:'0px 10px', borderRadius:'0px',padding:'0.2rem', justifyContent:'center', alignItems:'flex-start', overflowY:'scroll', backgroundColor:'black', marginTop:'10px'}}>
                                 <Typography style={{fontSize:'20px', fontWeight:'bold', color:'white', width:'100%', textAlign:'center', padding:'10px'}}>Attributes</Typography>

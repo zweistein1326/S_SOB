@@ -84,6 +84,7 @@ const Home = (props:any) => {
   const loadNFTs = async(user:any) => {
     let activeCreds:any = [];
     if(user && user.credentials){
+      console.log(user.credentials);
       if(activeCreds.length < user.credentials.length){
         await Promise.all(user.credentials).then(async(credentialIds:any)=>{
           await credentialIds.forEach(async(credentialId:string)=>{
@@ -204,15 +205,16 @@ const Home = (props:any) => {
       return(
         activeCredentials?
           (activeCredentials.map((nft:any,index:number)=>(
-            <Box component="div" key={index} style={{border:'1px solid black', boxShadow:'10px 10px', borderRadius:'10px', overflow:'hidden' }} onClick={()=>{navigate(`/credential/${nft.id}`)}}>
-                <img width="400px" src={nft.image}/>
-                <Box component="div" style={{padding:'20px'}}>
-                    <Typography style={{fontSize:'20px',fontWeight:'semi-bold', color:'black'}}>{nft.name} #{nft.token_id}</Typography>
-                    <Box component="div" style={{overflow:'hidden'}}>
-                        <Typography style={{color:'gray'}}>{nft.description}</Typography>
-                    </Box>
-                </Box>
-            </Box>          
+            // <Box component="div" key={index} style={{border:'1px solid black', margin:'10px', boxShadow:'10px 10px', borderRadius:'20px', overflow:'hidden' }} onClick={()=>{navigate(`/credential/${nft.id}`)}}>
+            //     <img width="400px" src={nft.image}/>
+            //     <Box component="div" style={{padding:'20px'}}>
+            //         <Typography style={{fontSize:'20px',fontWeight:'semi-bold', color:'black'}}>{nft.name} #{nft.token_id}</Typography>
+            //         <Box component="div" style={{overflow:'hidden'}}>
+            //             <Typography style={{color:'gray'}}>{nft.description}</Typography>
+            //         </Box>
+            //     </Box>
+            // </Box>       
+            <NFTCard credentialId={nft.id} key={index}/>
             )).reverse()
           )
           : (activeUser.id===user.id?<Box component="div" style={{width:'100%', height:'100%', display:'flex', flexDirection:'column', alignItems:'center', padding:'40px'}}>
@@ -229,84 +231,6 @@ const Home = (props:any) => {
             <NFTCard credentialId={favoriteId} key={index}/>))
           )
           : <Button style={{backgroundColor:'#02F9A7',flex:1, color:'black', borderRadius:0, padding:'20px 0px', marginTop:'20px'}} onClick={()=>{navigate('/feed')}}>Explore</Button>)
-    }
-    else{
-      return (
-        <Box component="div" style={{display:'flex',flexDirection:'row', width:'100vw', padding:'40px'}}>
-          <Box component="form" style={{flex:1, display:'flex', flexDirection:'column', alignItems:'center'}} noValidate sx={{ mt: 1 }} onChange={addNFT} onSubmit={createNewPost}>
-                <TextField
-                style={{backgroundColor:'#EEEEEE', margin:10, width:'90%'}}
-                margin="normal"
-                required
-                fullWidth
-                name="contract_address"
-                label="Contract Address"
-                type="text"
-                id="contract_address"
-                autoComplete="contract_address"
-                />
-                <TextField
-                    style={{backgroundColor:'#EEEEEE', margin:10, width:'90%'}}
-                    margin="normal"
-                    required
-                    fullWidth
-                    name="token_id"
-                    label="Token Id"
-                    type="text"
-                    id="token_id"
-                    autoComplete="token_id"
-                />
-                <Select
-                    style={{backgroundColor:'#EEEEEE', margin:10, width:'90%'}}
-                    required
-                    fullWidth
-                    value={privacy}
-                    name="token_id"
-                    labelId="Token Id"
-                    type="text"
-                    id="token_id"
-                    onChange = {handleChange}
-                >
-                    <MenuItem value={0}>Public</MenuItem>
-                    <MenuItem value={1}>Private</MenuItem>
-                </Select>
-                <TextField
-                    style={{backgroundColor:'#EEEEEE', margin:10, width:'90%'}}
-                    margin="normal"
-                    fullWidth
-                    value={caption}
-                    name="caption"
-                    label="Caption"
-                    type="text"
-                    id="caption"
-                    autoComplete="caption"
-                    onChange={handleCaptionChange}
-                />
-                <Button
-                    type="submit"
-                    fullWidth
-                    variant="contained"
-                    sx={{ mt: 3, mb: 2, width:'90%', backgroundColor:'#02F9A7', color:'black' }}
-                    // disabled={loading}
-                >
-                    Create new Post
-                </Button>
-                {/* <Button
-                    type="submit"
-                    fullWidth
-                    variant="contained"
-                    sx={{ mt: 3, mb: 2, width:'20%', backgroundColor:'#02F9A7', color:'black' }}
-                    // disabled={loading}
-                >
-                    +Add
-                </Button> */}
-            </Box>
-            <Box component="div" style={{backgroundColor:'#02F9A7', width:'28vw', height:'55vh', display:'flex', alignItems:'center', justifyContent:'center', flexDirection:'column' }}>
-                {tokenData ? <img style={{height:'100%', width:'100%'}} src={`${imageUrl}`} alt="token"/> : null}
-                <Typography style={{width:'90%', textAlign:'center', color:'black', fontWeight:'500', fontSize:'18px', padding:'10px'}}>{tokenData ? `${tokenData.name} #${tokenData.token_id}`:'Enter Contract Address and Token Id to view NFT'}</Typography>
-            </Box>
-          </Box>
-      );
     }
   }
   
@@ -334,21 +258,22 @@ const Home = (props:any) => {
       <Box component="div" style={{width:'30vw', height:'90%', display:'flex', flexDirection:'column', alignItems:'center', padding:'20px 0px'}}>
         {activeUser.profileImageUrl ? <img src={`${activeUser.profileImageUrl}`} style={{ width:'300px', borderRadius:'50%'}}/>:<Box component="div" style={{width:'300px', height:'300px', borderRadius:'50%',backgroundColor:'pink'}}></Box>}
         <Typography style={{color:'black'}}>@{activeUser.username}</Typography>
-        <Link to='/settings' style={{padding:'20px',borderRadius:'30px', margin:'20px 10px', backgroundColor:'black', width:'60%', display:'flex', justifyContent:'center',textDecoration:'none', color:'#02F9A7', fontFamily:'sans-serif'}}>
+        {activeUser.id === user.id? <Link to='/settings' style={{padding:'20px', borderRadius:'30px', margin:'20px 10px', backgroundColor:'black', width:'60%', display:'flex', justifyContent:'center',textDecoration:'none', color:'#02F9A7', fontFamily:'sans-serif'}}>
                 Settings
-        </Link>
-        {isFollowing?<Button style={activeUser.id !== user.id ? {backgroundColor:'darkGreen', color:'white', padding:'20px 0px', height:'10%',width:'100%', margin:'10px'}:{display:'none'}} onClick={()=>{
+        </Link>: null }
+        {activeUser.id !== user.id ? (isFollowing ? <Button style={{backgroundColor:'darkGreen', color:'white', borderRadius:'30px', padding:'20px', width:'60%', margin:'10px'}} onClick={()=>{
               setIsFollowing(!isFollowing);
               dispatch(followUser(user.id,activeUser.id));
-            }}>Unfollow</Button>:<Button style={activeUser.id !== user.id ?{backgroundColor:'darkGreen', color:'white', padding:'20px 0px', height:'10%', width:'100%', margin:'10px'}:{display:'none'}} onClick={()=>{
+            }}>Unfollow</Button>:
+            <Button style={{backgroundColor:'darkGreen', color:'white', borderRadius:'30px', padding:'20px', width:'60%', margin:'10px'}} onClick={()=>{
               setIsFollowing(!isFollowing);
               dispatch(followUser(user.id,activeUser.id));
-            }}>Follow</Button>}
+            }}>Follow</Button>) : null }
       </Box>
         <Box component="div" style={{width:'100%', padding:'20px', alignItems:'center', display:'flex', flexDirection:'column', overflow:'auto', height:'83vh', overflowY:'auto'}}>
           <Box component="div" style={{width:'100%', display:'flex', flexDirection:'row', alignItems:'center', justifyContent:'space-around', padding:'10px 0px'}}>
             <Button style={view==0?{ backgroundColor:'darkGreen',flex:1, color:'white', borderRadius:0, padding:'20px 0px'}:{backgroundColor:'white',flex:1, color:'darkGreen', borderRadius:0, padding:'20px 0px'}} onClick={()=>{setView(0)}}>My NFTs</Button>
-            <Button style={view==1?{backgroundColor:'darkGreen',flex:1, color:'white', borderRadius:0, padding:'20px 0px'}:{backgroundColor:'white',flex:1, color:'darkGreen', borderRadius:0, padding:'20px 0px'}} onClick={()=>{setView(1)}}>Favorited</Button>
+            {activeUser.id === user.id?<Button style={view==1?{backgroundColor:'darkGreen',flex:1, color:'white', borderRadius:0, padding:'20px 0px'}:{backgroundColor:'white',flex:1, color:'darkGreen', borderRadius:0, padding:'20px 0px'}} onClick={()=>{setView(1)}}>Favorited</Button> : null}
           </Box>
           <Grid container columns={3} style={{justifyContent:'center'}}>
             {loading? <ThreeDots height="100" width="100" color="grey"/>:

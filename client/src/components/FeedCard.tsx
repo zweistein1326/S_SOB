@@ -34,7 +34,12 @@ const FeedCard = (props:any) => {
                 }
             }
         if(nft.image.split('://')[0]=="ipfs"){
-            setImageUrl(`https://gateway.ipfs.io/ipfs/${nft.image.split('://')[1]}`);
+            if (nft.image.split('://')[0].split('/')[0] === "ipfs") {
+                setImageUrl(`https://gateway.ipfs.io/${nft.image.split('://')[1]}`);
+            }
+            else {
+                    setImageUrl(`https://gateway.ipfs.io/ipfs/${nft.image.split('://')[1]}`);
+            }
         }
         else{
             setImageUrl(nft.image);
@@ -101,37 +106,37 @@ const FeedCard = (props:any) => {
     return(
         <Grid item key ={props.key} className="feedCard" style={{margin:'0px 20px 50px 20px',  position:'relative', backgroundColor:'#FFFFFF', display:'flex', flexDirection:'column', alignItems:'center', justifyContent:'center', borderRadius:'20px', border: '2px solid black'}}>
             <Box component="div" className="Right" style={{display:'flex',width:'100%', backgroundColor:'transparent', marginBottom:'0px'}}>
-                <Box component="div" className="PostAssets" style={{width:'100%'}}>
+                <Box component="div" className="PostAssets" style={{width:'100%' }}>
                     {nft && imageUrl ? <img onClick={()=>{navigate(`/credential/${nft.id}`)}} style={{height:'100%', width:'500px',objectFit:'cover', borderRadius:'20px', borderBottomLeftRadius:'0px',borderBottomRightRadius:'0px'}} src={imageUrl} alt="token"/> : <Box component="div" style={{backgroundColor:'#332E2E',objectFit:'contain', width:'100%', height:'100%', borderRadius:'20px'}}></Box>}
                 </Box>
             </Box>
             <Box component="div" className='Left' style={{width:'100%', flex:1, padding:'10px 0px'}}>
-                <Box component="div" className='UserInfo' style={{display:'flex', padding:'10px', flexDirection:'row', alignItems:'center'}} onClick={()=>{navigate(`/${nftOwner}`)}}>
+                <Box component="div" className='UserInfo' style={{display:'flex', padding:'10px 10px', flexDirection:'row', alignItems:'center'}} onClick={()=>{navigate(`/${nftOwner}`)}}>
                     {nftOwner ? <img src={nftOwner.profileImageUrl ? nftOwner.profileImageUrl:''} style={{backgroundColor:'pink',objectFit:'cover', width:'50%', height:'50%'}} className = "cardImage"/>:
                     <Box component="div" style={{backgroundColor:'#E46A6A',objectFit:'cover', width:'40px', height:'40px', borderRadius:'50%'}}></Box>}
                     {nftOwner ? <Typography style={{color:'black', padding:'0px 10px'}}>@{nftOwner.id}</Typography>:<Typography style={{color:'black', padding:'0px 10px'}}>@{nft.owner}</Typography>}
                 </Box>
-                <Box onClick={()=>{navigate(`/credential/${nft.id}`)}} component="div" className="PostInfo" style={{width:'100%', padding:'10px', height:'50%',display:'flex', justifyContent:'center', flexDirection:'column', margin:'10px 0px', }}>
+                <Box onClick={()=>{navigate(`/credential/${nft.id}`)}} component="div" className="PostInfo" style={{flex:1, padding:'10px 10px', display:'flex', justifyContent:'space-between', flexDirection:'row'}}>
                     {/* <Typography color="black">{props.nft.name} #{props.nft.token_id}</Typography> */}
                     <Typography style={{color:'black', fontWeight:'bold', padding:'0px 10px', fontSize:'20px'}}>{nft.name} #{nft.token_id}</Typography>
+                    <Box component="div" className="PostActions" style={{display:'flex', flexDirection:'row', padding:'0px 10px'}}>
+                        {nft? 
+                            <Box component="div" style={{zIndex:99999, display:'flex', flexDirection:'row', alignItems:'center'}}>
+                                <BiUpArrow size={18} color={isLiked ? '#02F9A7':'red'} onClick={setLike}/>
+                                {<Typography style={{padding:'0px 10px', fontSize:'21px', color:'black'}}>{nft.likes ? nft.likes.length : 0}</Typography>}
+                            </Box> 
+                        : 
+                        null}
+                        {nft? 
+                            <Box component="div" style={{zIndex:99999, display:'flex', flexDirection:'row', alignItems:'center'}}>
+                                <FaRegComment size={18} color={'#02F9A7'} onClick={()=>{navigate(`/nft/${nft.id}`)}}/>
+                                {<Typography style={{padding:'0px 10px', fontSize:'21px', color:'black'}}>{nft.comments ? nft.comments.length : 0}</Typography>}
+                            </Box> 
+                        : 
+                        null}
+                    </Box>
                     {/* <Typography style={{color:'black', padding:'0px 10px'}}>{nft.description}</Typography> */}
                     {/* <Typography style={{color:'black', padding:'0px 10px'}}>{nft.price} MATIC</Typography> */}
-                </Box>
-                <Box component="div" className="PostActions" style={{display:'flex', flexDirection:'row', position:'absolute', bottom:0, right:0, padding:'10px'}}>
-                    {nft? 
-                    <Box component="div" style={{zIndex:99999, display:'flex', flexDirection:'row', alignItems:'center'}}>
-                        <BiUpArrow size={18} color={isLiked ? '#02F9A7':'red'} onClick={setLike}/>
-                        {<Typography style={{padding:'0px 10px', fontSize:'21px', color:'black'}}>{nft.likes ? nft.likes.length : 0}</Typography>}
-                    </Box> 
-                    : 
-                    null}
-                    {nft? 
-                    <Box component="div" style={{zIndex:99999, display:'flex', flexDirection:'row', alignItems:'center'}}>
-                        <FaRegComment size={18} color={'#02F9A7'} onClick={()=>{navigate(`/nft/${nft.id}`)}}/>
-                        {<Typography style={{padding:'0px 10px', fontSize:'21px', color:'black'}}>{nft.comments ? nft.comments.length : 0}</Typography>}
-                    </Box> 
-                    : 
-                    null}
                 </Box>
             </Box>
              {/* <Box component="div" style={{width:'100%', borderBottomRightRadius:'20px', borderBottomLeftRadius:'20px'}}>
