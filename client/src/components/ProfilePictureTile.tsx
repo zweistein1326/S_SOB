@@ -4,13 +4,14 @@ import { BiUpArrow } from 'react-icons/bi';
 import { FaRegComment } from 'react-icons/fa';
 import { connect, useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
-import { like } from '../functions/axios';
+import { like, updateUser } from '../functions/axios';
 import './NFTCard.css';
 import sortCredentials from '../redux/selectors/credentials';
 
 interface Props{
     credentialId:string,
     key:number,
+    changeProfilePicture: (imageUrl:string)=>void;
 }
 
 interface State{
@@ -18,7 +19,7 @@ interface State{
 }
 
 
-const NFTCard = (props:Props) => {
+const PPTile = (props:Props) => {
     
     const navigate = useNavigate();
     const [imageUrl,setImageUrl] = useState('');
@@ -69,6 +70,8 @@ const NFTCard = (props:Props) => {
         setCredential(newCredential.data);
     }
 
+    
+
     if(credential && (1==1 || user.id===credential.owner)){
         return(
         <Grid item key={props.key} style={{height:'400px',width:'400px', margin:'1rem', position:'relative', backgroundColor:'#EEEEEE', borderRadius:'15px'}}>
@@ -81,7 +84,9 @@ const NFTCard = (props:Props) => {
                         <Box style={{backgroundColor:'pink',objectFit:'cover', width:'50%', height:'50%', borderRadius:'50%'}}>
                         </Box>
                     </Box>} */}
-                    <Typography color="white" style={{fontSize:'18px', fontWeight:'bold', textAlign:'center'}}>{credential.name} #{credential.token_id}</Typography>
+                    <Button style={{fontSize:'18px', fontWeight:'bold', textAlign:'center', color:'white'}} onClick={()=>{
+                        props.changeProfilePicture(imageUrl)
+                    }}>Set Profile Picture</Button>
                     {/* <Button onClick={()=>{}}>Add To Collection</Button>
                     <Button onClick={()=>{}}>Share</Button> */}
                     {/* <Typography style={{fontSize:'21px'}} color="white">ETH{props.credential.minPrice}</Typography> */}
@@ -90,7 +95,7 @@ const NFTCard = (props:Props) => {
                 {/* {credential.minPrice?<Typography style={{flex:1}} color="white">{credential.minPrice}</Typography>:null} */}
             </Box>
             {/* <Typography>NFT: opensea.io//{props.credential.contract_address}/{props.credential.token_id}</Typography> */}
-            {credential ? <img onClick ={()=>{navigate(`/credential/${credential.id}`)}} style={{height:'400px', width:'400px', borderRadius:'15px'}} src={imageUrl} alt="token"/> : null}
+            {credential ? <img onClick ={()=>{}} style={{height:'400px', width:'400px', borderRadius:'15px'}} src={imageUrl} alt="token"/> : null}
         </Grid>
     )
     }else{
@@ -99,4 +104,4 @@ const NFTCard = (props:Props) => {
 
 }
 
-export default NFTCard;
+export default PPTile;

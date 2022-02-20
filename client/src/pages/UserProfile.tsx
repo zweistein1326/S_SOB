@@ -84,7 +84,7 @@ const Home = (props:any) => {
   const loadNFTs = async(user:any) => {
     let activeCreds:any = [];
     if(user && user.credentials){
-      console.log(user.credentials);
+      console.log(user);
       if(activeCreds.length < user.credentials.length){
         await Promise.all(user.credentials).then(async(credentialIds:any)=>{
           await credentialIds.forEach(async(credentialId:string)=>{
@@ -190,6 +190,7 @@ const Home = (props:any) => {
       }
       const activeUser:any = await dispatch(getUserById(address));
       setActiveUser(activeUser.user);
+      console.log(activeUser.user);
       loadNFTs(activeUser.user);
       if(user.credentials){
          user.credentials.forEach(async(credentialId:string,index:number)=>{
