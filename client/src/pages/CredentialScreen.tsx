@@ -10,6 +10,7 @@ import {BiDownArrow, BiUpArrow} from 'react-icons/bi';
 import Header from '../components/Header';
 import Modal from 'react-modal';
 import styles from './CredentialScreen.module.css';
+import {FaRegComment} from 'react-icons/fa';
 
 const NFTScreen = (state:any) => {
 
@@ -108,7 +109,7 @@ const NFTScreen = (state:any) => {
     return(
         user ? <Box component="div" className={styles.container}>
             <Header/>
-            <Modal
+            {/* <Modal
             isOpen = {isModalOpen}
             onAfterOpen = {afterOpenModal}
             onRequestClose = {closeModal}
@@ -132,9 +133,10 @@ const NFTScreen = (state:any) => {
                     <button>inside</button>
                     <button>the modal</button>
                 </form>
-            </Modal>
+            </Modal> */}
+            <Box component="div" style={{display:'flex', flexDirection:'row', justifyContent:'center', width:'100%', overflowY:'scroll'}}>
             {credential ?
-            <Box component="div">
+            <Box component="div" style={{width:'70%'}}>
                     <Box component="div" className='UserInfo' style={{display:'flex', padding:'10px 20px', flexDirection:'row', alignItems:'center', justifyContent:'space-between', width:'100%'}}>
                         <Box component="div" style={{display:'flex', flexDirection:'row', alignItems:'center', padding:'10px'}}>
                                 {credentialOwner?<img src={credentialOwner.profileImageUrl ? credentialOwner.profileImageUrl:''} style={{backgroundColor:'pink',objectFit:'cover', width:'50%', height:'50%'}} className = "cardImage"/>:
@@ -143,31 +145,27 @@ const NFTScreen = (state:any) => {
                                 {/* <Typography style={{color:'black'}} >{credential.iat}</Typography> */}
                         </Box>
                          <Box component="div" className={styles.actionContainer}>
-                                <Button className={styles.actionButton} style={{border: '1px solid black',margin: '10px' ,borderRadius:'10px',padding:'10px '}}><a target="_blank" href={`https://opensea.io/assets/${credential.contract_address}/${credential.token_id}`}>View on OpenSea</a></Button>
-                                <Button style={{border: '1px solid black',margin: '10px' ,borderRadius:'10px',padding:'10px '}} className={styles.actionButton}><a target="_blank" href={`https://etherscan.io/address/${credential.contract_address}`}>View on EtherScan</a></Button>
+                                <Button className={styles.actionButton} style={{border: '1px solid black',margin: '10px' ,borderRadius:'10px',padding:'10px'}}><a target="_blank"  href={`https://opensea.io/assets/${credential.contract_address}/${credential.token_id}`}>OpenSea</a></Button>
+                                <Button style={{border: '1px solid black',margin: '10px' ,borderRadius:'10px', padding:'10px '}} className={styles.actionButton}><a target="_blank" href={`https://etherscan.io/address/${credential.contract_address}`}>EtherScan</a></Button>
                                 <Button onClick = {setFavorite} className={styles.actionButton} style={{display:'flex', flexDirection:'row'}}>
-                                    {isFavorite? <FavoriteIcon style={{color:'red'}} />: <FavoriteIcon style={{color:'grey'}}/>}
-                                    <Typography style={{color:'black'}}>{isFavorite?`Add to Favorites`:`Add to Favorites`}</Typography>
+                                    {/* <Typography style={{color:'black'}}>{isFavorite?`Add to Favorites`:`Add to Favorites`}</Typography> */}
                                 </Button>
-                                {credential.owner===user.id ? <Button onClick = {()=>{
-                                    dispatch(updateUser({id:user.id, profileImageUrl: imageUrl}))
-                                }} style={{border:'1px solid black', margin:'10px', borderRadius:'10px', padding:'10px', color:'black'}}>Use as profile image</Button>
-                                :
-                                null}
                             </Box>
                     </Box>
                     <Box component="div" className={styles.tokenInfo}>
-                        <Box component="div" className={styles.imgContainer}>
-                            <img className={styles.credentialImg} src={imageUrl} alt="token"/> 
+                        <Box component="div">
+                            <Box component="div" className={styles.imgContainer}>
+                                <img className={styles.credentialImg} src={imageUrl} alt="token"/> 
+                            </Box>
                         </Box>
                        
                         <Box component="div" className={styles.infoContainer}>
-                            {credential.name ? <Typography style={{fontSize:'24px', fontWeight:'bold', color:'black', padding:'10px', textAlign:'center'}} color="black">{credential.name} #{credential.token_id}</Typography> : null}
+                            {credential.name ? <Typography style={{fontSize:'24px', fontWeight:'bold', color:'black', padding:'10px', textAlign:'center'}} color="black">{credential.name} #{credential.token_id}  {isFavorite? <FavoriteIcon style={{color:'red'}} />: <FavoriteIcon style={{color:'grey'}}/>}</Typography> : null}
                             {/* {credential.token_id ? <Typography style={{fontSize:'24px', fontWeight:'500', color:'black', padding:'10px', textAlign:'center'}} color="black">Token: </Typography> : null} */}
-                            <Grid container columns={3} style={{height:'100%', margin:'0px 10px', borderRadius:'20px',padding:'1rem', justifyContent:'center', alignItems:'flex-start', overflowY:'scroll', backgroundColor:'black'}}>
-                            <Typography style={{fontSize:'20px', fontWeight:'bold', color:'white', width:'100%', textAlign:'center', padding:'10px'}}>Attributes</Typography>
+                             <Grid container columns={3} style={{ margin:'0px 10px', borderRadius:'0px',padding:'0.2rem', justifyContent:'center', alignItems:'flex-start', overflowY:'scroll', backgroundColor:'black', marginTop:'10px'}}>
+                                <Typography style={{fontSize:'20px', fontWeight:'bold', color:'white', width:'100%', textAlign:'center', padding:'10px'}}>Attributes</Typography>
                                 {credential.attributes?credential.attributes.map(({trait_type,value}:any)=>{return(
-                                    <Grid item style={{border:'1px solid #000000', backgroundColor:'#E46A6A', padding:'0.3rem', minWidth:'10rem', margin:'0.5rem', textAlign:'center'}}>
+                                    <Grid item style={{border:'1px solid #000000', backgroundColor:'#E46A6A', padding:'0.3rem', minWidth:'8rem', margin:'0.5rem', textAlign:'center'}}>
                                         <Typography style={{fontSize:'18px', fontWeight:'bold', color:'#000000', textTransform:'capitalize'}}>{trait_type}</Typography>
                                         <Typography style={{fontSize:'14px', fontWeight:'500', color:'#000000', textTransform:'capitalize'}}>{value}</Typography>
                                     </Grid>
@@ -175,32 +173,54 @@ const NFTScreen = (state:any) => {
                                         <Typography style={{fontSize:'18px', fontWeight:'bold', color:'#000000'}}>Attributes not available</Typography>
                                     </Grid>}
                             </Grid>
+                            <Box component="div" style={{display:'flex', flexDirection:'row',}}>
+                                <Box component="div" style={{display:'flex', flexDirection:'row', alignItems:'center', padding:'20px', cursor:'pointer'}} onClick={setLike}>
+                                    <BiUpArrow color={isLiked ? '#02F9A7':'red'}/>
+                                    <Typography style={{padding:'0px 10px', color:isLiked ? '#02F9A7':'red'}}>Like</Typography>
+                                </Box>
+                                <Box component="div" style={{zIndex:99999, display:'flex', flexDirection:'row', alignItems:'center'}}>
+                                    <FaRegComment size={18} color={'#02F9A7'} onClick={()=>{navigate(`/nft/${credential.id}`)}}/>
+                                    {<Typography style={{padding:'0px 10px', color:'black'}}>{credential.comments ? credential.comments.length : 0}</Typography>}
+                                </Box> 
+                            </Box>
                             {/* <Button onClick={()=>{setModalIsOpen(true)}} style={{ backgroundColor:'#02F9A7', padding:'10px', color:'black', width:'100%', margin:'10px'}}>Purchase</Button> */}
                         </Box>
                         {/* <Typography>NFT: opensea.io//{props.credential.contract_address}/{props.credential.token_id}</Typography> */}
                     </Box>
+                     {credential ?
+                        <Box component="div" style={{display:'flex',position:'relative', alignItems:'center', justifyContent:'space-between', backgroundColor:'#FFFFFF', margin:'20px 40px 40px 40px'}}>
+                            <Box component="div" style={{flex:1}}>
+                                <Box component="div" style={{padding:'0px 40px', margin:'10px 0px'}}>
+                                    <Typography style={{fontSize:'24px', color:'black'}}>Comments</Typography>
+                                    {credential ?(credential.comments ? credential.comments.map((comment:any)=>{return (<CommentTile comment={comment}/>)}) : null):null}
+                                    <Box component="div" style={{width:'100%', display:'flex', flexDirection:'row', padding:'5px'}}>
+                                        {user.profileImageUrl? <img src={user.profileImageUrl} style={{height:'40px', width:'40px', borderRadius:'50%', backgroundColor:'#E46A6A'}}/> : <Box component="div" style={{backgroundColor:'#E46A6A',objectFit:'cover', width:'40px', height:'40px', margin:'10px', borderRadius:'50%'}}></Box> }
+                                        <Box component="div" style={{flex:1, padding:'0px 10px'}}>
+                                            <Input style={{width:'100%'}} name="comment" value={comment} onChange={(event:any)=>{setComment(event.target.value)}} placeholder="Add Comment" id="comment"/>
+                                        </Box>
+                                        <Button onClick = {submitComment}>Submit</Button>
+                                    </Box>
+                                </Box>
+                            </Box>
+                        </Box>:null}
                 </Box>
                 : null}
-            {credential ?
-            <Box component="div" style={{display:'flex',position:'relative', alignItems:'center', justifyContent:'space-between', backgroundColor:'#EEEEEE', margin:'20px 40px 40px 40px'}}>
-                <Box component="div" style={{flex:1}}>
-                    <Box component="div" style={{display:'flex', flexDirection:'row', alignItems:'center', padding:'0px 40px', cursor:'pointer'}} onClick={setLike}>
-                        <BiUpArrow color={isLiked ? 'darkGreen':'red'}/>
-                        <Typography style={{color:(isLiked?'darkGreen':'red')}}>Like</Typography>
-                    </Box>
-                    <Box component="div" style={{padding:'0px 40px', margin:'10px 0px'}}>
-                        <Typography style={{fontSize:'24px', color:'black'}}>Comments</Typography>
-                        {credential ?(credential.comments ? credential.comments.map((comment:any)=>{return (<CommentTile comment={comment}/>)}) : null):null}
-                        <Box component="div" style={{width:'100%', display:'flex', flexDirection:'row', padding:'5px'}}>
-                            {user.profileImageUrl? <img src={user.profileImageUrl} style={{height:'40px', width:'40px', borderRadius:'50%', backgroundColor:'#E46A6A'}}/> : <Box component="div" style={{backgroundColor:'#E46A6A',objectFit:'cover', width:'40px', height:'40px', margin:'10px', borderRadius:'50%'}}></Box> }
-                            <Box component="div" style={{flex:1, padding:'0px 10px'}}>
-                                <Input style={{width:'100%'}} name="comment" value={comment} onChange={(event:any)=>{setComment(event.target.value)}} placeholder="Add Comment" id="comment"/>
+                <Box component="div" style={{zIndex:'999999', height:'100vh', backgroundColor:'#333333', maxWidth:'20vw', display:'flex', flexDirection:'column', alignItems:'center', justifyContent:'flex-start', padding:'0px 10px', overflowY:'scroll'}}>
+                    <Typography style={{color:'white', fontSize:'20px', fontWeight:'bold', padding:'20px'}}>Recommended for you</Typography>
+                    {/* <Typography style={{color:'white', fontSize:'14px', fontWeight:'bold',textAlign:'right', width:'100%', padding:'0px 20px'}}>View more</Typography> */}
+                    { allUsers.map((recommendUser:any)=>{
+                        return(
+                        recommendUser.id!==user.id?<Box component="div" style={{display:'flex', flexDirection:'row', alignItems:'center', justifyContent:'flex-start', width:'100%', margin:'10px',}}>
+                            <Box component="div" style={{display:'flex', flexDirection:'row', flex:1, alignItems:'center'}} onClick ={()=>{navigate(`/${recommendUser.id}`)}}>
+                                {recommendUser.profileImageUrl? <img src={recommendUser.profileImageUrl} style={{width:'50px', height:'50px',backgroundColor:'pink', borderRadius:'50%'}}/>:<Box component="div" style={{width:'50px', height:'50px', backgroundColor:'pink', borderRadius:'50%'}}></Box>}
+                                <Typography style={{flex:1, paddingLeft:'10px'}}>{recommendUser.username}</Typography>
+                                {/* <Button onClick={()=>{dispatch(followUser(user.id,recommendUser.id))}}>+ Follow</Button> */}
                             </Box>
-                            <Button onClick = {submitComment}>Submit</Button>
-                        </Box>
-                    </Box>
+                        </Box>:null
+                        )})
+                        }
                 </Box>
-            </Box>:null}
+            </Box>
         </Box> : null
     );
 }
