@@ -98,32 +98,36 @@ const AddCredential = (props:any) => {
             contract_address: data.get('contract_address'),
             token_id: data.get('token_id'),
       }
-
-        const tokenData = await getNFT(credential, user.id);
-        if(tokenData.name){
-          if(tokenData.name==="CRYPTOPUNKS"){
-            setTokenData(tokenData);
-            setImageUrl(tokenData.image);
-          }
-          else{
-            setTokenData(tokenData);
+        try{
+            const tokenData = await getNFT(credential, user.id);
             console.log(tokenData);
-            if(tokenData.image.split('://')[0]=="ipfs"){
-                if (tokenData.image.split('://')[1].split('/')[0] === "ipfs") {
-                    setImageUrl(`https://gateway.ipfs.io/${tokenData.image.split('://')[1]}`);
-                }
-                else {
-                    setImageUrl(`https://gateway.ipfs.io/ipfs/${tokenData.image.split('://')[1]}`);
-                }
-              
+            if(tokenData){
+                if(tokenData.collection_name){
+                    if(tokenData.collection_name==="CRYPTOPUNKS"){
+                        setTokenData(tokenData);
+                        setImageUrl(tokenData.image);
+                    }
+                    else{
+                        setTokenData(tokenData);
+                        console.log(tokenData);
+                        if(tokenData.image.split('://')[0]=="ipfs"){
+                            if (tokenData.image.split('://')[1].split('/')[0] === "ipfs") {
+                                setImageUrl(`https://gateway.ipfs.io/${tokenData.image.split('://')[1]}`);
+                            }
+                            else {
+                                setImageUrl(`https://gateway.ipfs.io/ipfs/${tokenData.image.split('://')[1]}`);
+                            }
+                        
+                        }
+                        else{
+                        setImageUrl(tokenData.image);
+                        }
+                        // navigate('/feed');
+                    }
+                    }
             }
-            else{
-              setImageUrl(tokenData.image);
-            }
-            // navigate('/feed');
-          }
-        }else{
-          alert(tokenData.message);
+        }catch(e){
+            console.log(e);
         }
       }
   }
@@ -223,7 +227,7 @@ const AddCredential = (props:any) => {
                 </Box>
                 <Box component="div" style={{backgroundColor:'#FFFFFF',border:'1px solid black', borderRadius:'20px', height:'450px', width:'400px', display:'flex', flexDirection:'column', alignItems:'center', justifyContent:'space-between', textAlign:'center'}}>
                     {tokenData ? <img style={{height:'400px',borderTopRightRadius:'20px',borderTopLeftRadius:'20px', width:'400px'}} src={`${imageUrl}`} alt="token"/> : null}
-                    <Typography style={{padding:'10px', color:'#000000', fontWeight:'bold', fontSize:'16px'}}>{tokenData ? `${tokenData.name} #${tokenData.token_id}` :'Enter Contract Address and Token Id to import NFT'}</Typography>
+                    <Typography style={{padding:'10px', color:'#000000', fontWeight:'bold', fontSize:'16px'}}>{tokenData ? `${tokenData.collection_name} #${tokenData.token_id}` :'Enter Contract Address and Token Id to import NFT'}</Typography>
                 </Box>
             </Box>:
             <Box component="div" style={{display:'flex', flexDirection:'row', alignItems:'center', padding:'0px 20px'}}>

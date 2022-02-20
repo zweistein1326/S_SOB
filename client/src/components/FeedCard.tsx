@@ -119,7 +119,7 @@ const FeedCard = (props:any) => {
                 </Box>
                 <Box onClick={()=>{navigate(`/credential/${nft.id}`)}} component="div" className="PostInfo" style={{flex:1, padding:'10px 10px', display:'flex', justifyContent:'space-between', flexDirection:'row'}}>
                     {/* <Typography color="black">{props.nft.name} #{props.nft.token_id}</Typography> */}
-                    <Typography style={{color:'black', fontWeight:'bold', padding:'0px 10px', fontSize:'20px'}}>{nft.name} #{nft.token_id}</Typography>
+                    <Typography style={{color:'black', fontWeight:'bold', padding:'0px 10px', fontSize:'20px'}}>{nft.name?nft.name:nft.collection_name} #{nft.token_id}</Typography>
                     <Box component="div" className="PostActions" style={{display:'flex', flexDirection:'row', padding:'0px 10px'}}>
                         {nft? 
                             <Box component="div" style={{zIndex:99999, display:'flex', flexDirection:'row', alignItems:'center'}}>

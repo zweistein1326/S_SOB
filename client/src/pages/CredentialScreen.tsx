@@ -200,7 +200,7 @@ const NFTScreen = (state:any) => {
                                     <Typography style={{fontSize:'24px', color:'black'}}>Comments</Typography>
                                     {credential ?(credential.comments ? credential.comments.map((comment:any)=>{return (<CommentTile comment={comment}/>)}) : null):null}
                                     <Box component="div" style={{width:'100%', display:'flex', flexDirection:'row', padding:'5px'}}>
-                                        {user.profileImageUrl? <img src={user.profileImageUrl} style={{height:'40px', width:'40px', borderRadius:'50%', backgroundColor:'#E46A6A'}}/> : <Box component="div" style={{backgroundColor:'#E46A6A',objectFit:'cover', width:'40px', height:'40px', margin:'10px', borderRadius:'50%'}}></Box> }
+                                        {user.profileImageUrl? <img src={user.profileImageUrl} style={{height:'40px', width:'40px', borderRadius:'50%', backgroundColor:'#E46A6A', border:'2px solid #02F9A7'}}/> : <Box component="div" style={{backgroundColor:'#E46A6A',objectFit:'cover', width:'40px', height:'40px', margin:'10px', borderRadius:'50%'}}></Box> }
                                         <Box component="div" style={{flex:1, padding:'0px 10px'}}>
                                             <Input style={{width:'100%'}} name="comment" value={comment} onChange={(event:any)=>{setComment(event.target.value)}} placeholder="Add Comment" id="comment"/>
                                         </Box>
