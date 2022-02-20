@@ -256,8 +256,8 @@ const Home = (props:any) => {
         </Box> */}
       {/* <Box component="form" onSubmit={addNFT} noValidate sx={{ mt: 1 }}> */}
       <Box component="div" style={{width:'30vw', height:'90%', display:'flex', flexDirection:'column', alignItems:'center', padding:'20px 0px'}}>
-        {activeUser.profileImageUrl ? <img src={`${activeUser.profileImageUrl}`} style={{ width:'300px', borderRadius:'50%'}}/>:<Box component="div" style={{width:'300px', height:'300px', borderRadius:'50%',backgroundColor:'pink'}}></Box>}
-        <Typography style={{color:'black'}}>@{activeUser.username}</Typography>
+        {activeUser.profileImageUrl ? <img src={`${activeUser.profileImageUrl}`} style={{ width:'300px', borderRadius:'50%'}}/>:<Box component="div" style={{width:'300px', height:'300px', borderRadius:'50%',backgroundColor:'#E46A6A'}}></Box>}
+        <Typography style={{color:'black', padding:'20px 0px'}}>@{activeUser.username}</Typography>
         {activeUser.id === user.id? <Link to='/settings' style={{padding:'20px', borderRadius:'30px', margin:'20px 10px', backgroundColor:'black', width:'60%', display:'flex', justifyContent:'center',textDecoration:'none', color:'#02F9A7', fontFamily:'sans-serif'}}>
                 Settings
         </Link>: null }
@@ -272,7 +272,7 @@ const Home = (props:any) => {
       </Box>
         <Box component="div" style={{width:'100%', padding:'20px', alignItems:'center', display:'flex', flexDirection:'column', overflow:'auto', height:'83vh', overflowY:'auto'}}>
           <Box component="div" style={{width:'100%', display:'flex', flexDirection:'row', alignItems:'center', justifyContent:'space-around', padding:'10px 0px'}}>
-            <Button style={view==0?{ backgroundColor:'darkGreen',flex:1, color:'white', borderRadius:0, padding:'20px 0px'}:{backgroundColor:'white',flex:1, color:'darkGreen', borderRadius:0, padding:'20px 0px'}} onClick={()=>{setView(0)}}>My NFTs</Button>
+            <Button style={view==0?{ backgroundColor:'darkGreen',textTransform:'none', flex:1, color:'white', borderRadius:0, padding:'20px 0px'}:{backgroundColor:'white', textTransform:'none', flex:1, color:'darkGreen', borderRadius:0, padding:'20px 0px'}} onClick={()=>{setView(0)}}>{activeUser.id===user.id?'My':`${activeUser.username}'s`} NFTs</Button>
             {activeUser.id === user.id?<Button style={view==1?{backgroundColor:'darkGreen',flex:1, color:'white', borderRadius:0, padding:'20px 0px'}:{backgroundColor:'white',flex:1, color:'darkGreen', borderRadius:0, padding:'20px 0px'}} onClick={()=>{setView(1)}}>Favorited</Button> : null}
           </Box>
           <Grid container columns={3} style={{justifyContent:'center'}}>

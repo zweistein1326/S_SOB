@@ -4,7 +4,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { Link, useNavigate } from 'react-router-dom';
 import { useParams } from 'react-router-dom';
 import FavoriteIcon from '@mui/icons-material/Favorite';
-import { favorite, like, comment as postComment, changePrivacy, submitBid, submitMinPrice, updateUser } from '../functions/axios';
+import { favorite, like, comment as postComment, changePrivacy, submitBid, submitMinPrice, updateUser, followUser } from '../functions/axios';
 import CommentTile from '../components/CommentTile';
 import {BiDownArrow, BiUpArrow} from 'react-icons/bi';
 import Header from '../components/Header';
@@ -61,7 +61,7 @@ const NFTScreen = (state:any) => {
             }
         }
             if(cred.image.split('://')[0]=="ipfs"){
-            if (cred.image.split('://')[0].split('/')[0] === "ipfs") {
+            if (cred.image.split('://')[1].split('/')[0] === "ipfs") {
                 setImageUrl(`https://gateway.ipfs.io/${cred.image.split('://')[1]}`);
             }
             else {
@@ -144,7 +144,7 @@ const NFTScreen = (state:any) => {
             <Box component="div" style={{width:'70%'}}>
                     <Box component="div" className='UserInfo' style={{display:'flex', padding:'10px 20px', flexDirection:'row', alignItems:'center', justifyContent:'space-between', width:'100%'}}>
                         <Box component="div" style={{display:'flex', flexDirection:'row', alignItems:'center', padding:'10px'}}>
-                                {credentialOwner?<img src={credentialOwner.profileImageUrl ? credentialOwner.profileImageUrl:''} style={{backgroundColor:'pink',objectFit:'cover', width:'50%', height:'50%'}} className = "cardImage"/>:
+                                {credentialOwner?<img src={credentialOwner.profileImageUrl ? credentialOwner.profileImageUrl:''} style={{backgroundColor:'#E46A6A',objectFit:'cover', width:'50%', height:'50%'}} className = "cardImage"/>:
                                 <Box component="div" style={{backgroundColor:'#E46A6A',objectFit:'cover', width:'50px', height:'50px', borderRadius:'50%'}}></Box>}
                                 {credentialOwner?<Typography style={{color:'black', padding:'0px 10px'}}>@{credentialOwner.username}</Typography>:<Typography style={{color:'black', padding:'0px 10px'}}>@{credential.owner}</Typography>}
                                 {/* <Typography style={{color:'black'}} >{credential.iat}</Typography> */}
@@ -218,9 +218,9 @@ const NFTScreen = (state:any) => {
                         return(
                         recommendUser.id!==user.id?<Box component="div" style={{display:'flex', flexDirection:'row', alignItems:'center', justifyContent:'flex-start', width:'100%', margin:'10px',}}>
                             <Box component="div" style={{display:'flex', flexDirection:'row', flex:1, alignItems:'center'}} onClick ={()=>{navigate(`/${recommendUser.id}`)}}>
-                                {recommendUser.profileImageUrl? <img src={recommendUser.profileImageUrl} style={{width:'50px', height:'50px',backgroundColor:'pink', borderRadius:'50%'}}/>:<Box component="div" style={{width:'50px', height:'50px', backgroundColor:'pink', borderRadius:'50%'}}></Box>}
-                                <Typography style={{flex:1, paddingLeft:'10px'}}>{recommendUser.username}</Typography>
-                                {/* <Button onClick={()=>{dispatch(followUser(user.id,recommendUser.id))}}>+ Follow</Button> */}
+                                {recommendUser.profileImageUrl? <img src={recommendUser.profileImageUrl} style={{width:'50px', height:'50px',backgroundColor:'#E46A6A', borderRadius:'50%'}}/>:<Box component="div" style={{width:'50px', height:'50px', backgroundColor:'#E46A6A', borderRadius:'50%'}}></Box>}
+                                <Typography style={{flex:1, paddingLeft:'10px'}}>{Array.from(recommendUser.username).map((letter:any, index:number)=>index<17 ? letter: (index<20?'.':null))}</Typography>
+                                <Button onClick={()=>{dispatch(followUser(user.id,recommendUser.id))}}>+ Follow</Button>
                             </Box>
                         </Box>:null
                         )})

@@ -42,7 +42,7 @@ const NFTCard = (props:Props) => {
                 }
             }
         if(credential.image.split('://')[0]=="ipfs"){
-            if (credential.image.split('://')[0].split('/')[0] === "ipfs") {
+            if (credential.image.split('://')[1].split('/')[0] === "ipfs") {
                 setImageUrl(`https://gateway.ipfs.io/${credential.image.split('://')[1]}`);
             }
             else {

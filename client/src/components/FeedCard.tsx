@@ -34,11 +34,12 @@ const FeedCard = (props:any) => {
                 }
             }
         if(nft.image.split('://')[0]=="ipfs"){
-            if (nft.image.split('://')[0].split('/')[0] === "ipfs") {
+            console.log(`https://gateway.ipfs.io/${nft.image.split('://')[1]}`);
+            if (nft.image.split('://')[1].split('/')[0] === "ipfs") {
                 setImageUrl(`https://gateway.ipfs.io/${nft.image.split('://')[1]}`);
             }
             else {
-                    setImageUrl(`https://gateway.ipfs.io/ipfs/${nft.image.split('://')[1]}`);
+                setImageUrl(`https://gateway.ipfs.io/ipfs/${nft.image.split('://')[1]}`);
             }
         }
         else{
