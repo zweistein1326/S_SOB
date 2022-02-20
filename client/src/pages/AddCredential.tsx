@@ -99,7 +99,6 @@ const AddCredential = (props:any) => {
             token_id: data.get('token_id'),
       }
         const tokenData = await getNFT(credential, user.id);
-        console.log(tokenData);
         if(tokenData.name){
           if(tokenData.name==="CRYPTOPUNKS"){
             setTokenData(tokenData);
@@ -139,14 +138,14 @@ const AddCredential = (props:any) => {
         <Box component="div" className="Container" style={{backgroundColor:'#FFFFFF', color:'white', padding:'0px 0px', minHeight:'100vh', display:'flex', flexDirection:'column'}}>
             <Header/>
             <Box component="div" style={{display:'flex', alignItems:'center', justifyContent:'center', backgroundColor:'#02F9A7', margin:'20px'}}>
-                <Button sx={createType==1?{flex:1,backgroundColor:'#02F9A7', color:'black', p:2}:{flex:1, backgroundColor:'black', color:'white',p:2}} onClick={()=>{setCreateType(0)}}>Upload Existing</Button>
-                <Button sx={createType==0?{flex:1, backgroundColor:'#02F9A7', color:'black',p:2}:{flex:1, backgroundColor:'black', color:'white',p:2}} onClick={()=>{setCreateType(1)}}>Create new</Button>
+                <Button sx={createType==1?{flex:1,backgroundColor:'#02F9A7', color:'black', p:2}:{flex:1, backgroundColor:'black', color:'white',p:2}} onClick={()=>{setCreateType(0)}}>Upload NFT</Button>
+                {/* <Button sx={createType==0?{flex:1, backgroundColor:'#02F9A7', color:'black',p:2}:{flex:1, backgroundColor:'black', color:'white',p:2}} onClick={()=>{setCreateType(1)}}>Create new</Button> */}
             </Box>
 {createType===0?
             <Box component="div" style={{display:'flex', flexDirection:'row', alignItems:'center', padding:'0px 20px'}}>
-                <Box component="form" style={{width:'100%', display:'flex', flexDirection:'column', alignItems:'center'}} noValidate sx={{ mt: 1 }} onChange={addNFT} onSubmit={createNewPost}>
+                <Box component="form" style={{width:'70%', display:'flex', flexDirection:'column', alignItems:'center'}} noValidate sx={{ mt: 1 }} onChange={addNFT} onSubmit={createNewPost}>
                     <TextField
-                    style={{backgroundColor:'#EEEEEE', margin:10, width:'90%'}}
+                    style={{backgroundColor:'#EEEEEE', margin:10, width:'80%'}}
                     margin="normal"
                     required
                     fullWidth
@@ -157,7 +156,7 @@ const AddCredential = (props:any) => {
                     autoComplete="contract_address"
                     />
                     <TextField
-                        style={{backgroundColor:'#EEEEEE', margin:10, width:'90%'}}
+                        style={{backgroundColor:'#EEEEEE', margin:10, width:'80%'}}
                         margin="normal"
                         required
                         fullWidth
@@ -168,7 +167,7 @@ const AddCredential = (props:any) => {
                         autoComplete="token_id"
                     />
                     <Select
-                        style={{backgroundColor:'#EEEEEE', margin:10, width:'90%'}}
+                        style={{backgroundColor:'#EEEEEE', margin:10, width:'80%'}}
                         required
                         fullWidth
                         value={privacy}
@@ -180,7 +179,7 @@ const AddCredential = (props:any) => {
                         <MenuItem value={0}>Ethereum</MenuItem>
                     </Select>
                     <Select
-                        style={{backgroundColor:'#EEEEEE', margin:10, width:'90%'}}
+                        style={{backgroundColor:'#EEEEEE', margin:10, width:'80%'}}
                         required
                         fullWidth
                         value={privacy}
@@ -208,7 +207,7 @@ const AddCredential = (props:any) => {
                         type="submit"
                         fullWidth
                         variant="contained"
-                        sx={{ mt: 3, mb: 2, p:2, width:'90%', backgroundColor:'#02F9A7', color:'black' }}
+                        sx={{ mt: 3, mb: 2, p:2, width:'80%', backgroundColor:'#02F9A7', color:'black' }}
                         // disabled={loading}
                     >
                         Add to collection
@@ -220,9 +219,9 @@ const AddCredential = (props:any) => {
                 </Box>
             </Box>:
             <Box component="div" style={{display:'flex', flexDirection:'row', alignItems:'center', padding:'0px 20px'}}>
-            <Box component="div" style={{width:'100%', display:'flex', flexDirection:'column', alignItems:'center'}} sx={{ mt: 1 }}>
+            <Box component="div" style={{width:'70%', display:'flex', flexDirection:'column', alignItems:'center'}} sx={{ mt: 1 }}>
                 <TextField
-                style={{backgroundColor:'#EEEEEE', margin:10, width:'90%'}}
+                style={{backgroundColor:'#EEEEEE', margin:10, width:'80%'}}
                 margin="normal"
                 required
                 fullWidth
@@ -233,7 +232,7 @@ const AddCredential = (props:any) => {
                 onChange={onChange}
                 />
                 <TextField
-                    style={{backgroundColor:'#EEEEEE', margin:10, width:'90%'}}
+                    style={{backgroundColor:'#EEEEEE', margin:10, width:'80%'}}
                     margin="normal"
                     required
                     fullWidth
@@ -246,7 +245,7 @@ const AddCredential = (props:any) => {
                     onChange={e=>updateFormInput({...formInput, name:e.target.value})}
                 />
                 <TextField
-                    style={{backgroundColor:'#EEEEEE', margin:10, width:'90%'}}
+                    style={{backgroundColor:'#EEEEEE', margin:10, width:'80%'}}
                     margin="normal"
                     required
                     fullWidth
@@ -259,7 +258,7 @@ const AddCredential = (props:any) => {
                     onChange={e=>updateFormInput({...formInput, description:e.target.value})}
                 />
                 <TextField
-                    style={{backgroundColor:'#EEEEEE', margin:10, width:'90%'}}
+                    style={{backgroundColor:'#EEEEEE', margin:10, width:'80%'}}
                     margin="normal"
                     required
                     fullWidth
@@ -272,7 +271,7 @@ const AddCredential = (props:any) => {
                     onChange={e=>updateFormInput({...formInput, price:e.target.value})}
                 />
                 <Select
-                    style={{backgroundColor:'#EEEEEE', margin:10, width:'90%'}}
+                    style={{backgroundColor:'#EEEEEE', margin:10, width:'80%'}}
                     required
                     fullWidth
                     value={privacy}
@@ -284,7 +283,7 @@ const AddCredential = (props:any) => {
                         <MenuItem value={0}>Polygon</MenuItem>
                     </Select>
                 <Select
-                    style={{backgroundColor:'#EEEEEE', margin:10, width:'90%'}}
+                    style={{backgroundColor:'#EEEEEE', margin:10, width:'80%'}}
                     required
                     fullWidth
                     value={privacy}
@@ -300,7 +299,7 @@ const AddCredential = (props:any) => {
                     type="submit"
                     fullWidth
                     variant="contained"
-                    sx={{ mt: 3, mb: 2, p:2, width:'90%', backgroundColor:'#02F9A7', color:'black' }}
+                    sx={{ mt: 3, mb: 2, p:2, width:'80%', backgroundColor:'#02F9A7', color:'black' }}
                     // disabled={loading}
                     onClick = {createMarket}
                 >

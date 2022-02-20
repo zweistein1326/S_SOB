@@ -28,41 +28,47 @@ const Feed = () => {
     const [loadingState,setLoadingState] = useState('not-loaded');
 
     useEffect(()=>{
-        loadNFTs()
+        // loadNFTs()
+        getAllUploadedNFTs();
     },[])
 
-    const loadNFTs = async() => {
-        const provider = new ethers.providers.JsonRpcProvider('https://polygon-mumbai.infura.io/v3/12bd70f594644e4ea699b452fd7e7d44')
-        const tokenContract = new ethers.Contract(nftAddress, NFT.abi, provider);
-        const marketContract = new ethers.Contract(NFTMarketAddress, Market.abi, provider);
-        try{
-            const data = await marketContract.fetchMarketItems();
-            const items:any = await Promise.all(data.map(async (i:any) => {
-            const tokenUri = await tokenContract.tokenURI(i.tokenId)
-            const meta = await axios.get(tokenUri);
-            let price = ethers.utils.formatUnits(i.price.toString(),"ether");
-            console.log(i.nftContract);
-            let item ={
-                price,
-                tokenId: i.tokenId.toNumber(),
-                seller: i.seller,
-                owner: i.owner,
-                image: meta.data.image,
-                name: meta.data.name,
-                description: meta.data.description,
-                nftContract: i.nftContract
-            }
-            return item;
-            }));
-            setNfts(items);
-            dispatch(setCredentials(items))
-            setLoadingState('loaded')
-        }
-        catch(e){
-            console.log(e);
-            setLoadingState('loaded')
-        }
+    // const loadNFTs = async() => {
+    //     const provider = new ethers.providers.JsonRpcProvider('https://polygon-mumbai.infura.io/v3/12bd70f594644e4ea699b452fd7e7d44')
+    //     const tokenContract = new ethers.Contract(nftAddress, NFT.abi, provider);
+    //     const marketContract = new ethers.Contract(NFTMarketAddress, Market.abi, provider);
+    //     try{
+    //         const data = await marketContract.fetchMarketItems();
+    //         const items:any = await Promise.all(data.map(async (i:any) => {
+    //         const tokenUri = await tokenContract.tokenURI(i.tokenId)
+    //         const meta = await axios.get(tokenUri);
+    //         let price = ethers.utils.formatUnits(i.price.toString(),"ether");
+    //         let item ={
+    //             price,
+    //             tokenId: i.tokenId.toNumber(),
+    //             seller: i.seller,
+    //             owner: i.owner,
+    //             image: meta.data.image,
+    //             name: meta.data.name,
+    //             description: meta.data.description,
+    //             nftContract: i.nftContract
+    //         }
+    //         return item;
+    //         }));
+    //         setNfts(items);
+    //         dispatch(setCredentials(items))
+    //         setLoadingState('loaded')
+    //     }
+    //     catch(e){
+    //         console.log(e);
+    //         setLoadingState('loaded')
+    //     }
+    // }
+
+    const getAllUploadedNFTs = async() => {
+        await dispatch(getCredentials());
+        setLoadingState('loaded');
     }
+    
 
     const buyNft = async(nft:any) => {
         try{
@@ -79,7 +85,7 @@ const Feed = () => {
             value: price
             })
             await transaction.wait();
-            loadNFTs();
+            // loadNFTs();
         }catch(e){
             console.log(e);
         }
@@ -91,7 +97,7 @@ const Feed = () => {
     //     dispatch(getAllUsers());
     // },[])
     
-    if(loadingState == 'loaded' && !nfts.length) return (
+    if(loadingState == 'loaded' && !credentials.length) return (
         <Typography>No items in marketplace</Typography>
     )
     return(
@@ -102,7 +108,7 @@ const Feed = () => {
                 {/* <Box style={{width:'80%'}}>
                 <Typography style={{backgroundColor:'#02F9A7', color:'black', margin:20, padding:'10px 30px', borderRadius:'20px'}}>Username, Address</Typography>
                 </Box> */}
-                <Box component="div" style={{zIndex:'999999', height:'90vh', backgroundColor:'#333333', maxWidth:'20vw', display:'flex', flexDirection:'column', alignItems:'center', justifyContent:'flex-start', padding:'0px 10px', overflowY:'scroll'}}>
+                <Box component="div" style={{zIndex:'1', height:'90vh', backgroundColor:'#333333', maxWidth:'20vw', display:'flex', flexDirection:'column', alignItems:'center', justifyContent:'flex-start', padding:'0px 10px', overflowY:'scroll'}}>
                     <Typography style={{color:'white', fontSize:'20px', fontWeight:'bold', padding:'20px'}}>Trending</Typography>
                     <Typography style={{color:'white', fontSize:'14px', fontWeight:'bold',textAlign:'right', width:'100%', padding:'0px 20px'}}>View more</Typography>
                     { allUsers.map((recommendUser:any)=>{
@@ -128,14 +134,18 @@ const Feed = () => {
                         // disabled={loading}
                         onClick={()=>{navigate('/addCredential')}}
                     >
-                        Create 
+                        Upload 
                     </Button>
-                    {nfts.map((nft:any,i:number)=>{
-                    console.log(nft);
+                    {credentials.map((nft:any,i:number)=>{
                     return(
                         <FeedCard nft={nft} buyNft={buyNft}/>
                     )}
                     )}
+                    {/* {nfts.map((nft:any,i:number)=>{
+                    return(
+                        <FeedCard nft={nft} buyNft={buyNft}/>
+                    )}
+                    )} */}
                     </Box>
                 </Box>
                 <Box component="div" style={{zIndex:'999999', height:'90vh', backgroundColor:'#333333', maxWidth:'20vw', display:'flex', flexDirection:'column', alignItems:'center', justifyContent:'flex-start', padding:'0px 10px', overflowY:'scroll'}}>

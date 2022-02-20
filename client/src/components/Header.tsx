@@ -50,7 +50,7 @@ const Header = (props:any) => {
                 Profile
             </Link>
             <Link to='/addCredential' style={{padding:'10px',borderRadius:'30px', margin:'20px 10px', backgroundColor:'#02F9A7', width:'10%', display:'flex', justifyContent:'center',textDecoration:'none', color:'#000000', fontFamily:'sans-serif'}}>
-                Create
+                Upload
             </Link>
             {/* <Link to='/settings' style={{padding:'20px 10px',borderRadius:'30px', margin:'20px 10px', backgroundColor:'#000000', width:'10%', display:'flex', justifyContent:'center',textDecoration:'none', color:'#02F9A7', fontFamily:'sans-serif'}}>
                 20JUMP

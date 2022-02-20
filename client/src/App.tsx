@@ -81,7 +81,7 @@ function App() {
           <Route path="/:address" element={<Home />} />
           <Route path="/settings" element={<SettingsScreen />} />
           <Route path="/feed" element={<Feed />} />
-          <Route path="/credential/:nftContract/:tokenId" element={<NFTScreen />} />
+          <Route path="/credential/:credentialId" element={<NFTScreen />} />
           <Route path="/addCredential" element={<AddCredential />} />
         </Routes>
       </Router>

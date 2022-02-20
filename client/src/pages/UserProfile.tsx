@@ -45,37 +45,65 @@ const Home = (props:any) => {
   const [nfts, setNFTs] = useState<any>([]);
   const dispatch = useDispatch();  
 
-  const loadNFTs = async(address:any) => {
-        const web3Modal = new Web3Modal();
-        const connection = await web3Modal.connect()
-        const provider = new ethers.providers.Web3Provider(connection)
-        const signer = provider.getSigner()
+  // const loadNFTs = async(address:any) => {
+  //       const web3Modal = new Web3Modal();
+  //       const connection = await web3Modal.connect()
+  //       const provider = new ethers.providers.Web3Provider(connection)
+  //       const signer = provider.getSigner()
           
-        const marketContract = new ethers.Contract(NFTMarketAddress, Market.abi, signer)
-        const tokenContract = new ethers.Contract(nftAddress, NFT.abi, provider)
+  //       const marketContract = new ethers.Contract(NFTMarketAddress, Market.abi, signer)
+  //       const tokenContract = new ethers.Contract(nftAddress, NFT.abi, provider)
 
-        console.log(address);
-        const data = await marketContract.fetchNFTsByUser(address);
-        console.log(data);
+  //       console.log(address);
+  //       const data = await marketContract.fetchNFTsByUser(address);
+  //       console.log(data);
         
-        const items = await Promise.all(data.map(async (i:any) => {
-          const tokenUri = await tokenContract.tokenURI(i.tokenId)
-          const meta = await axios.get(tokenUri)
-          let price = ethers.utils.formatUnits(i.price.toString(), 'ether')
-          let item = {
-            price,
-              tokenId: i.tokenId.toNumber(),
-              seller: i.seller,
-              owner: i.owner,
-              image: meta.data.image,
-              name: meta.data.name,
-              description: meta.data.description
+  //       const items = await Promise.all(data.map(async (i:any) => {
+  //         const tokenUri = await tokenContract.tokenURI(i.tokenId)
+  //         const meta = await axios.get(tokenUri)
+  //         let price = ethers.utils.formatUnits(i.price.toString(), 'ether')
+  //         let item = {
+  //           price,
+  //             tokenId: i.tokenId.toNumber(),
+  //             seller: i.seller,
+  //             owner: i.owner,
+  //             image: meta.data.image,
+  //             name: meta.data.name,
+  //             description: meta.data.description
+  //         }
+  //         return item
+  //       }))
+
+  //       const savedItems = activeUser.credentials;
+        
+
+  //       setNFTs(items)
+  //       setLoading(false) 
+  //   }
+
+  const loadNFTs = async(user:any) => {
+    let activeCreds:any = [];
+    if(user && user.credentials){
+      if(activeCreds.length < user.credentials.length){
+        await Promise.all(user.credentials).then(async(credentialIds:any)=>{
+          await credentialIds.forEach(async(credentialId:string)=>{
+          const credential:any = await dispatch(getCredentialById(credentialId));
+          activeCreds.push(credential.credential);
+          if(activeCreds.length===user.credentials.length){
+            setActiveCredentials(activeCreds);
+            Promise.resolve();
           }
-          return item
-        }))
-        setNFTs(items)
-        setLoading(false) 
+          })
+        });
+      }
+    else{
+      setActiveCredentials([]);
     }
+  }
+    
+   
+    // setActiveCredentials();
+  }
 
   const handleLogout = () => {
     localStorage.removeItem('token');
@@ -148,7 +176,6 @@ const Home = (props:any) => {
   const {address} = useParams();
 
   useEffect(()=>{
-  
     setLoading(true);
     (async ()=>{
       setActiveCredentials([]);
@@ -156,14 +183,13 @@ const Home = (props:any) => {
       setIsUserProfile(address?.toLowerCase()===user.id.toLowerCase());
       if(followingIds){
         const resAddress= followingIds.find((id:any)=>id===address);
-        console.log(resAddress);
         setIsFollowing(!!resAddress);
       }else{
         setIsFollowing(false);
       }
       const activeUser:any = await dispatch(getUserById(address));
       setActiveUser(activeUser.user);
-      loadNFTs(user.id);
+      loadNFTs(activeUser.user);
       if(user.credentials){
          user.credentials.forEach(async(credentialId:string,index:number)=>{
           setActiveCredentials([...activeCredentials,credentialId].sort((a:any,b:any)=>b.iat-a.iat))
@@ -171,19 +197,17 @@ const Home = (props:any) => {
       }
   })();
   setLoading(false);
-  },[
-    // address,
-  ])
+  },[address])
 
   const renderView=(view:number)=>{
     if(view==0){
       return(
-        nfts?
-          (nfts.map((nft:any,index:number)=>(
-            <Box component="div" key={index} style={{border:'1px solid black', boxShadow:'10px 10px', borderRadius:'10px', overflow:'hidden' }} >
+        activeCredentials?
+          (activeCredentials.map((nft:any,index:number)=>(
+            <Box component="div" key={index} style={{border:'1px solid black', boxShadow:'10px 10px', borderRadius:'10px', overflow:'hidden' }} onClick={()=>{navigate(`/credential/${nft.id}`)}}>
                 <img width="400px" src={nft.image}/>
                 <Box component="div" style={{padding:'20px'}}>
-                    <Typography style={{fontSize:'20px',fontWeight:'semi-bold', color:'black'}}>{nft.name}</Typography>
+                    <Typography style={{fontSize:'20px',fontWeight:'semi-bold', color:'black'}}>{nft.name} #{nft.token_id}</Typography>
                     <Box component="div" style={{overflow:'hidden'}}>
                         <Typography style={{color:'gray'}}>{nft.description}</Typography>
                     </Box>
@@ -194,7 +218,8 @@ const Home = (props:any) => {
           : (activeUser.id===user.id?<Box component="div" style={{width:'100%', height:'100%', display:'flex', flexDirection:'column', alignItems:'center', padding:'40px'}}>
             <Typography style={{color:'black'}}>No NFTs added yet</Typography>
             <Button style={{backgroundColor:'#02F9A7',color:'black', borderRadius:0, padding:'20px', marginTop:'20px', width:'100%'}} onClick={()=>{setView(2)}}>+Add new nft</Button>
-            </Box>:null)
+            </Box>:
+            <Button style={{backgroundColor:'#02F9A7',flex:1, color:'black', borderRadius:0, padding:'20px 0px', marginTop:'20px'}} onClick={()=>{navigate('/feed')}}>Explore</Button>)
           )
     }
     else if(view===1){
@@ -309,7 +334,7 @@ const Home = (props:any) => {
       <Box component="div" style={{width:'30vw', height:'90%', display:'flex', flexDirection:'column', alignItems:'center', padding:'20px 0px'}}>
         {activeUser.profileImageUrl ? <img src={`${activeUser.profileImageUrl}`} style={{ width:'300px', borderRadius:'50%'}}/>:<Box component="div" style={{width:'300px', height:'300px', borderRadius:'50%',backgroundColor:'pink'}}></Box>}
         <Typography style={{color:'black'}}>@{activeUser.username}</Typography>
-        <Link to='/settings' style={{padding:'10px',borderRadius:'30px', margin:'20px 10px', backgroundColor:'black', width:'60%', display:'flex', justifyContent:'center',textDecoration:'none', color:'#02F9A7', fontFamily:'sans-serif'}}>
+        <Link to='/settings' style={{padding:'20px',borderRadius:'30px', margin:'20px 10px', backgroundColor:'black', width:'60%', display:'flex', justifyContent:'center',textDecoration:'none', color:'#02F9A7', fontFamily:'sans-serif'}}>
                 Settings
         </Link>
         {isFollowing?<Button style={activeUser.id !== user.id ? {backgroundColor:'darkGreen', color:'white', padding:'20px 0px', height:'10%',width:'100%', margin:'10px'}:{display:'none'}} onClick={()=>{
@@ -323,8 +348,7 @@ const Home = (props:any) => {
         <Box component="div" style={{width:'100%', padding:'20px', alignItems:'center', display:'flex', flexDirection:'column', overflow:'auto', height:'83vh', overflowY:'auto'}}>
           <Box component="div" style={{width:'100%', display:'flex', flexDirection:'row', alignItems:'center', justifyContent:'space-around', padding:'10px 0px'}}>
             <Button style={view==0?{ backgroundColor:'darkGreen',flex:1, color:'white', borderRadius:0, padding:'20px 0px'}:{backgroundColor:'white',flex:1, color:'darkGreen', borderRadius:0, padding:'20px 0px'}} onClick={()=>{setView(0)}}>My NFTs</Button>
-            <Button style={view==1?{backgroundColor:'darkGreen',flex:1, color:'white', borderRadius:0, padding:'20px 0px'}:{backgroundColor:'white',flex:1, color:'darkGreen', borderRadius:0, padding:'20px 0px'}} onClick={()=>{setView(1)}}>Creator Dashboard</Button>
-            {/* <Button style={view==2?{backgroundColor:'darkGreen',flex:1, color:'white', borderRadius:0, padding:'20px 0px'}:{backgroundColor:'white',flex:1, color:'darkGreen', borderRadius:0, padding:'20px 0px'}} onClick={()=>{setView(2)}}>+Add new</Button> */}
+            <Button style={view==1?{backgroundColor:'darkGreen',flex:1, color:'white', borderRadius:0, padding:'20px 0px'}:{backgroundColor:'white',flex:1, color:'darkGreen', borderRadius:0, padding:'20px 0px'}} onClick={()=>{setView(1)}}>Favorited</Button>
           </Box>
           <Grid container columns={3} style={{justifyContent:'center'}}>
             {loading? <ThreeDots height="100" width="100" color="grey"/>:
