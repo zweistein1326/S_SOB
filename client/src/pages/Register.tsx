@@ -109,7 +109,7 @@ const Register = (props:any) => {
           try{
             const user:any = await dispatch(getUserById(result[0]));
             console.log(user);
-            if(user.user){
+            if(user){
                 setAccount(user.user.id);
                 dispatch(setUser(user.user));
                 setLoading(true);
@@ -208,14 +208,14 @@ const Register = (props:any) => {
                 color:'white'
               }
             }}
-            sx={{ mt: 3, mb: 2, backgroundColor:'#333333', border:'1px solid #02F9A7',color:'white', input:{color:'white'}}}
+            sx={{ width:'40%', mt: 3, mb: 2, backgroundColor:'#333333', border:'1px solid #02F9A7',color:'white', input:{color:'white'}}}
           />:null}
           {!loading?(walletConnected?
           <Button
               type="submit"
               fullWidth
               variant="contained"
-              sx={{ mt: 3, mb: 2, backgroundColor:'#333333', border:'1px solid #02F9A7', color:'#02F9A7' }}
+              sx={{ width:'40%', mt: 3, mb: 2, backgroundColor:'#333333', border:'1px solid #02F9A7', color:'#02F9A7' }}
               // disabled={loading}
               onClick ={login}
             >

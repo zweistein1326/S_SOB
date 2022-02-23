@@ -203,7 +203,7 @@ const Home = (props:any) => {
   const renderView=(view:number)=>{
     if(view==0){
       return(
-        activeCredentials?
+        activeCredentials.length>0?
           (activeCredentials.map((nft:any,index:number)=>(
             // <Box component="div" key={index} style={{border:'1px solid black', margin:'10px', boxShadow:'10px 10px', borderRadius:'20px', overflow:'hidden' }} onClick={()=>{navigate(`/credential/${nft.id}`)}}>
             //     <img width="400px" src={nft.image}/>
@@ -217,9 +217,9 @@ const Home = (props:any) => {
             <NFTCard credentialId={nft.id} key={index}/>
             )).reverse()
           )
-          : (activeUser.id===user.id?<Box component="div" style={{width:'100%', height:'100%', display:'flex', flexDirection:'column', alignItems:'center', padding:'40px'}}>
-            <Typography style={{color:'black'}}>No NFTs added yet</Typography>
-            <Button style={{backgroundColor:'#02F9A7',color:'black', borderRadius:0, padding:'20px', marginTop:'20px', width:'100%'}} onClick={()=>{setView(2)}}>+Add new nft</Button>
+          : (activeUser.id===user.id?<Box component="div" style={{width:'100%', height:'100%', display:'flex', flexDirection:'column', alignItems:'center',}}>
+            {/* <Typography style={{color:'black'}}>No NFTs added yet</Typography> */}
+            <Button style={{backgroundColor:'#02F9A7',color:'black', borderRadius:0, padding:'20px 0px', marginTop:'20px', width:'100%'}} onClick={()=>{setView(2)}}>Upload</Button>
             </Box>:
             <Button style={{backgroundColor:'#02F9A7',flex:1, color:'black', borderRadius:0, padding:'20px 0px', marginTop:'20px'}} onClick={()=>{navigate('/feed')}}>Explore</Button>)
           )
