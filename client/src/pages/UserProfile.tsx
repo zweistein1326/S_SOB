@@ -239,11 +239,11 @@ const Home = (props:any) => {
   return (
     <Box component="div" style={{backgroundColor:'#FFFFFF', color:'white', padding:'0px 0px', display:'flex', flexDirection:'column', height:'100vh'}}>
         <Header/>
-        {!loading?<Box component="div" style={{display:'flex', flexDirection:'row'}}>
+        {!loading ? <Box component="div" style={{display:'flex', flexDirection:'row'}}>
         <Box component="div" style={{width:'30vw', height:'90%', display:'flex', flexDirection:'column', alignItems:'center', padding:'20px 0px'}}>
           {activeUser.profileImageUrl ? <img src={`${activeUser.profileImageUrl}`} style={{ width:'300px', borderRadius:'50%', border:'3px solid #02F9A7'}}/>:<Box component="div" style={{width:'300px', height:'300px', borderRadius:'50%',backgroundColor:'#E46A6A'}}></Box>}
           <Typography style={{color:'black', padding:'10px 0px', fontSize:'20px'}}>@{activeUser.username}</Typography>
-          <Typography style={{color:'black', padding:'10px 0px', fontSize:'14px'}}>{activeUser.following.length} Following {activeUser.following.length} Followers</Typography>
+          <Typography style={{color:'black', padding:'10px 0px', fontSize:'14px'}}>{activeUser.following?activeUser.following.length : 0} Following {activeUser.followers?activeUser.followers.length:0} Followers</Typography>
           {activeUser.id === user.id? <Link to='/settings' style={{padding:'20px', borderRadius:'30px', margin:'20px 10px', backgroundColor:'black', width:'60%', display:'flex', justifyContent:'center',textDecoration:'none', color:'#02F9A7', fontFamily:'sans-serif'}}>
                   Settings
           </Link>: null }
