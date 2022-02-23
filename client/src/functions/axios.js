@@ -162,10 +162,11 @@ export const like = (credentialId) => {
     }
 }
 
-export const comment = (credentialId, comment) => {
+export const comment = (credentialId, credentialOwnerId, comment, mentions) => {
     return async (dispatch, getState) => {
         const user = getState().auth.user;
-        const newCredential = await instance.post('/credential/comment', { userId: user.id, credentialId, comment });
+        const newCredential = await instance.post('/credential/comment', { userId: user.id, credentialId, credentialOwnerId, comment, mentions });
+        // create notification for comment
         dispatch(setCredentials(newCredential.data));
         return newCredential;
     }

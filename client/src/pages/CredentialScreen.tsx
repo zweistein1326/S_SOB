@@ -11,12 +11,16 @@ import Header from '../components/Header';
 import Modal from 'react-modal';
 import styles from './CredentialScreen.module.css';
 import {FaRegComment} from 'react-icons/fa';
+import {MentionsInput, Mention, MentionItem } from 'react-mentions';
+import mentionsInputStyles from './mentionsInputStyles';
 
 const NFTScreen = (state:any) => {
 
     const [credential,setCredential]= useState<any>(null);
     const [imageUrl,setImageUrl]= useState<any>(null);
-    const [loading,setLoading]= useState<any>(false);
+    const [mentions,setMentions]= useState<any>([]);
+    const [usernames,setUsernames]= useState<any>([]);
+    const [loading,setLoading]= useState<any>(true);
     const [isModalOpen,setModalIsOpen]= useState<boolean>(false);
     const {credentialId} = useParams();
     const navigate = useNavigate();
@@ -40,8 +44,13 @@ const NFTScreen = (state:any) => {
     }
 
     useEffect(()=>{
-        setLoading(true);
-        console.log(credentials);
+        let usernames = Array.from(allUsers.values()).map((user:any)=>{
+            if(!!user.username){
+                return {id:user.id, display:user.username}
+            }
+        });
+        setUsernames(usernames);
+
         const cred = credentials.get(credentialId);
         setCredential(cred);
     
@@ -71,8 +80,8 @@ const NFTScreen = (state:any) => {
             else{
                 setImageUrl(cred.image);
             }
-            setLoading(false);
         }        
+        setLoading(false);
     },[
         credentialId, credentials, user
     ]);
@@ -84,9 +93,21 @@ const NFTScreen = (state:any) => {
     }
 
     const submitComment = async() => {
-        const newCredential:any = await dispatch(postComment(credential.id,comment));
+        let newCredential:any;
+        console.log(mentions);
+        if(credentialOwner){
+            newCredential = await dispatch(postComment(credential.id,credentialOwner.id, comment, mentions));
+        }
+        else{
+            newCredential = await dispatch(postComment(credential.id,null, comment, mentions));
+        }
+        setMentions([]);
         setComment('');
         setCredential(newCredential.data);
+    }
+
+    const handleComment = (commentText:string) => {
+        setComment(commentText);
     }
 
     const handlePrivacyChange = async(event:any)=>{
@@ -112,7 +133,7 @@ const NFTScreen = (state:any) => {
     }
 
     return(
-        user ? <Box component="div" className={styles.container}>
+        user && !loading ? <Box component="div" className={styles.container}>
             <Header/>
             {/* <Modal
             isOpen = {isModalOpen}
@@ -202,7 +223,14 @@ const NFTScreen = (state:any) => {
                                     <Box component="div" style={{width:'100%', display:'flex', flexDirection:'row', padding:'5px'}}>
                                         {user.profileImageUrl? <img src={user.profileImageUrl} style={{height:'40px', width:'40px', borderRadius:'50%', backgroundColor:'#E46A6A', border:'2px solid #02F9A7'}}/> : <Box component="div" style={{backgroundColor:'#E46A6A',objectFit:'cover', width:'40px', height:'40px', margin:'10px', borderRadius:'50%'}}></Box> }
                                         <Box component="div" style={{flex:1, padding:'0px 10px'}}>
-                                            <Input style={{width:'100%'}} name="comment" value={comment} onChange={(event:any)=>{setComment(event.target.value)}} placeholder="Add Comment" id="comment"/>
+                                            <MentionsInput style={mentionsInputStyles} value={comment} onChange={(event:any,newValue:string,newPlainTextValue:string,newMentions:MentionItem[])=>{
+                                                setComment(newPlainTextValue)
+                                                if(newMentions.length>0){
+                                                    setMentions(mentions.concat(newMentions));
+                                                }              
+                                            }} placeholder="Comment">
+                                                <Mention displayTransform={(id,display) => `@${display}`} trigger="@" data={usernames} style={{backgroundColor: '#cee4e5'}}/>
+                                            </MentionsInput>
                                         </Box>
                                         <Button onClick = {submitComment}>Submit</Button>
                                     </Box>
