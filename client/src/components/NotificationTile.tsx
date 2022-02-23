@@ -22,9 +22,9 @@ const NotificationTile = (props:any) => {
     },[props.creator])
 
     return(
-        loading?<CircularProgress/>:
+        loading?null:
         <Box onClick={()=>{navigate(`/credential/${props.notification.credentialId}`)}}  component="div" style={{border:'1px solid gray', width:'80%', padding:'20px', position:'relative', display:'flex', flexDirection:'row'}}>
-            {from ? <img src={from.profileImageUrl ? from.profileImageUrl:''} style={{backgroundColor:'pink',objectFit:'cover', width:'50px', height:'50px', borderRadius:'50%'}} className = "cardImage"/>:
+            {from && from.profileImageUrl ? <img src={from.profileImageUrl ? from.profileImageUrl:''} style={{backgroundColor:'pink',objectFit:'cover', width:'50px', height:'50px', borderRadius:'50%'}} className = "cardImage"/>:
                     <Box component="div" style={{backgroundColor:'#E46A6A',objectFit:'cover', width:'50px', height:'50px', borderRadius:'50%'}}></Box>}
             <Box component="div" style={{marginLeft:'20px'}}>
                 <Typography onClick={()=>{navigate(`/credential/${props.notification.credentialId}`)}} style={{color:'black', fontWeight:'bold'}}>{props.notification.title}</Typography>
