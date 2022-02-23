@@ -44,44 +44,46 @@ const NFTScreen = (state:any) => {
     }
 
     useEffect(()=>{
-        let usernames = Array.from(allUsers.values()).map((user:any)=>{
-            if(!!user.username){
-                return {id:user.id, display:user.username}
-            }
-        });
-        setUsernames(usernames);
-
-        const cred = credentials.get(credentialId);
-        setCredential(cred);
+        if(allUsers && user){
+            let usernames = Array.from(allUsers.values()).map((user:any)=>{
+                if(!!user.username){
+                    return {id:user.id, display:user.username}
+                }
+            });
+            setUsernames(usernames);
     
-        if(user){
-            if (!!favoriteIds && credential){
-            if(favoriteIds.find((id:string)=>id.toLowerCase()==credential.id.toLowerCase())){
-                console.log(true);
-                setIsFavorite(true);
+            const cred = credentials.get(credentialId);
+            setCredential(cred);
+        
+            if(user){
+                if (!!favoriteIds && credential){
+                if(favoriteIds.find((id:string)=>id.toLowerCase()==credential.id.toLowerCase())){
+                    console.log(true);
+                    setIsFavorite(true);
+                }
             }
+            if(cred.likes){
+                if(cred.likes.find((like:string)=>like.toLowerCase()===user.id.toLowerCase())){
+                    setLiked(true);
+                }
+                else{
+                    setLiked(false);
+                }
+            }
+                if(cred.image.split('://')[0]=="ipfs"){
+                if (cred.image.split('://')[1].split('/')[0] === "ipfs") {
+                    setImageUrl(`https://gateway.ipfs.io/${cred.image.split('://')[1]}`);
+                }
+                else {
+                        setImageUrl(`https://gateway.ipfs.io/ipfs/${cred.image.split('://')[1]}`);
+                }
+            }
+                else{
+                    setImageUrl(cred.image);
+                }
+            }        
+            setLoading(false);
         }
-        if(cred.likes){
-            if(cred.likes.find((like:string)=>like.toLowerCase()===user.id.toLowerCase())){
-                setLiked(true);
-            }
-            else{
-                setLiked(false);
-            }
-        }
-            if(cred.image.split('://')[0]=="ipfs"){
-            if (cred.image.split('://')[1].split('/')[0] === "ipfs") {
-                setImageUrl(`https://gateway.ipfs.io/${cred.image.split('://')[1]}`);
-            }
-            else {
-                    setImageUrl(`https://gateway.ipfs.io/ipfs/${cred.image.split('://')[1]}`);
-            }
-        }
-            else{
-                setImageUrl(cred.image);
-            }
-        }        
-        setLoading(false);
     },[
         credentialId, credentials, user
     ]);
@@ -192,7 +194,7 @@ const NFTScreen = (state:any) => {
                              <Grid container columns={3} style={{ margin:'0px 10px', borderRadius:'0px',padding:'0.2rem', justifyContent:'center', alignItems:'flex-start', overflowY:'scroll', backgroundColor:'black', marginTop:'10px'}}>
                                 <Typography style={{fontSize:'20px', fontWeight:'bold', color:'white', width:'100%', textAlign:'center', padding:'10px'}}>Attributes</Typography>
                                 {credential.attributes?credential.attributes.map(({trait_type,value}:any)=>{return(
-                                    <Grid item style={{border:'1px solid #000000', backgroundColor:'#E46A6A', padding:'0.3rem', minWidth:'8rem', margin:'0.5rem', textAlign:'center'}}>
+                                    <Grid item style={{border:'1px solid #000000', backgroundColor:'#E46A6A', padding:'0.3rem', minWidth:'8rem', margin:'0.5rem', textAlign:'center', flex:1}}>
                                         <Typography style={{fontSize:'18px', fontWeight:'bold', color:'#000000', textTransform:'capitalize'}}>{trait_type}</Typography>
                                         <Typography style={{fontSize:'14px', fontWeight:'500', color:'#000000', textTransform:'capitalize'}}>{value}</Typography>
                                     </Grid>
@@ -222,7 +224,7 @@ const NFTScreen = (state:any) => {
                                     {credential ?(credential.comments ? credential.comments.map((comment:any)=>{return (<CommentTile comment={comment}/>)}) : null):null}
                                     <Box component="div" style={{width:'100%', display:'flex', flexDirection:'row', padding:'5px'}}>
                                         {user.profileImageUrl? <img src={user.profileImageUrl} style={{height:'40px', width:'40px', borderRadius:'50%', backgroundColor:'#E46A6A', border:'2px solid #02F9A7'}}/> : <Box component="div" style={{backgroundColor:'#E46A6A',objectFit:'cover', width:'40px', height:'40px', margin:'10px', borderRadius:'50%'}}></Box> }
-                                        <Box component="div" style={{flex:1, padding:'0px 10px'}}>
+                                        <Box component="div" style={{margin:'auto', flex:1, padding:'0px 10px'}}>
                                             <MentionsInput style={mentionsInputStyles} value={comment} onChange={(event:any,newValue:string,newPlainTextValue:string,newMentions:MentionItem[])=>{
                                                 setComment(newPlainTextValue)
                                                 if(newMentions.length>0){

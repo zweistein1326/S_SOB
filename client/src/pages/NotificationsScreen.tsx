@@ -56,14 +56,16 @@ const NotificationsScreen = (props:any) => {
     }
 
     useEffect(()=>{
+      if(user){
         (async ()=>{
-            setNotifications([]);
-            await loadNotifications(user.notifications);
-            setLoading(false);
-        })();
-        setNotifications(user.notifications);
-        setLoading(false);
-    },[address])
+          setNotifications([]);
+          await loadNotifications(user.notifications);
+          setLoading(false);
+      })();
+      setNotifications(user.notifications?user.notifications:[]);
+      setLoading(false);
+      }
+    },[address, user])
 
   const {ethereum} = window;
 
@@ -72,12 +74,12 @@ const NotificationsScreen = (props:any) => {
         <Header/>
         {!loading ? <Box component="div" style={{display:'flex', flexDirection:'row', width:'100%'}}>
             <Box component="div" style={{width:'100%', display:'flex', flexDirection:'column', alignItems:'center', padding:'20px 0px'}}>
-                {notifications.map((notification:any)=>{
+                {notifications.length>0 ? notifications.map((notification:any)=>{
                     return <NotificationTile notification={notification} creator={notification.from}/>
-                    })}
+                    }):<Typography style={{color:'black', fontSize:'18px'}}>You don't have any notifications yet</Typography>}
             </Box>
         </Box>:
-          <Box component="div" style={{width:'100%', height:'100%', display:'flex', alignItems:'center', justifyContent:'center'}}>
+          <Box component="div" style={{width:'100vw', height:'100vh', display:'flex', alignItems:'center', justifyContent:'center'}}>
             <CircularProgress/>
           </Box>}
       </Box>

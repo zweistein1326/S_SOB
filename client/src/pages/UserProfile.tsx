@@ -45,42 +45,6 @@ const Home = (props:any) => {
   const [nfts, setNFTs] = useState<any>([]);
   const dispatch = useDispatch();  
 
-  // const loadNFTs = async(address:any) => {
-  //       const web3Modal = new Web3Modal();
-  //       const connection = await web3Modal.connect()
-  //       const provider = new ethers.providers.Web3Provider(connection)
-  //       const signer = provider.getSigner()
-          
-  //       const marketContract = new ethers.Contract(NFTMarketAddress, Market.abi, signer)
-  //       const tokenContract = new ethers.Contract(nftAddress, NFT.abi, provider)
-
-  //       console.log(address);
-  //       const data = await marketContract.fetchNFTsByUser(address);
-  //       console.log(data);
-        
-  //       const items = await Promise.all(data.map(async (i:any) => {
-  //         const tokenUri = await tokenContract.tokenURI(i.tokenId)
-  //         const meta = await axios.get(tokenUri)
-  //         let price = ethers.utils.formatUnits(i.price.toString(), 'ether')
-  //         let item = {
-  //           price,
-  //             tokenId: i.tokenId.toNumber(),
-  //             seller: i.seller,
-  //             owner: i.owner,
-  //             image: meta.data.image,
-  //             name: meta.data.name,
-  //             description: meta.data.description
-  //         }
-  //         return item
-  //       }))
-
-  //       const savedItems = activeUser.credentials;
-        
-
-  //       setNFTs(items)
-  //       setLoading(false) 
-  //   }
-
   const loadNFTs = async(user:any) => {
     let activeCreds:any = [];
     if(user && user.credentials){
@@ -101,78 +65,7 @@ const Home = (props:any) => {
       setActiveCredentials([]);
     }
   }
-    
-   
-    // setActiveCredentials();
-  }
-
-  const handleLogout = () => {
-    localStorage.removeItem('token');
-    setLoggedIn(false);
-  };
-
-  const addNFT = async(event:React.FormEvent<HTMLFormElement>) => {
-      event.preventDefault();
-      const data = new FormData(event.currentTarget);
-      if(data.get('contract_address')!=='' && data.get('token_id')!==''){
-        const credential = {
-            contract_address: data.get('contract_address'),
-            token_id: data.get('token_id'),
-      }
-        const tokenData = await getNFT(credential, user.id);
-        console.log(tokenData);
-        if(tokenData.name){
-          if(tokenData.name==="CRYPTOPUNKS"){
-            setTokenData(tokenData);
-            setImageUrl(tokenData.image);
-          }
-          else{
-            setTokenData(tokenData);
-            if(tokenData.image.split('://')[0]=="ipfs"){
-              setImageUrl(`https://gateway.ipfs.io/ipfs/${tokenData.image.split('://')[1]}`);
-            }
-            else{
-              setImageUrl(tokenData.image);
-            }
-            // navigate('/feed');
-          }
-        }else{
-          alert(tokenData.message);
-        }
-      }
-      
-      // const tokenData = await getNFT(credential, user.id); 
-      // if(tokenData.name){
-      //     // props.setCredentials(tokenData);
-      //     setTokenData(tokenData);
-      //     if(tokenData.image.split('://')[0]=="ipfs"){
-      //         console.log(tokenData.image.split('://')[1]);
-      //         setImageUrl(`https://gateway.ipfs.io/ipfs/${tokenData.image.split('://')[1]}`);
-      //     }
-      //     else{
-      //         setImageUrl(tokenData.image);
-      //     }
-      // // navigate('/feed');
-      // }
-      // else{
-      //       alert(tokenData.message);
-      // }
-  }
-
-  const createNewPost = async(event:any) => {
-    event.preventDefault();
-    console.log('creating new post');
-    await dispatch(createPost(tokenData, user.id, privacy));
-    navigate('/feed');
-  }
-
-  const handleChange = (event:any) => {
-      setPrivacy(event.target.value);
-  }
-
-  const handleCaptionChange = (event:any) => {
-      setCaption(event.target.value)
-  }
+}
 
   const {address} = useParams();
 

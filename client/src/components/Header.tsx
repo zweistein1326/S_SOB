@@ -1,6 +1,7 @@
 import { Navigation } from '@mui/icons-material';
 import {Button, Input, Typography} from '@mui/material'
 import { Box } from '@mui/system';
+import { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
 import { useNavigate } from 'react-router-dom';
@@ -15,6 +16,7 @@ const Header = (props:any) => {
     const filters = useSelector((state:any)=> state.filters)
     const allUsers = useSelector((state:any)=> selectUsers(state.auth.allUsers,{text:filters.text}));
     const user = useSelector((state:any)=>state.auth.user)
+    const [loading, setLoading] = useState(true);
     const dispatch = useDispatch();
 
     const handleLogout = () => {
@@ -23,8 +25,14 @@ const Header = (props:any) => {
         props.setLoggedIn(!props.loggedIn);
     };
 
+    useEffect(()=>{
+        if(!!user){
+            setLoading(false);
+        }
+    },[user])
+
     return(
-        <Box component="div" style={{backgroundColor:'transparent', display:'flex', flexDirection:'row', alignItems:'center', justifyContent:'center', height:'8vh', padding:'10px 20px'}}>
+        loading? null : <Box component="div" style={{backgroundColor:'transparent', display:'flex', flexDirection:'row', alignItems:'center', justifyContent:'center', height:'8vh', padding:'10px 20px'}}>
             {/* <img src={playgroundLogo} style={{height:'10vh', width:'20vw'}}/> */}
             <Typography onClick={()=>{navigate('/feed')}} style={{color:'#02F9A7', fontSize:'22px', fontWeight:'bold', cursor:'pointer'}}>Playground</Typography>
             <Box component="div" style={{width:'100%', position:'relative', padding:'0px 20px', display:'flex', flexDirection:'row'}}>
@@ -48,7 +56,7 @@ const Header = (props:any) => {
                 Profile
             </Link>
             <Link to={`/notifications`} style={{padding:'10px',borderRadius:'30px', margin:'20px 10px', backgroundColor:'transparent', width:'10%', display:'flex', justifyContent:'center',textDecoration:'none', color:'#000000', fontFamily:'sans-serif'}}>
-                Notifications <span style={{color:'white', borderRadius:'50%', backgroundColor:'red', width:'20px', textAlign:'center'}}>{user.notifications.length}</span>
+                Notifications <span style={{color:'white', borderRadius:'50%', backgroundColor:'red', width:'20px', textAlign:'center'}}>{user.notifications?user.notifications.length:0}</span>
             </Link>
             <Link to='/addCredential' style={{padding:'10px',borderRadius:'30px', margin:'20px 10px', backgroundColor:'#02F9A7', width:'10%', display:'flex', justifyContent:'center',textDecoration:'none', color:'#000000', fontFamily:'sans-serif'}}>
                 Upload

@@ -39,8 +39,8 @@ const SettingsScreen = (props:any) => {
                 <Button onClick = {()=>{setModalStatus(true)}} style={{padding:'20px 10px',borderRadius:'30px', margin:'20px 0px', backgroundColor:'#02F9A7', color:'#000000', width:'60%', display:'flex', justifyContent:'center'}}>Change Profile Picture</Button>
                 <Button onClick = {async()=>{
                     window.localStorage.removeItem('userId');
-                    dispatch(setUser(null));
                     navigate('/');
+                    dispatch(setUser(null));
                 }} 
                     style={{padding:'20px 10px', borderRadius:'30px', margin:'20px 0px', backgroundColor:'#000000', color:'#02F9A7', width:'60%', display:'flex', justifyContent:'center'}}>Logout</Button>
             </Box>

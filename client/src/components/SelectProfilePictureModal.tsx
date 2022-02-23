@@ -71,7 +71,7 @@ export default function SelectProfilePictureModal(props:any){
                 </Box>
                 <Grid container columns={3} style={{justifyContent:'center'}}>
                     {
-                        activeCredentials?
+                        activeCredentials.length?
                         (activeCredentials.map((nft:any,index:number)=>(
                             // <Box component="div" key={index} style={{border:'1px solid black', margin:'10px', boxShadow:'10px 10px', borderRadius:'20px', overflow:'hidden' }} onClick={()=>{navigate(`/credential/${nft.id}`)}}>
                             //     <img width="400px" src={nft.image}/>
@@ -86,7 +86,7 @@ export default function SelectProfilePictureModal(props:any){
                             )).reverse()
                         )
                         :
-                        null
+                        <Typography>Add NFTs to set profile picture</Typography>
                     }
                 </Grid>
             </Modal>

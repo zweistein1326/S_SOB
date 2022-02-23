@@ -112,7 +112,7 @@ const FeedCard = (props:any) => {
                 </Box>
             </Box>
             <Box component="div" className='Left' style={{width:'100%', flex:1, padding:'10px 0px'}}>
-                <Box component="div" className='UserInfo' style={{display:'flex', padding:'10px 10px', flexDirection:'row', alignItems:'center'}} onClick={()=>{navigate(`/${nftOwner}`)}}>
+                <Box component="div" className='UserInfo' style={{display:'flex', padding:'10px 10px', flexDirection:'row', alignItems:'center'}}>
                     {nftOwner ? <img src={nftOwner.profileImageUrl ? nftOwner.profileImageUrl:''} style={{backgroundColor:'pink',objectFit:'cover', width:'50%', height:'50%'}} className = "cardImage"/>:
                     <Box component="div" style={{backgroundColor:'#E46A6A',objectFit:'cover', width:'40px', height:'40px', borderRadius:'50%'}}></Box>}
                     {nftOwner ? <Typography style={{color:'black', padding:'0px 10px'}}>@{nftOwner.id}</Typography>:<Typography style={{color:'black', padding:'0px 10px'}}>@{nft.owner}</Typography>}
