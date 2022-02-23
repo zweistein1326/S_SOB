@@ -68,6 +68,15 @@ export const getCredentialById = (credentialId) => {
     }
 }
 
+export const getNotificationById = (notificationId) => {
+    return async (dispatch) => {
+        const { data } = await instance.get(`/notification/${notificationId}`);
+        // return dispatch(setNotification(data));
+        console.log(data);
+        return data;
+    }
+}
+
 export const updateCredential = (credential) => {
     return async (dispatch) => {
         const { data } = await instance.post(`/updateCredential`, credential);

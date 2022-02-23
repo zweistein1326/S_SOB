@@ -13,9 +13,7 @@ const Header = (props:any) => {
 
     const navigate = useNavigate();
     const filters = useSelector((state:any)=> state.filters)
-    console.log(filters);
     const allUsers = useSelector((state:any)=> selectUsers(state.auth.allUsers,{text:filters.text}));
-    console.log(allUsers);
     const user = useSelector((state:any)=>state.auth.user)
     const dispatch = useDispatch();
 
@@ -48,6 +46,9 @@ const Header = (props:any) => {
             </Link>
             <Link to={`/${user.id}`} style={{padding:'10px',borderRadius:'30px', margin:'20px 10px', backgroundColor:'transparent', width:'10%', display:'flex', justifyContent:'center',textDecoration:'none', color:'#000000', fontFamily:'sans-serif'}}>
                 Profile
+            </Link>
+            <Link to={`/notifications`} style={{padding:'10px',borderRadius:'30px', margin:'20px 10px', backgroundColor:'transparent', width:'10%', display:'flex', justifyContent:'center',textDecoration:'none', color:'#000000', fontFamily:'sans-serif'}}>
+                Notifications <span style={{color:'white', borderRadius:'50%', backgroundColor:'red', width:'20px', textAlign:'center'}}>{user.notifications.length}</span>
             </Link>
             <Link to='/addCredential' style={{padding:'10px',borderRadius:'30px', margin:'20px 10px', backgroundColor:'#02F9A7', width:'10%', display:'flex', justifyContent:'center',textDecoration:'none', color:'#000000', fontFamily:'sans-serif'}}>
                 Upload

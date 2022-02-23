@@ -26,6 +26,7 @@ import WalletConnect from '@walletconnect/client';
 import QRCodeModal from '@walletconnect/qrcode-modal';
 import { connector } from './functions/walletConnector';
 import { setUser } from './redux/actions/user';
+import NotificationsScreen from './pages/NotificationsScreen';
 // import './assets/main.css';
 
 // import * as firebase from 'firebase/app';
@@ -81,6 +82,7 @@ function App() {
           <Route path="/:address" element={<Home />} />
           <Route path="/settings" element={<SettingsScreen />} />
           <Route path="/feed" element={<Feed />} />
+          <Route path="/notifications" element={<NotificationsScreen />} />
           <Route path="/credential/:credentialId" element={<NFTScreen />} />
           <Route path="/addCredential" element={<AddCredential />} />
         </Routes>
