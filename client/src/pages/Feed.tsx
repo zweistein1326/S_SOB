@@ -155,7 +155,7 @@ const Feed = () => {
                         recommendUser.id!==user.id?<Box component="div" style={{display:'flex', flexDirection:'row', alignItems:'center', justifyContent:'flex-start', width:'100%', margin:'10px',}}>
                             <Box component="div" style={{display:'flex', flexDirection:'row', flex:1, alignItems:'center'}} onClick ={()=>{navigate(`/${recommendUser.id}`)}}>
                                 {recommendUser.profileImageUrl? <img src={recommendUser.profileImageUrl} style={{width:'50px', height:'50px',backgroundColor:'#E46A6A', borderRadius:'50%'}}/>:<Box component="div" style={{width:'50px', height:'50px', backgroundColor:'#E46A6A', borderRadius:'50%'}}></Box>}
-                                <Typography style={{flex:1, paddingLeft:'10px'}}>{Array.from(recommendUser.username).map((letter:any, index:number)=>index<20 ? letter:null)}</Typography>
+                                <Typography style={{flex:1, paddingLeft:'10px'}}>{Array.from(recommendUser.username).map((letter:any, index:number)=>index<12 ? letter: (index<15?'.':null))}</Typography>
                                 <Button onClick={()=>{dispatch(followUser(user.id,recommendUser.id))}}>+ Follow</Button>
                             </Box>
                         </Box>:null

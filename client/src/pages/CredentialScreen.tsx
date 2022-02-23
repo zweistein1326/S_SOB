@@ -162,7 +162,7 @@ const NFTScreen = (state:any) => {
             </Modal> */}
             <Box component="div" style={{display:'flex', flexDirection:'row', justifyContent:'center', width:'100%', overflowY:'scroll'}}>
             {credential ?
-            <Box component="div" style={{width:'70%'}}>
+            <Box component="div" style={{width:'70%', overflowY:'scroll'}}>
                     <Box component="div" className='UserInfo' style={{display:'flex', padding:'10px 20px', flexDirection:'row', alignItems:'center', justifyContent:'space-between', width:'100%'}}>
                         <Box component="div" style={{display:'flex', flexDirection:'row', alignItems:'center', padding:'10px'}}>
                                 {credentialOwner?<img src={credentialOwner.profileImageUrl ? credentialOwner.profileImageUrl:''} style={{backgroundColor:'#E46A6A',objectFit:'cover', width:'50%', height:'50%'}} className = "cardImage"/>:
@@ -186,8 +186,8 @@ const NFTScreen = (state:any) => {
                         </Box>
                        
                         <Box component="div" className={styles.infoContainer}>
-                            {credential.name ? <Typography style={{fontSize:'24px', fontWeight:'bold', color:'black', padding:'10px', textAlign:'center'}} color="black">{credential.name} #{credential.token_id}  {isFavorite? <FavoriteIcon style={{color:'red'}} />: <FavoriteIcon style={{color:'grey'}}/>}</Typography> : null}
-                            {credential.description ? <Typography style={{fontSize:'24px', fontWeight:'bold', color:'black', padding:'10px', textAlign:'center'}} color="black">{credential.description} </Typography> : null}
+                            {credential.name ? <Typography style={{fontSize:'24px', fontWeight:'bold', color:'black', padding:'10px', textAlign:'left'}} color="black">{credential.name} #{credential.token_id}  {isFavorite? <FavoriteIcon style={{color:'red'}} />: <FavoriteIcon style={{color:'grey'}}/>}</Typography> : null}
+                            {credential.description ? <Typography style={{fontSize:'18px', fontWeight:'500', color:'black', padding:'10px', textAlign:'left'}} color="black">{credential.description} </Typography> : null}
                             {/* {credential.token_id ? <Typography style={{fontSize:'24px', fontWeight:'500', color:'black', padding:'10px', textAlign:'center'}} color="black">Token: </Typography> : null} */}
                              <Grid container columns={3} style={{ margin:'0px 10px', borderRadius:'0px',padding:'0.2rem', justifyContent:'center', alignItems:'flex-start', overflowY:'scroll', backgroundColor:'black', marginTop:'10px'}}>
                                 <Typography style={{fontSize:'20px', fontWeight:'bold', color:'white', width:'100%', textAlign:'center', padding:'10px'}}>Attributes</Typography>
@@ -207,7 +207,7 @@ const NFTScreen = (state:any) => {
                                 </Box>
                                 <Box component="div" style={{zIndex:99999, display:'flex', flexDirection:'row', alignItems:'center'}}>
                                     <FaRegComment size={18} color={'#02F9A7'} onClick={()=>{navigate(`/nft/${credential.id}`)}}/>
-                                    {<Typography style={{padding:'0px 10px', color:'black'}}>{credential.comments ? credential.comments.length : 0}</Typography>}
+                                    {<Typography style={{padding:'0px 10px', color:'black'}}>{credential.comments ? credential.comments.length : 0} Comments</Typography>}
                                 </Box> 
                             </Box>
                             {/* <Button onClick={()=>{setModalIsOpen(true)}} style={{ backgroundColor:'#02F9A7', padding:'10px', color:'black', width:'100%', margin:'10px'}}>Purchase</Button> */}
@@ -239,15 +239,15 @@ const NFTScreen = (state:any) => {
                         </Box>:null}
                 </Box>
                 : null}
-                <Box component="div" style={{zIndex:'999999', height:'100vh', backgroundColor:'#333333', maxWidth:'20vw', display:'flex', flexDirection:'column', alignItems:'center', justifyContent:'flex-start', padding:'0px 10px', overflowY:'scroll'}}>
+                <Box component="div" style={{zIndex:'999999', height:'90vh', backgroundColor:'#333333', maxWidth:'20vw', display:'flex', flexDirection:'column', alignItems:'center', justifyContent:'flex-start', padding:'0px 10px', overflowY:'scroll', scrollbarWidth:'none'}}>
                     <Typography style={{color:'white', fontSize:'20px', fontWeight:'bold', padding:'20px'}}>Recommended for you</Typography>
                     {/* <Typography style={{color:'white', fontSize:'14px', fontWeight:'bold',textAlign:'right', width:'100%', padding:'0px 20px'}}>View more</Typography> */}
                     { allUsers.map((recommendUser:any)=>{
                         return(
-                        recommendUser.id!==user.id?<Box component="div" style={{display:'flex', flexDirection:'row', alignItems:'center', justifyContent:'flex-start', width:'100%', margin:'10px',}}>
+                        recommendUser.id!==user.id?<Box component="div" style={{display:'flex', flexDirection:'row', alignItems:'center', justifyContent:'flex-start', width:'100%', margin:'10px'}}>
                             <Box component="div" style={{display:'flex', flexDirection:'row', flex:1, alignItems:'center'}} onClick ={()=>{navigate(`/${recommendUser.id}`)}}>
                                 {recommendUser.profileImageUrl? <img src={recommendUser.profileImageUrl} style={{width:'50px', height:'50px',backgroundColor:'#E46A6A', borderRadius:'50%'}}/>:<Box component="div" style={{width:'50px', height:'50px', backgroundColor:'#E46A6A', borderRadius:'50%'}}></Box>}
-                                <Typography style={{flex:1, paddingLeft:'10px'}}>{Array.from(recommendUser.username).map((letter:any, index:number)=>index<17 ? letter: (index<20?'.':null))}</Typography>
+                                <Typography style={{flex:1, paddingLeft:'10px'}}>{Array.from(recommendUser.username).map((letter:any, index:number)=>index<12 ? letter: (index<15?'.':null))}</Typography>
                                 <Button onClick={()=>{dispatch(followUser(user.id,recommendUser.id))}}>+ Follow</Button>
                             </Box>
                         </Box>:null

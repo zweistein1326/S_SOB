@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   Avatar,
   Button,
@@ -10,6 +10,7 @@ import {
   Link,
   Grid,
   Typography,
+  CircularProgress,
 } from '@mui/material';
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import { useNavigate } from 'react-router-dom';
@@ -43,10 +44,13 @@ const Register = (props:any) => {
   const [username, setUsername] = useState<string>('');
   const [account, setAccount] = useState<any>(null);
   const [errorMessage, setErrorMessage] = useState<any>(null);
-  const [loading, setLoading] = useState<boolean>(false);
+  const [loading, setLoading] = useState<boolean>(true);
   const [walletConnected, setWalletConnected] = useState<boolean>(false);
   const dispatch = useDispatch();
-
+  
+  useEffect(()=>{
+    setLoading(false);
+  })
 
   const connectWalletHandler = async (event:any) => {
     try{
@@ -108,6 +112,7 @@ const Register = (props:any) => {
             if(user.user){
                 setAccount(user.user.id);
                 dispatch(setUser(user.user));
+                setLoading(true);
                 navigate('/feed')
             }
             else{
@@ -128,7 +133,7 @@ const Register = (props:any) => {
     if(username!==''){
       // getUserBalance(newAccount);
       const user = await props.register({address,username});
-      setLoading(false);
+      setLoading(true);
       navigate(`/feed`)
     }else{
       setErrorMessage('Username cannot be empty');
@@ -141,7 +146,7 @@ const Register = (props:any) => {
       const user:any = await dispatch(register({address:account, username}));
       if(!!user){
             window.localStorage.setItem('userId',account);
-            setLoading(false)
+            setLoading(true)
             navigate('/feed');
       }
     }else{
@@ -205,7 +210,7 @@ const Register = (props:any) => {
             }}
             sx={{ mt: 3, mb: 2, backgroundColor:'#333333', border:'1px solid #02F9A7',color:'white', input:{color:'white'}}}
           />:null}
-          {walletConnected?
+          {!loading?(walletConnected?
           <Button
               type="submit"
               fullWidth
@@ -227,7 +232,8 @@ const Register = (props:any) => {
               Connect Wallet
               {/* <img src={metamask_logo} style={{height:'40px', width:'40px', padding:'5px 20px', position:'absolute', left:0}}/> */}
             </Button>
-          </Box>}
+          </Box>)
+          :<CircularProgress/>}
         </Box>
       </Box>
     </Box>
