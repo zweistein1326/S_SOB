@@ -62,17 +62,16 @@ const Register = (props:any) => {
         let web3:any;
         let providerOptions:any;
         providerOptions = {
-            metamask: {
-              id: "injected",
-              name: "Metamask", 
-              type: "injected",
-              check: "isMetaMask",
-            },
+          metamask: {
+            id: "injected",
+            name: "Metamask", 
+            type: "injected",
+            check: "isMetaMask",
+          },
           walletconnect: {
           package: WalletConnectProvider, // required
           options: {
             infuraId: "23pWFcRt7vce0drcQcwyGhIhpyI", // Required
-            network: "IPFS",
             qrcodeModalOptions: {
               mobileLinks: [
                 "rainbow",
@@ -85,9 +84,9 @@ const Register = (props:any) => {
               }
             } 
           },
-          authereum: {
-            package: Authereum // required
-          },
+          // authereum: {
+          //   package: Authereum // required
+          // },
         };
 
         web3Modal = new Web3Modal({
