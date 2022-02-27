@@ -8,17 +8,8 @@ import CredentialTile from '../components/CredentialTile';
 import Header from '../components/Header';
 import NFTCard from '../components/NFTCard';
 import { getCredentialById, getNFT, getUserById, followUser, createPost, updateCredential} from '../functions/axios';
-import { User } from '../models/User';
 import '../styles/Home.css'
-import {searchByText} from '../redux/actions/filters';
-import usersSelector from '../redux/selectors/users';
-import { ThreeDots } from 'react-loader-spinner';
-import {ethers} from 'ethers';
-import Web3Modal from 'web3modal';
-import {nftAddress, NFTMarketAddress} from '../../config';
-import NFT from '../../artifacts/contracts/NFT.sol/NFT.json'
-import Market from '../../artifacts/contracts/Market.sol/NFTMarket.json'
-import axios from 'axios';
+import {SocialIcon} from 'react-social-icons';
 
 declare var window:any;
 
@@ -127,8 +118,6 @@ const Home = (props:any) => {
     }
   }
   
-  const {ethereum} = window;
-
   return (
     <Box component="div" style={{backgroundColor:'#FFFFFF', color:'white', padding:'0px 0px', display:'flex', flexDirection:'column', height:'100vh'}}>
         <Header/>
@@ -137,6 +126,29 @@ const Home = (props:any) => {
           {activeUser.profileImageUrl ? <img src={`${activeUser.profileImageUrl}`} style={{ width:'300px', borderRadius:'50%', border:'3px solid #02F9A7'}}/>:<Box component="div" style={{width:'300px', height:'300px', borderRadius:'50%',backgroundColor:'#E46A6A'}}></Box>}
           <Typography style={{color:'black', padding:'10px 0px', fontSize:'20px'}}>@{activeUser.username}</Typography>
           <Typography style={{color:'black', padding:'10px 0px', fontSize:'16px'}}><span style={{fontWeight:'bold', fontStyle:'italic'}}>{activeUser.following?activeUser.following.length : 0}</span> Following <span style={{fontWeight:'bold', fontStyle:'italic'}}>{activeUser.followers?activeUser.followers.length:0}</span> Followers</Typography>
+          <Box component="div" style={{display:'flex', width:'80%', alignItems:'center', justifyContent:'center', margin:'5px'}} onClick={()=>{
+            if(activeUser.twitter){
+              window.open(user.twitter,'_blank')
+            }
+            else{
+              window.open("https://twitter.com",'_blank')
+            }
+          }}>
+            <SocialIcon style={{width:'50px'}} target={"_blank"} url={`${activeUser.twitter ? activeUser.twitter:"https://twitter.com"}`} />
+            <Typography style={{color:'black', fontSize:'16px'}}>{`${activeUser.twitter ? activeUser.twitter.split('/')[3]:""}`}</Typography>
+          </Box>
+          <Box component="div" style={{display:'flex', width:'80%', alignItems:'center', justifyContent:'center', margin:'5px'}}
+          onClick={()=>{
+            if(activeUser.instagram){
+              window.open(activeUser.instagram,'_blank')
+            }
+            else{
+              window.open("https://instagram.com",'_blank')
+            }
+          }}>
+            <SocialIcon style={{width:'50px'}} target={"_blank"} url={`${activeUser.instagram ? activeUser.instagram:"https://instagram.com"}`} />
+            <Typography style={{color:'black', fontSize:'16px'}}>{`${activeUser.instagram ? activeUser.instagram.split('/')[3]:""}`}</Typography>
+          </Box>
           {activeUser.id === user.id? <Link to='/settings' style={{padding:'20px', borderRadius:'30px', margin:'20px 10px', backgroundColor:'black', width:'60%', display:'flex', justifyContent:'center',textDecoration:'none', color:'#02F9A7', fontFamily:'sans-serif'}}>
                   Settings
           </Link>: null }
