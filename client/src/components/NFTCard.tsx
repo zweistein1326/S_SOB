@@ -81,7 +81,7 @@ const NFTCard = (props:Props) => {
                         <Box style={{backgroundColor:'pink',objectFit:'cover', width:'50%', height:'50%', borderRadius:'50%'}}>
                         </Box>
                     </Box>} */}
-                    <Typography color="white" style={{fontSize:'18px', fontWeight:'bold', textAlign:'center'}}>{credential.collection_name} #{credential.token_id}</Typography>
+                    <Typography color="white" style={{fontSize:'18px', fontWeight:'bold', textAlign:'center'}}>{credential.collection_name? credential.collection_name:credential.name} #{credential.token_id}</Typography>
                     {/* <Button onClick={()=>{}}>Add To Collection</Button>
                     <Button onClick={()=>{}}>Share</Button> */}
                     {/* <Typography style={{fontSize:'21px'}} color="white">ETH{props.credential.minPrice}</Typography> */}

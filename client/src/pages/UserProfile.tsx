@@ -122,8 +122,8 @@ const Home = (props:any) => {
               window.open("https://twitter.com",'_blank')
             }
           }}>
-            <SocialIcon style={{}} target={"_blank"} url={`${activeUser.twitter ? activeUser.twitter:"https://twitter.com"}`} />
-            <Typography style={{color:'black', fontSize:'16px'}}>{`${activeUser.twitter ? activeUser.twitter.split('/')[3]:""}`}</Typography>
+            <SocialIcon style={{height:'50px', width:'50px', padding:0, margin:'0px 10px'}} target={"_blank"} url={`${activeUser.twitter ? activeUser.twitter:"https://twitter.com"}`} />
+            <Typography style={{color:'black', fontSize:'16px'}}>{`${activeUser.twitter ? `@${activeUser.twitter.split('/')[3]}`:""}`}</Typography>
           </Box>
           <Box component="div" style={{display:'flex', width:'80%', alignItems:'center', justifyContent:'center', margin:'5px'}}
           onClick={()=>{
@@ -134,8 +134,8 @@ const Home = (props:any) => {
               window.open("https://instagram.com",'_blank')
             }
           }}>
-            <SocialIcon style={{}} target={"_blank"} url={`${activeUser.instagram ? activeUser.instagram:"https://instagram.com"}`} />
-            <Typography style={{color:'black', fontSize:'16px'}}>{`${activeUser.instagram ? activeUser.instagram.split('/')[3]:""}`}</Typography>
+            <SocialIcon style={{height:'50px', width:'50px', padding:0, margin:'0px 10px'}} target={"_blank"} url={`${activeUser.instagram ? activeUser.instagram:"https://instagram.com"}`} />
+            <Typography style={{color:'black', fontSize:'16px'}}>{`${activeUser.instagram ? `@${activeUser.instagram.split('/')[3]}`:""}`}</Typography>
           </Box>
           {activeUser.id === user.id? <Link to='/settings' style={{padding:'20px', borderRadius:'30px', margin:'20px 10px', backgroundColor:'black', width:'60%', display:'flex', justifyContent:'center',textDecoration:'none', color:'#02F9A7', fontFamily:'sans-serif'}}>
                   Settings
