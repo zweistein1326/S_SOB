@@ -67,8 +67,6 @@ const NotificationsScreen = (props:any) => {
       }
     },[address, user])
 
-  const {ethereum} = window;
-
   return (
     <Box component="div" style={{backgroundColor:'#FFFFFF', color:'white', padding:'0px 0px', display:'flex', flexDirection:'column', maxHeight:'100vh'}}>
         <Header/>

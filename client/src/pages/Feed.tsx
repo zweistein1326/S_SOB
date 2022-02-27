@@ -10,27 +10,24 @@ import { followUser, getAllUsers, getCredentials } from '../functions/axios';
 import {ethers} from 'ethers';
 import Web3Modal from 'web3modal';
 import {nftAddress, NFTMarketAddress} from '../../config';
-import NFT from '../../artifacts/contracts/NFT.sol/NFT.json'
 import Market from '../../artifacts/contracts/Market.sol/NFTMarket.json'
-import axios from 'axios';
-import { setCredentials } from '../redux/actions/credentials';
+
 
 const Feed = () => {
 
     const credentials = useSelector((state:any)=> sortCredentials(state.credentials));
-    const user = useSelector((state:any)=>state.auth.user);
+    const user:any = useSelector((state:any)=>state.auth.user);
+    console.log(user);
     const allUsers = useSelector((state:any)=>state.auth.allUsers);
-    const filters = useSelector((state:any)=>state.filters);
+    console.log(allUsers);
     const dispatch = useDispatch();
     const navigate = useNavigate();
-
-    const [nfts, setNfts] = useState([]);
     const [loadingState,setLoadingState] = useState('not-loaded');
 
     useEffect(()=>{
         // loadNFTs()
         getAllUploadedNFTs();
-    },[])
+    },[user])
 
     // const loadNFTs = async() => {
     //     const provider = new ethers.providers.JsonRpcProvider('https://polygon-mumbai.infura.io/v3/12bd70f594644e4ea699b452fd7e7d44')
@@ -166,40 +163,6 @@ const Feed = () => {
             </Box>
         </Box> : null
     )
-
-
-    // else{
-    //     return(
-    //         <Box component="div" style={{display:'flex', justifyContent:'center'}}>
-    //             <Box component="div" style={{padding:4, maxWidth:'1600px'}}>
-    //                 <Box component="div" sx={{display:'grid', gridColumn:1, pt:4}} className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 pt-4"> 
-    //                     {
-    //                     nfts.map((nft:any,i:number)=>{
-    //                         console.log(nft);
-    //                         return(
-    //                             <Box component="div" key={i} style={{border:'1px solid black', boxShadow:'10px 10px', borderRadius:'10px', overflow:'hidden' }} >
-    //                                 <img src={nft.image}/>
-    //                                 <Box component="div" style={{padding:'20px'}} className="p-4">
-    //                                     <Typography style={{fontSize:'2xl', height:'64px', fontWeight:'semi-bold'}} className="text-2xl font-semibold">{nft.name}</Typography>
-    //                                     <Box component="div" style={{height:'70px', overflow:'hidden'}}>
-    //                                         <Typography style={{color:'gray'}}>{nft.description}</Typography>
-    //                                     </Box>
-    //                                 </Box>
-    //                                 <Box component="div" style={{padding:'20px', backgroundColor:'black'}} className="p-4 bg-black">
-    //                                     <Typography style={{fontSize:'2xl', marginBottom:'20px', fontWeight:'bold', color:'white'}} className="text-2xl mb-4 font-bold text-white">{nft.price} MATIC</Typography>
-    //                                     <Button style={{width:'100%', backgroundColor:'pink', color:'white', fontWeight:'bold',padding:'10px 20px'}} className="w-full bg-pink-500 text-white font-bold py-2 px-12 rounded" onClick={()=>buyNft(nft)}>
-    //                                         Buy
-    //                                     </Button>
-    //                                 </Box> 
-    //                             </Box>
-    //                         )
-    //                     })
-    //                     }
-    //                 </Box>
-    //             </Box>
-    //         </Box>
-    //     )
-    // }
 }
 
 export default Feed

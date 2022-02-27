@@ -112,6 +112,7 @@ const Register = (props:any) => {
                 setAccount(user.user.id);
                 dispatch(setUser(user.user));
                 setLoading(true);
+                window.localStorage.setItem('userId',user.user.id);
                 navigate('/feed')
             }
             else{
@@ -128,16 +129,16 @@ const Register = (props:any) => {
     }
   }
 
-  const accountChangeHandler = async(address:any,username:string) => {
-    if(username!==''){
-      // getUserBalance(newAccount);
-      const user = await props.register({address,username});
-      setLoading(true);
-      navigate(`/feed`)
-    }else{
-      setErrorMessage('Username cannot be empty');
-    }
-  }
+  // const accountChangeHandler = async(address:any,username:string) => {
+  //   if(username!==''){
+  //     // getUserBalance(newAccount);
+  //     const user = await props.register({address,username});
+  //     setLoading(true);
+  //     navigate(`/feed`)
+  //   }else{
+  //     setErrorMessage('Username cannot be empty');
+  //   }
+  // }
 
   const login = async(event:any) => {
     event.preventDefault();

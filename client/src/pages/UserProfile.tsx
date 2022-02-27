@@ -15,31 +15,19 @@ declare var window:any;
 
 const Home = (props:any) => {
   const navigate = useNavigate();
-  const [activeUser,setActiveUser] = useState<any>({});
+  const [activeUser,setActiveUser] = useState<any>(null);
   const [activeCredentials,setActiveCredentials] = useState<any>([]);
-  const [account, setAccount] = useState<any>(null);
-  const [searchText, setSearchText] = useState<string>('');
-  const [isUserProfile, setIsUserProfile] = useState<boolean>(false);
   const [loading,setLoading]= useState(true);
   const [isFollowing, setIsFollowing] = useState(false);
   
   const user = useSelector((state:any)=>state.auth.user);
-  const [loggedIn, setLoggedIn] = useState(
-    user !==null ,
-  );
   const followingIds = useSelector((state:any)=>state.auth.following);
   const [view, setView] = useState<number>(0);
-  const [imageUrl, setImageUrl] = useState<any>(null);
-  const [privacy, setPrivacy] = useState(0);
-  const [caption, setCaption] = useState<string>('');
-  const [tokenData, setTokenData] = useState<any>(null);
-  const [nfts, setNFTs] = useState<any>([]);
   const dispatch = useDispatch();  
 
   const loadNFTs = async(user:any) => {
     let activeCreds:any = [];
     if(user && user.credentials){
-      console.log(user);
       if(activeCreds.length < user.credentials.length){
         await Promise.all(user.credentials).then(async(credentialIds:any)=>{
           await credentialIds.forEach(async(credentialId:string)=>{
@@ -64,7 +52,6 @@ const Home = (props:any) => {
     (async ()=>{
       setActiveCredentials([]);
       const {user}:any = await dispatch(getUserById(address));
-      setIsUserProfile(address?.toLowerCase()===user.id.toLowerCase());
       if(followingIds){
         const resAddress= followingIds.find((id:any)=>id===address);
         setIsFollowing(!!resAddress);
@@ -72,14 +59,15 @@ const Home = (props:any) => {
         setIsFollowing(false);
       }
       const activeUser:any = await dispatch(getUserById(address));
-      setActiveUser(activeUser.user);
       console.log(activeUser.user);
+      setActiveUser(activeUser.user);
       loadNFTs(activeUser.user);
       if(user.credentials){
          user.credentials.forEach(async(credentialId:string,index:number)=>{
           setActiveCredentials([...activeCredentials,credentialId].sort((a:any,b:any)=>b.iat-a.iat))
     });
-      }
+    }
+    console.log('setting loading');
       setLoading(false);
   })();
   },[address])
@@ -134,7 +122,7 @@ const Home = (props:any) => {
               window.open("https://twitter.com",'_blank')
             }
           }}>
-            <SocialIcon style={{width:'50px'}} target={"_blank"} url={`${activeUser.twitter ? activeUser.twitter:"https://twitter.com"}`} />
+            <SocialIcon style={{}} target={"_blank"} url={`${activeUser.twitter ? activeUser.twitter:"https://twitter.com"}`} />
             <Typography style={{color:'black', fontSize:'16px'}}>{`${activeUser.twitter ? activeUser.twitter.split('/')[3]:""}`}</Typography>
           </Box>
           <Box component="div" style={{display:'flex', width:'80%', alignItems:'center', justifyContent:'center', margin:'5px'}}
@@ -146,7 +134,7 @@ const Home = (props:any) => {
               window.open("https://instagram.com",'_blank')
             }
           }}>
-            <SocialIcon style={{width:'50px'}} target={"_blank"} url={`${activeUser.instagram ? activeUser.instagram:"https://instagram.com"}`} />
+            <SocialIcon style={{}} target={"_blank"} url={`${activeUser.instagram ? activeUser.instagram:"https://instagram.com"}`} />
             <Typography style={{color:'black', fontSize:'16px'}}>{`${activeUser.instagram ? activeUser.instagram.split('/')[3]:""}`}</Typography>
           </Box>
           {activeUser.id === user.id? <Link to='/settings' style={{padding:'20px', borderRadius:'30px', margin:'20px 10px', backgroundColor:'black', width:'60%', display:'flex', justifyContent:'center',textDecoration:'none', color:'#02F9A7', fontFamily:'sans-serif'}}>
