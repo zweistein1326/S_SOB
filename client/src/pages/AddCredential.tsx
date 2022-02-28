@@ -102,8 +102,8 @@ const AddCredential = (props:any) => {
             const tokenData = await getNFT(credential, user.id);
             console.log(tokenData);
             if(tokenData){
-                if(tokenData.collection_name){
-                    if(tokenData.collection_name==="CRYPTOPUNKS"){
+                if(tokenData.collection_name || tokenData.name){
+                    if(tokenData.collection_name==="CRYPTOPUNKS" || tokenData.name ==="CRYPTOPUNKS"){
                         setTokenData(tokenData);
                         setImageUrl(tokenData.image);
                     }
@@ -134,8 +134,13 @@ const AddCredential = (props:any) => {
 
     const createNewPost = async(event:any) => {
         event.preventDefault();
-        await dispatch(createPost(tokenData, user.id, privacy));
-        navigate('/feed');
+        const result:any = await dispatch(createPost(tokenData, user.id, privacy));
+        if(result.message){
+            alert(result.message);
+        }
+        else{
+            navigate('/feed');
+        }
     }
 
     const handleChange = (event:any) => {
@@ -227,7 +232,7 @@ const AddCredential = (props:any) => {
                 </Box>
                 <Box component="div" style={{backgroundColor:'#FFFFFF',border:'1px solid black', borderRadius:'20px', height:'450px', width:'400px', display:'flex', flexDirection:'column', alignItems:'center', justifyContent:'space-between', textAlign:'center'}}>
                     {tokenData ? <img style={{height:'400px',borderTopRightRadius:'20px',borderTopLeftRadius:'20px', width:'400px'}} src={`${imageUrl}`} alt="token"/> : null}
-                    <Typography style={{padding:'10px', color:'#000000', fontWeight:'bold', fontSize:'16px'}}>{tokenData ? `${tokenData.collection_name} #${tokenData.token_id}` :'Enter Contract Address and Token Id to import NFT'}</Typography>
+                    <Typography style={{padding:'10px', color:'#000000', fontWeight:'bold', fontSize:'16px'}}>{tokenData ? `${tokenData.collection_name? tokenData.collection_name: tokenData.name} #${tokenData.token_id}` :'Enter Contract Address and Token Id to import NFT'}</Typography>
                 </Box>
             </Box>:
             <Box component="div" style={{display:'flex', flexDirection:'row', alignItems:'center', padding:'0px 20px'}}>

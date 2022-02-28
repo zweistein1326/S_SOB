@@ -108,7 +108,7 @@ const FeedCard = (props:any) => {
         <Grid item key ={props.key} className="feedCard" style={{margin:'0px 20px 50px 20px',  position:'relative', backgroundColor:'#FFFFFF', display:'flex', flexDirection:'column', alignItems:'center', justifyContent:'center', borderRadius:'20px', border: '2px solid black'}}>
             <Box component="div" className="Right" style={{display:'flex',width:'100%', backgroundColor:'transparent', marginBottom:'0px'}}>
                 <Box component="div" className="PostAssets" style={{width:'100%' }}>
-                    {nft && imageUrl ? <img onClick={()=>{navigate(`/credential/${nft.id}`)}} style={{height:'100%', width:'500px',objectFit:'cover', borderRadius:'18px', borderBottomLeftRadius:'0px',borderBottomRightRadius:'0px'}} src={imageUrl} alt="token"/> : <Box component="div" style={{backgroundColor:'#332E2E',objectFit:'contain', width:'100%', height:'100%', borderRadius:'20px'}}></Box>}
+                    {nft && imageUrl ? <img onClick={()=>{navigate(`/credential/${nft.id}`)}} style={{height:'100%', width:'550px',objectFit:'cover', borderRadius:'18px', borderBottomLeftRadius:'0px',borderBottomRightRadius:'0px'}} src={imageUrl} alt="token"/> : <Box component="div" style={{backgroundColor:'#332E2E',objectFit:'contain', width:'100%', height:'100%', borderRadius:'20px'}}></Box>}
                 </Box>
             </Box>
             <Box component="div" className='Left' style={{width:'100%', flex:1, padding:'10px 0px'}}>
