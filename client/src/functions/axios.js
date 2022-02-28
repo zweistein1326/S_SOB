@@ -127,10 +127,12 @@ export const getAllUsers = () => {
 export const getCredentials = () => {
     return async (dispatch) => {
         const { data } = await instance.get('/credentials');
-        if (data.allCredentials) {
+        console.log(data);
+        if (data.allCredentials!==null) {
             Object.values(data.allCredentials).forEach((credential) => dispatch(setCredentials(credential)))
+            return data.allCredentials;
         }
-        return data.allCredentials;
+        return null;
     }
 }
 

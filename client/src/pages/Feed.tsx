@@ -94,11 +94,11 @@ const Feed = () => {
     //     dispatch(getAllUsers());
     // },[])
     
-    if(loadingState == 'loaded' && !credentials.length) return (
-        <Typography>No items in marketplace</Typography>
-    )
+    // if(loadingState == 'loaded' && !credentials.length) return (
+    //     <Typography>No items in marketplace</Typography>
+    // )
     return(
-        allUsers && user ? <Box component="div" style={{backgroundColor:'#FFFFFF', color:'white',padding:'0px 0px', maxHeight:'100vh', display:'flex', flexDirection:'column', overflowY:'scroll'}}>
+        allUsers && user && loadingState=="loaded" ? <Box component="div" style={{backgroundColor:'#FFFFFF', color:'white',padding:'0px 0px', maxHeight:'100vh', display:'flex', flexDirection:'column', overflowY:'scroll'}}>
             <Header/>
             <Box component="div" style={{backgroundColor:'#FFFFFF', color:'white', margin:'auto', minHeight:'90vh', display:'flex', flexDirection:'row', alignItems:'center', justifyContent:'center', width:'100%' }}>
                 {/* <Box style={{width:'80%'}}>
