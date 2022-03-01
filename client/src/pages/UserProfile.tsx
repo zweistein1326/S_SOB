@@ -91,7 +91,7 @@ const Home = (props:any) => {
           )
           : (activeUser.id===user.id?<Box component="div" style={{width:'100%', height:'100%', display:'flex', flexDirection:'column', alignItems:'center',}}>
             {/* <Typography style={{color:'black'}}>No NFTs added yet</Typography> */}
-            <Button style={{backgroundColor:'#02F9A7',color:'black', borderRadius:0, padding:'20px 0px', marginTop:'20px', width:'100%'}} onClick={()=>{setView(2)}}>Upload</Button>
+            <Button style={{backgroundColor:'#02F9A7',color:'black', borderRadius:0, padding:'20px 0px', marginTop:'20px', width:'100%'}} onClick={()=>{navigate('/addCredential')}}>Upload</Button>
             </Box>:
             <Button style={{backgroundColor:'#02F9A7',flex:1, color:'black', borderRadius:0, padding:'20px 0px', marginTop:'20px'}} onClick={()=>{navigate('/feed')}}>Explore</Button>)
           )

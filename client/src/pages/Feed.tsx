@@ -11,15 +11,15 @@ import {ethers} from 'ethers';
 import Web3Modal from 'web3modal';
 import {nftAddress, NFTMarketAddress} from '../../config';
 import Market from '../../artifacts/contracts/Market.sol/NFTMarket.json'
+import { setFollowing } from '../redux/actions/user';
 
 
 const Feed = () => {
 
     const credentials = useSelector((state:any)=> sortCredentials(state.credentials));
     const user:any = useSelector((state:any)=>state.auth.user);
-    console.log(user);
     const allUsers = useSelector((state:any)=>state.auth.allUsers);
-    console.log(allUsers);
+    const followingIds = useSelector((state:any)=>state.auth.following);
     const dispatch = useDispatch();
     const navigate = useNavigate();
     const [loadingState,setLoadingState] = useState('not-loaded');
@@ -27,7 +27,7 @@ const Feed = () => {
     useEffect(()=>{
         // loadNFTs()
         getAllUploadedNFTs();
-    },[user])
+    },[user, followingIds])
 
     // const loadNFTs = async() => {
     //     const provider = new ethers.providers.JsonRpcProvider('https://polygon-mumbai.infura.io/v3/12bd70f594644e4ea699b452fd7e7d44')
@@ -62,6 +62,9 @@ const Feed = () => {
     // }
 
     const getAllUploadedNFTs = async() => {
+        if(user){
+            await dispatch(setFollowing(user.following))
+        }
         await dispatch(getCredentials());
         setLoadingState('loaded');
     }
@@ -148,12 +151,23 @@ const Feed = () => {
                     <Typography style={{color:'white', fontSize:'20px', fontWeight:'bold', padding:'20px'}}>Recommended for you</Typography>
                     {/* <Typography style={{color:'white', fontSize:'14px', fontWeight:'bold',textAlign:'right', width:'100%', padding:'0px 20px'}}>View more</Typography> */}
                     { allUsers.map((recommendUser:any)=>{
+                        console.log(followingIds);
+                        let isFollowing = false;
+                        if(followingIds){
+                            const resAddress= followingIds.find((id:any)=>id.toLowerCase()===recommendUser.id.toLowerCase());
+                            isFollowing = !!resAddress;
+                          }
                         return(
                         recommendUser.id!==user.id?<Box component="div" style={{display:'flex', flexDirection:'row', alignItems:'center', justifyContent:'flex-start', width:'100%', margin:'10px',}}>
-                            <Box component="div" style={{display:'flex', flexDirection:'row', flex:1, alignItems:'center'}} onClick ={()=>{navigate(`/${recommendUser.id}`)}}>
-                                {recommendUser.profileImageUrl? <img src={recommendUser.profileImageUrl} style={{width:'50px', height:'50px',backgroundColor:'#E46A6A', borderRadius:'50%'}}/>:<Box component="div" style={{width:'50px', height:'50px', backgroundColor:'#E46A6A', borderRadius:'50%'}}></Box>}
-                                <Typography style={{flex:1, paddingLeft:'10px'}}>{Array.from(recommendUser.username).map((letter:any, index:number)=>index<12 ? letter: (index<15?'.':null))}</Typography>
-                                <Button onClick={()=>{dispatch(followUser(user.id,recommendUser.id))}}>+ Follow</Button>
+                            <Box component="div" style={{display:'flex', flexDirection:'row', flex:1, alignItems:'center'}}>
+                                <Box component="div" style={{display:'flex', flexDirection:'row', alignItems:'center', flex:1}} onClick ={()=>{navigate(`/${recommendUser.id}`)}}>
+                                    {recommendUser.profileImageUrl? <img src={recommendUser.profileImageUrl} style={{width:'50px', height:'50px',backgroundColor:'#E46A6A', borderRadius:'50%'}}/>:<Box component="div" style={{width:'50px', height:'50px', backgroundColor:'#E46A6A', borderRadius:'50%'}}></Box>}
+                                    <Typography style={{flex:1, paddingLeft:'10px'}}>{Array.from(recommendUser.username).map((letter:any, index:number)=>index<17 ? letter: (index<20?'.':null))}</Typography>
+                                </Box>
+                                {/* <Button onClick={()=>{
+                                    isFollowing = false;
+                                        dispatch(followUser(user.id,recommendUser.id))
+                                    }}>{isFollowing?'Unfollow':'+ Follow'}</Button> */}
                             </Box>
                         </Box>:null
                         )})

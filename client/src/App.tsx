@@ -25,7 +25,7 @@ import { uploadBytes } from 'firebase/storage';
 import WalletConnect from '@walletconnect/client';
 import QRCodeModal from '@walletconnect/qrcode-modal';
 import { connector } from './functions/walletConnector';
-import { setUser } from './redux/actions/user';
+import { setFollowing, setUser } from './redux/actions/user';
 import NotificationsScreen from './pages/NotificationsScreen';
 // import './assets/main.css';
 
@@ -57,6 +57,9 @@ function App() {
     var userId: any;
     try {
       userId = window.localStorage.getItem('userId');
+      if(!userId){
+        setIsLoggedIn(false);
+      }
     } catch (e) {
       console.log(e);
     }
@@ -67,6 +70,8 @@ function App() {
         const user: any = await store.dispatch(getUserById(userId));
         console.log(user);
         if (!!user) {
+          console.log(user.user.following);
+          await store.dispatch(setFollowing(user.following));
           store.dispatch(setUser(user.user));
           setIsLoggedIn(true);
         }

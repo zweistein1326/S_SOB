@@ -1,11 +1,3 @@
-import { AnyARecord } from "dns";
-import { User } from "../../models/User";
-
-export const setAccount = (account:any) => ({
-    type:'SET_ACCOUNT',
-    account
-})
-
 export const setUser = (user:any ) => ({
     type:'SET_USER',
     user
